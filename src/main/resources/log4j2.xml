@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!-- Configuration of root logger: log level Trace (most detailed information) and two appenders-->
+
+<Configuration status="ERROR">
+    <Properties>
+
+        <!--  Pattern-->
+        <!--  {time} [level] thread      name of the class with the package : method : line - message-->
+        <property name="pattern_file">
+            %d{ABSOLUTE} [%5p] %t %c{1}:%M:%L - %m%n
+        </property>
+
+    </Properties>
+    <Appenders>
+
+        <!--  Console Appender-->
+        <Console name="ConsoleAppender" target="SYSTEM_OUT">
+            <PatternLayout pattern="${pattern_file}"/>
+        </Console>
+
+        <!--  RollingFileAppender-->
+        <!--  The archived log file will be automatically archived to zip.-->
+        <RollingFile name="RollingFile" fileName="logs/hotelproject.log"
+                     filePattern="logs/${date:yyyy-MM-dd}/app-%d{yyyy-MM-dd_HH-mm}_%i.log.zip">
+            <PatternLayout pattern="${pattern_file}"/>
+            <Policies>
+
+                <!-- Maximum allowed file size before rolling over.-->
+                <SizeBasedTriggeringPolicy size="8 MB"/>
+            </Policies>
+
+            <!-- Maximum number of backup files to keep-->
+            <DefaultRolloverStrategy max="15"/>
+        </RollingFile>
+    </Appenders>
+    <Loggers>
+        <Root level="trace">
+            <AppenderRef ref="ConsoleAppender"/>
+            <AppenderRef ref="RollingFile"/>
+        </Root>
+    </Loggers>
+</Configuration>
