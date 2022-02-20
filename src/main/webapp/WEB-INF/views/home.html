@@ -244,19 +244,29 @@
             </i>
         </button>
         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-            <form class="form-inline" method="post" action="controller?command=i18n">
-                <button type="submit" name="en" onclick="changeFieldElement('langField', 'en')"
-                        class="dropdown-item" th:text="#{main.menu.button.english}"></button>
-                <button type="submit" name="uk" onclick="changeFieldElement('langField', 'uk')"
-                        class="dropdown-item" th:text="#{main.menu.button.ukrainian}"></button>
-                <input name="langField" type="hidden" value="en">
-            </form>
+            <div class="search_icon" th:if="${#locale.toString() == 'ru_RU'}">
+                <a th:href="@{${#httpServletRequest.requestURI}(lang='en_US')}">
+                    <i>EN</i>
+                </a>
+            </div>
+            <div class="search_icon" th:if="${#locale.toString() == 'en_US'}">
+                <a th:href="@{${#httpServletRequest.requestURI}(lang='ru_RU')}">
+                    <i>RU</i>
+                </a>
+            </div>
+<!--            <form class="form-inline" method="post" action="controller?command=i18n">-->
+<!--                <button type="submit" name="en" onclick="changeFieldElement('langField', 'en')"-->
+<!--                        class="dropdown-item" th:text="#{main.menu.button.english}"></button>-->
+<!--                <button type="submit" name="uk" onclick="changeFieldElement('langField', 'uk')"-->
+<!--                        class="dropdown-item" th:text="#{main.menu.button.ukrainian}"></button>-->
+<!--                <input name="langField" type="hidden" value="en">-->
+<!--            </form>-->
         </div>
     </div>
 
     <div class="rightNav">
         <input type="text" name="search" id="search">
-        <button class="btn btn-sm" th:text="#{home.menu.button.search}"></button>
+        <button class="btn btn-sm" th:text="#{home.menu.button.search}">Search</button>
     </div>
 
 

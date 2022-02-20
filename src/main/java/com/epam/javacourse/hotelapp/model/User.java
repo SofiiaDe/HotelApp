@@ -1,17 +1,36 @@
 package com.epam.javacourse.hotelapp.model;
 
+
+import javax.persistence.*;
 import java.io.Serializable;
 
+@Entity
+@Table(name="users")
 public class User implements Serializable {
 
     private static final long serialVersionUID = -1L;
 
+    @Id
+    @GeneratedValue
+    @Column(name = "id", insertable = false, updatable = false, nullable = false)
     private int id;
+
+    @Column(name = "firstName")
     private String firstName;
+
+    @Column(name = "lastName")
     private String lastName;
+
+    @Column(name = "email", unique=true)
     private String email;
+
+    @Column(name = "password")
     private String password;
+
+    @Column(name = "country")
     private String country;
+
+    @Column(name = "role")
     private String role;
 
 

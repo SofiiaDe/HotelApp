@@ -1,0 +1,634 @@
+<!--<!doctype html>-->
+<!--<html>-->
+<!--<jsp:include page="/WEB-INF/components/head.jsp"/>-->
+
+<!--<html xmlns:th="http://www.thymeleaf.org">-->
+
+<!--<html>-->
+
+<!--<head>-->
+
+
+<!--    &lt;!&ndash; Required meta tags &ndash;&gt;-->
+<!--    <meta charset="utf-8">-->
+<!--    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>-->
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">-->
+
+<!--    &lt;!&ndash; Bootstrap CSS &ndash;&gt;-->
+<!--    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"-->
+<!--          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">-->
+
+<!--    &lt;!&ndash; Material CSS &ndash;&gt;-->
+<!--    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"-->
+<!--          rel="stylesheet">-->
+
+<!--    <title>Hotel Home page</title>-->
+
+<!--    &lt;!&ndash;    <link rel="stylesheet" href="/css/home.css">&ndash;&gt;-->
+
+
+<!--    <style>-->
+
+<!--        #infoSection {-->
+<!--            background-color: floralwhite;-->
+<!--            border-radius: 30px 0 0 15px;-->
+<!--            color: #404040;-->
+<!--            padding: 30px;-->
+<!--        }-->
+
+<!--        #footer {-->
+<!--            position: absolute;-->
+<!--            bottom: 0;-->
+<!--            width: 100%;-->
+<!--        }-->
+
+<!--        #title {-->
+<!--            color: #404040;-->
+<!--        }-->
+
+<!--        .navLink {-->
+<!--            color: white !important;-->
+<!--        }-->
+
+<!--        body {-->
+<!--            background-color: floralwhite;-->
+<!--        }-->
+
+<!--        #web {-->
+<!--            margin-top: 55px;-->
+<!--        }-->
+
+
+<!--        /*home.css*/-->
+
+<!--        * {-->
+<!--            margin: 0;-->
+<!--            padding: 0;-->
+<!--        }-->
+
+<!--        .navbar {-->
+<!--            display: flex;-->
+<!--            align-items: center;-->
+<!--            justify-content: center;-->
+<!--            position: sticky;-->
+<!--            top: 0;-->
+<!--            cursor: pointer;-->
+<!--        }-->
+
+<!--        .background {-->
+<!--            background: lightseagreen;-->
+<!--            background-blend-mode: darken;-->
+<!--            background-size: cover;-->
+<!--        }-->
+
+<!--        .nav-list {-->
+<!--            width: 70%;-->
+<!--            display: flex;-->
+<!--            align-items: center;-->
+<!--            font-size: 20px;-->
+<!--        }-->
+
+<!--        .logo {-->
+<!--            display: flex;-->
+<!--            justify-content: center;-->
+<!--            align-items: center;-->
+<!--        }-->
+
+<!--        .logo img {-->
+<!--            width: 100px;-->
+<!--            border-radius: 35px;-->
+<!--        }-->
+
+<!--        .nav-list li {-->
+<!--            list-style: none;-->
+<!--            padding: 26px 30px;-->
+<!--        }-->
+
+<!--        .nav-list li a {-->
+<!--            text-decoration: none;-->
+<!--            color: #404040;-->
+<!--        }-->
+
+<!--        .nav-list li a:hover {-->
+<!--            color: black;-->
+<!--        }-->
+
+<!--        .rightnav {-->
+<!--            width: 30%;-->
+<!--            text-align: right;-->
+<!--        }-->
+
+<!--        #search {-->
+<!--            padding: 5px;-->
+<!--            font-size: 17px;-->
+<!--            border: 2px solid grey;-->
+<!--            border-radius: 9px;-->
+<!--        }-->
+
+<!--        .firstsection {-->
+<!--            background-color: floralwhite;-->
+<!--            height: 170px;-->
+<!--        }-->
+
+
+<!--        .box-main {-->
+<!--            display: flex;-->
+<!--            justify-content: center;-->
+<!--            align-items: center;-->
+<!--            color: black;-->
+<!--            max-width: 80%;-->
+<!--            margin: auto;-->
+<!--            height: 60%;-->
+<!--        }-->
+
+<!--        .firsthalf {-->
+<!--            width: 100%;-->
+<!--            display: flex;-->
+<!--            flex-direction: column;-->
+<!--            justify-content: center;-->
+<!--        }-->
+
+<!--        .secondhalf {-->
+<!--            width: 30%;-->
+<!--        }-->
+
+<!--        .secondhalf img {-->
+<!--            width: 70%;-->
+<!--            border: 4px solid wheat;-->
+<!--            border-radius: 150px;-->
+<!--            display: block;-->
+<!--            margin: auto;-->
+<!--        }-->
+
+<!--        .text-big {-->
+<!--            font-family: 'Piazzolla', serif;-->
+<!--            font-weight: bold;-->
+<!--            font-size: 35px;-->
+<!--        }-->
+
+<!--        .text-small {-->
+<!--            font-size: 18px;-->
+<!--        }-->
+
+<!--        .btn {-->
+<!--            padding: 8px 20px;-->
+<!--            margin: 7px 0;-->
+<!--            border: 2px solid white;-->
+<!--            border-radius: 8px;-->
+<!--            background: none;-->
+<!--            color: white;-->
+<!--            cursor: pointer;-->
+<!--        }-->
+
+<!--        .btn-sm {-->
+<!--            padding: 6px 10px;-->
+<!--            vertical-align: middle;-->
+<!--        }-->
+
+<!--        .section {-->
+<!--            height: 350px;-->
+<!--            display: flex;-->
+<!--            align-items: center;-->
+<!--            justify-content: center;-->
+<!--            max-width: 90%;-->
+<!--            margin: auto;-->
+<!--        }-->
+
+<!--        .section-Left {-->
+<!--            flex-direction: row-reverse;-->
+<!--        }-->
+
+<!--        .paras {-->
+<!--            padding: 0px 65px;-->
+<!--        }-->
+
+<!--        .thumbnail img {-->
+<!--            width: 250px;-->
+<!--            border: 2px solid black;-->
+<!--            border-radius: 26px;-->
+<!--            margin-top: 19px;-->
+<!--        }-->
+
+<!--        .center {-->
+<!--            text-align: center;-->
+<!--        }-->
+
+<!--        .text-footer {-->
+<!--            text-align: center;-->
+<!--            padding: 30px 0;-->
+<!--            font-family: 'Ubuntu', sans-serif;-->
+<!--            display: flex;-->
+<!--            justify-content: center;-->
+<!--            color: white;-->
+<!--        }-->
+
+<!--    </style>-->
+
+
+<!--</head>-->
+
+
+<!--<body>-->
+<!--<jsp:include page="/WEB-INF/components/clientMenu.jsp"/>-->
+<!--<div class="container">-->
+<!--    <div class="tab-pane fade show active" id="v-pills-services" role="tabpanel"-->
+<!--         aria-labelledby="v-pills-services-tab">-->
+<!--        <ul class="nav nav-tabs" id="myTab" role="tablist">-->
+<!--            <li class="nav-item">-->
+<!--                <a class="nav-link active" id="booking-tab" data-toggle="tab" href="#booking"-->
+<!--                   role="tab"-->
+<!--                   aria-controls="booking" aria-selected="true"-->
+<!--                    th:text="#{client.table.user_bookings}">-->
+<!--                </a>-->
+<!--            </li>-->
+<!--            <li class="nav-item">-->
+<!--                <a class="nav-link" id="application-tab" data-toggle="tab" href="#application" role="tab"-->
+<!--                   aria-controls="application"-->
+<!--                   aria-selected="false"-->
+<!--                    th:text="#{client.table.user_applications}">-->
+<!--                </a>-->
+<!--            </li>-->
+<!--            <li class="nav-item">-->
+<!--                <a class="nav-link" id="confirmrequest-tab" data-toggle="tab" href="#confirmrequest" role="tab"-->
+<!--                   aria-controls="confirmrequest"-->
+<!--                   aria-selected="false"-->
+<!--                    th:text="#{client.table.user_confirmation_requests}">-->
+<!--                </a>-->
+<!--            </li>-->
+<!--            <li class="nav-item">-->
+<!--                <a class="nav-link" id="invoice-tab" data-toggle="tab" href="#invoice" role="tab"-->
+<!--                   aria-controls="invoice"-->
+<!--                   aria-selected="false"-->
+<!--                    th:text="#{client.table.user_invoices}">-->
+<!--                </a>-->
+<!--            </li>-->
+
+<!--        </ul>-->
+<!--        <div class="tab-content" id="myTabContent">-->
+
+<!--            <%&#45;&#45; My bookings &#45;&#45;%>-->
+<!--            <div class="tab-pane fade active show" id="booking" role="tabpanel" aria-labelledby="booking-tab">-->
+<!--                <table class="table table-hover mt-2">-->
+<!--                    <thead>-->
+<!--                    <tr>-->
+<!--                        <th scope="col"-->
+<!--                            th:text="#{checkin.date}">-->
+<!--                        </th>-->
+<!--                        <th scope="col"-->
+<!--                            th:text="#{checkout.date}">-->
+<!--                        </th>-->
+<!--                        <th scope="col"-->
+<!--                            th:text="#{table.th.room_seats}">-->
+<!--                        </th>-->
+<!--                        <th scope="col"-->
+<!--                            th:text="#{table.th.room_class}">-->
+<!--                        </th>-->
+<!--                        <th scope="col"-->
+<!--                            th:text="#{table.th.status}">-->
+<!--                        </th>-->
+<!--                        <th scope="col"></th>-->
+<!--                    </tr>-->
+<!--                    </thead>-->
+<!--                    <tbody>-->
+<!--                    <c:forEach var="booking" items="${sessionScope.myBookings}">-->
+
+<!--                        <tr>-->
+<!--                            <td>${booking.checkinDate}</td>-->
+<!--                            <td>${booking.checkoutDate}</td>-->
+<!--                            <td>-->
+<!--                                <c:if test="${booking.roomTypeBySeats != null}">-->
+<!--                                    <c:choose>-->
+<!--                                        <c:when test="${booking.roomTypeBySeats == 'single'}"-->
+<!--                                            th:text="#{room.type.single}">-->
+<!--                                        </c:when>-->
+<!--                                        <c:when test="${booking.roomTypeBySeats == 'double'}"-->
+<!--                                            th:text="#{room.type.double}">-->
+<!--                                        </c:when>-->
+<!--                                        <c:when test="${booking.roomTypeBySeats == 'twin'}"-->
+<!--                                            th:text="#{room.type.twin}">-->
+<!--                                        </c:when>-->
+<!--                                        <c:when test="${booking.roomTypeBySeats == 'triple'}"-->
+<!--                                            th:text="#{room.type.triple}">-->
+<!--                                        </c:when>-->
+<!--                                        <c:otherwise-->
+<!--                                            th:text="#{sort.seats.unknown}">-->
+<!--                                        </c:otherwise>-->
+<!--                                    </c:choose>-->
+<!--                                </c:if>-->
+<!--                            </td>-->
+<!--                            <td>-->
+<!--                                <c:if test="${booking.roomClass != null}">-->
+<!--                                    <c:choose>-->
+<!--                                        <c:when test="${booking.roomClass == 'standard'}">-->
+<!--                                            th:text="#{room.class.standard"/>-->
+<!--                                        </c:when>-->
+<!--                                        <c:when test="${booking.roomClass == 'business'}">-->
+<!--                                            th:text="#{room.class.business"/>-->
+<!--                                        </c:when>-->
+<!--                                        <c:when test="${booking.roomClass == 'lux'}">-->
+<!--                                            th:text="#{room.class.lux"/>-->
+<!--                                        </c:when>-->
+<!--                                        <c:otherwise>-->
+<!--                                            th:text="#{sort.seats.unknown"/>-->
+<!--                                        </c:otherwise>-->
+<!--                                    </c:choose>-->
+<!--                                </c:if>-->
+<!--                            </td>-->
+<!--                            <td>-->
+<!--                                <c:if test="${booking.bookingStatus.text != null}"-->
+<!--                                    <c:choose>-->
+<!--                                        <c:when test="${booking.bookingStatus.text == 'new'}"-->
+<!--                                            th:text="#{status.new}">-->
+<!--                                        </c:when>-->
+<!--                                        <c:when test="${booking.bookingStatus.text == 'cancelled'}"-->
+<!--                                            th:text="#{status.cancelled}">-->
+<!--                                        </c:when>-->
+<!--                                        <c:when test="${booking.bookingStatus.text == 'paid'}"-->
+<!--                                            th:text="#{status.paid}">-->
+<!--                                        </c:when>-->
+<!--                                        <c:when test="${booking.bookingStatus.text == 'finished'}"-->
+<!--                                            th:text="#{status.finished}">-->
+<!--                                        </c:when>-->
+<!--                                        <c:when test="${booking.bookingStatus.text == 'ongoing'}"-->
+<!--                                            th:text="#{status.ongoing}">-->
+<!--                                        </c:when>-->
+<!--                                        <c:otherwise>-->
+<!--                                            th:text="#{status"/>-->
+<!--                                        </c:otherwise>-->
+<!--                                    </c:choose>-->
+<!--                                </c:if>-->
+<!--                            </td>-->
+<!--                        </tr>-->
+<!--                    </c:forEach>-->
+<!--                    </tbody>-->
+<!--                </table>-->
+
+<!--                <c:if test="${requestScope != null && requestScope.page != null && requestScope.pageCount != null}">-->
+<!--                    <form action="controller">-->
+<!--                        <input type="hidden" name="command" value="clientAccount"/>-->
+<!--                        <nav aria-label="Client's lift of booking navigation">-->
+<!--                            <jsp:include page="/WEB-INF/components/pagination.jsp"/>-->
+<!--                        </nav>-->
+<!--                    </form>-->
+<!--                </c:if>-->
+<!--            </div>-->
+
+
+<!--            <%&#45;&#45; My applications &#45;&#45;%>-->
+<!--            <div class="tab-pane fade" id="application" role="tabpanel" aria-labelledby="application-tab">-->
+<!--                <table class="table table-hover mt-2">-->
+<!--                    <thead>-->
+<!--                    <tr>-->
+<!--                        <th scope="col">-->
+<!--                            th:text="#{table.th.room_seats"/>-->
+<!--                        </th>-->
+<!--                        <th scope="col">-->
+<!--                            th:text="#{table.th.room_class"/>-->
+<!--                        </th>-->
+<!--                        <th scope="col">-->
+<!--                            th:text="#{checkin.date"/>-->
+<!--                        </th>-->
+<!--                        <th scope="col">-->
+<!--                            th:text="#{checkout.date"/>-->
+<!--                        </th>-->
+
+<!--                    </tr>-->
+<!--                    </thead>-->
+<!--                    <tbody>-->
+<!--                    <c:forEach var="application" items="${sessionScope.myApplications}">-->
+<!--                        <tr>-->
+<!--                            <td>-->
+<!--                                <c:if test="${application.roomTypeBySeats != null}">-->
+<!--                                    <c:choose>-->
+<!--                                        <c:when test="${application.roomTypeBySeats == 'single'}"-->
+<!--                                            th:text="#{room.type.single}">-->
+<!--                                        </c:when>-->
+<!--                                        <c:when test="${application.roomTypeBySeats == 'double'}"-->
+<!--                                            th:text="#{room.type.double}">-->
+<!--                                        </c:when>-->
+<!--                                        <c:when test="${application.roomTypeBySeats == 'twin'}"-->
+<!--                                            th:text="#{room.type.twin}">-->
+<!--                                        </c:when>-->
+<!--                                        <c:when test="${application.roomTypeBySeats == 'triple'}"-->
+<!--                                            th:text="#{room.type.triple}">-->
+<!--                                        </c:when>-->
+<!--                                        <c:otherwise-->
+<!--                                            th:text="#{sort.seats.unknown}">-->
+<!--                                        </c:otherwise>-->
+<!--                                    </c:choose>-->
+<!--                                </c:if>-->
+<!--                            </td>-->
+<!--                            <td>-->
+<!--                                <c:if test="${application.roomClass != null}">-->
+<!--                                    <c:choose>-->
+<!--                                        <c:when test="${application.roomClass == 'standard'}">-->
+<!--                                            th:text="#{room.class.standard"/>-->
+<!--                                        </c:when>-->
+<!--                                        <c:when test="${application.roomClass == 'business'}">-->
+<!--                                            th:text="#{room.class.business"/>-->
+<!--                                        </c:when>-->
+<!--                                        <c:when test="${application.roomClass == 'lux'}">-->
+<!--                                            th:text="#{room.class.lux"/>-->
+<!--                                        </c:when>-->
+<!--                                        <c:otherwise>-->
+<!--                                            th:text="#{sort.seats.unknown"/>-->
+<!--                                        </c:otherwise>-->
+<!--                                    </c:choose>-->
+<!--                                </c:if>-->
+<!--                            </td>-->
+<!--                            <td>${application.checkinDate}</td>-->
+<!--                            <td>${application.checkoutDate}</td>-->
+<!--                        </tr>-->
+<!--                    </c:forEach>-->
+<!--                    </tbody>-->
+<!--                </table>-->
+<!--            </div>-->
+
+<!--            <%&#45;&#45; Confirmation Request &#45;&#45;%>-->
+<!--            <div class="tab-pane fade" id="confirmrequest" role="tabpanel" aria-labelledby="confirmrequest-tab">-->
+<!--                <table class="table table-hover mt-2">-->
+<!--                    <thead>-->
+<!--                    <tr>-->
+<!--                        <th scope="col">-->
+<!--                            th:text="#{table.th.confirmrequest_date"/>-->
+<!--                        </th>-->
+<!--                        <th scope="col">-->
+<!--                            th:text="#{table.th.confirmrequest_due_date"/>-->
+<!--                        </th>-->
+<!--                        <th scope="col">-->
+<!--                            th:text="#{table.th.room_seats"/>-->
+<!--                        </th>-->
+<!--                        <th scope="col">-->
+<!--                            th:text="#{table.th.room_class"/>-->
+<!--                        </th>-->
+<!--                        <th scope="col">-->
+<!--                            th:text="#{checkin.date"/>-->
+<!--                        </th>-->
+<!--                        <th scope="col">-->
+<!--                            th:text="#{checkout.date"/>-->
+<!--                        </th>-->
+<!--                        <th scope="col">-->
+<!--                            th:text="#{table.th.application_id"/>-->
+<!--                        </th>-->
+<!--                        <th scope="col">-->
+<!--                            th:text="#{table.th.status"/>-->
+<!--                        </th>-->
+
+<!--                    </tr>-->
+<!--                    </thead>-->
+<!--                    <tbody>-->
+<!--                    <c:forEach var="confirmrequest" items="${sessionScope.myConfirmRequests}">-->
+<!--                        <tr>-->
+<!--                            <td>${confirmrequest.confirmRequestDate}</td>-->
+<!--                            <td>${confirmrequest.confirmRequestDueDate}</td>-->
+<!--                            <td>-->
+<!--                                <c:if test="${confirmrequest.roomTypeBySeats != null}">-->
+<!--                                    <c:choose>-->
+<!--                                        <c:when test="${confirmrequest.roomTypeBySeats == 'single'}">-->
+<!--                                            th:text="#{room.type.single"/>-->
+<!--                                        </c:when>-->
+<!--                                        <c:when test="${confirmrequest.roomTypeBySeats == 'double'}">-->
+<!--                                            th:text="#{room.type.double"/>-->
+<!--                                        </c:when>-->
+<!--                                        <c:when test="${confirmrequest.roomTypeBySeats == 'twin'}">-->
+<!--                                            th:text="#{room.type.twin"/>-->
+<!--                                        </c:when>-->
+<!--                                        <c:when test="${confirmrequest.roomTypeBySeats == 'triple'}">-->
+<!--                                            th:text="#{room.type.triple"/>-->
+<!--                                        </c:when>-->
+<!--                                        <c:otherwise>-->
+<!--                                            th:text="#{sort.seats.unknown"/>-->
+<!--                                        </c:otherwise>-->
+<!--                                    </c:choose>-->
+<!--                                </c:if>-->
+<!--                            </td>-->
+<!--                            <td>-->
+<!--                                <c:if test="${confirmrequest.roomClass != null}">-->
+<!--                                    <c:choose>-->
+<!--                                        <c:when test="${confirmrequest.roomClass == 'standard'}">-->
+<!--                                            th:text="#{room.class.standard"/>-->
+<!--                                        </c:when>-->
+<!--                                        <c:when test="${confirmrequest.roomClass == 'business'}">-->
+<!--                                            th:text="#{room.class.business"/>-->
+<!--                                        </c:when>-->
+<!--                                        <c:when test="${confirmrequest.roomClass == 'lux'}">-->
+<!--                                            th:text="#{room.class.lux"/>-->
+<!--                                        </c:when>-->
+<!--                                        <c:otherwise>-->
+<!--                                            th:text="#{sort.seats.unknown"/>-->
+<!--                                        </c:otherwise>-->
+<!--                                    </c:choose>-->
+<!--                                </c:if>-->
+<!--                            </td>-->
+
+<!--                            <td>${confirmrequest.checkinDate}</td>-->
+<!--                            <td>${confirmrequest.checkoutDate}</td>-->
+<!--                            <td>${confirmrequest.applicationId}</td>-->
+<!--                            <td><htl:requestStatus request="${confirmrequest.status}"/></td>-->
+<!--                            <td>-->
+<!--                                <div class="ml-1">-->
+<!--                                    <form action="controller?command=confirmRequest" method="post">-->
+<!--                                        <input type="hidden" name="confirmRequest_id"-->
+<!--                                               value="${confirmrequest.id}">-->
+<!--                                        <button class="ui-button" type="submit"><fmt:message-->
+<!--                                                key="confirm.button"/></button>-->
+<!--                                    </form>-->
+<!--                                </div>-->
+<!--                            </td>-->
+<!--                        </tr>-->
+<!--                    </c:forEach>-->
+<!--                    </tbody>-->
+<!--                </table>-->
+<!--            </div>-->
+
+
+<!--            <%&#45;&#45; Invoices &#45;&#45;%>-->
+<!--            <div class="tab-pane fade" id="invoice" role="tabpanel" aria-labelledby="invoice-tab">-->
+<!--                <table class="table table-hover mt-2">-->
+<!--                    <thead>-->
+<!--                    <tr>-->
+<!--                        <th scope="col">-->
+<!--                            th:text="#{table.th.invoice_date"/>-->
+<!--                        </th>-->
+<!--                        <th scope="col">-->
+<!--                            th:text="#{table.th.invoice_due_date"/>-->
+<!--                        </th>-->
+<!--                        <th scope="col">-->
+<!--                            th:text="#{table.th.invoice_amount"/>, $-->
+<!--                        </th>-->
+<!--                        <th scope="col">-->
+<!--                            th:text="#{table.th.booking_id"/>-->
+<!--                        </th>-->
+<!--                        <th scope="col">-->
+<!--                            th:text="#{table.th.room_price"/>, $-->
+<!--                        </th>-->
+<!--                        <th scope="col">-->
+<!--                            th:text="#{checkin.date"/>-->
+<!--                        </th>-->
+<!--                        <th scope="col">-->
+<!--                            th:text="#{checkout.date"/>-->
+<!--                        </th>-->
+<!--                        <th scope="col">-->
+<!--                            th:text="#{table.th.status"/>-->
+<!--                        </th>-->
+<!--                        <th scope="col"></th>-->
+<!--                    </tr>-->
+<!--                    </thead>-->
+<!--                    <tbody>-->
+
+<!--                    <c:forEach var="invoice" items="${sessionScope.myInvoices}">-->
+<!--                        <tr>-->
+<!--                            <td>${invoice.invoiceDate}</td>-->
+<!--                            <td>${invoice.dueDate}</td>-->
+<!--                            <td>${invoice.amount}</td>-->
+<!--                            <td>${invoice.bookingId}</td>-->
+<!--                            <td>${invoice.pricePerNight}</td>-->
+<!--                            <td>${invoice.checkInDate}</td>-->
+<!--                            <td>${invoice.checkOutDate}</td>-->
+<!--                            <td><htl:invoiceStatus invoiceStatus="${invoice.status}"/></td>-->
+
+<!--                            <td>-->
+<!--                                <c:if test="${invoice.status == null || invoice.status == 'new'}">-->
+
+<!--                                    <div class="ml-1">-->
+<!--                                        <a class="nav-link"-->
+<!--                                           href="controller?command=paymentPage&invoiceId=${invoice.id}">-->
+
+<!--                                            <button class="ui-button" type="submit"><fmt:message-->
+<!--                                                    key="pay.button"/></button>-->
+<!--                                        </a>-->
+<!--                                    </div>-->
+<!--                                </c:if>-->
+
+
+<!--                            </td>-->
+<!--                        </tr>-->
+<!--                    </c:forEach>-->
+<!--                    </tbody>-->
+<!--                </table>-->
+<!--            </div>-->
+
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+
+<!--<%&#45;&#45;<div id="successApplicSnackbar">th:text="#{client.snackbar.success.submit_application"/></div>&#45;&#45;%>-->
+
+
+<!--<jsp:include page="/WEB-INF/components/scripts.jsp"/>-->
+<!--<script>-->
+<!--    (function () {-->
+<!--        const url = new URL(window.location.href);-->
+<!--        if(url.searchParams.get("successApplic")){-->
+<!--            showSnackbar("successApplicSnackbar");-->
+<!--        }-->
+<!--        function showSnackbar(tagId) {-->
+<!--            const x = document.getElementById(tagId);-->
+<!--            x.className = "show";-->
+<!--            setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);-->
+<!--        }-->
+<!--    })();-->
+<!--</script>-->
+
+<!--</body>-->
+<!--</html>-->
