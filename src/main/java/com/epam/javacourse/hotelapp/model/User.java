@@ -1,8 +1,11 @@
 package com.epam.javacourse.hotelapp.model;
 
 
+import org.springframework.security.core.GrantedAuthority;
+
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Set;
 
 @Entity
 @Table(name="users")
@@ -35,6 +38,13 @@ public class User implements Serializable {
 
 
     public User() {
+    }
+
+    public User(String email, String password, String role) {
+        this.email = email;
+        this.password = password;
+        this.role = role;
+
     }
 
 
@@ -93,5 +103,6 @@ public class User implements Serializable {
     public void setCountry(String country) {
         this.country = country;
     }
+
 
 }

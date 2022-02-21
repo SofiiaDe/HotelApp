@@ -1,18 +1,8 @@
-package com.epam.javacourse.hotelapp.dao;
+package com.epam.javacourse.hotelapp.repository;
 
-import com.epam.javacourse.hotelapp.dao.interfaces.IUserDAO;
-import com.epam.javacourse.hotelapp.exception.DBException;
-import com.epam.javacourse.hotelapp.model.User;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
-import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
-
-public class UserDAO extends GenericDAO implements IUserDAO {
-
-    private static final Logger logger = LogManager.getLogger(UserDAO.class);
+//public class UserRepository2 extends GenericRepository implements IUserRepository {
+//
+//    private static final Logger logger = LogManager.getLogger(UserRepository2.class);
 
 //    @Override
 //    public List<User> findAllUsers() throws DBException {
@@ -160,29 +150,29 @@ public class UserDAO extends GenericDAO implements IUserDAO {
 //        }
 //        return user;
 //    }
-
-    private static User mapResultSetToUser(ResultSet rs) throws SQLException{
-        User user = new User();
-        user.setId(rs.getInt("id"));
-        mapUserCommonProperties(user, rs);
-
-        return user;
-    }
-
-    private static void mapUserCommonProperties(User user, ResultSet rs) throws SQLException {
-        user.setFirstName(rs.getString("firstName"));
-        user.setLastName(rs.getString("lastName"));
-        user.setEmail(rs.getString("email"));
-        user.setPassword(rs.getString("password"));
-        user.setCountry(rs.getString("country"));
-        user.setRole(rs.getString("role"));
-    }
-
-    private static void close(AutoCloseable itemToBeClosed) {
-        close(itemToBeClosed, "DB close failed in UserDAO");
-    }
-
-    private static void rollback(Connection con) {
-        rollback(con, "Cannot rollback transaction in UserDAO");
-    }
-}
+//
+//    private static User mapResultSetToUser(ResultSet rs) throws SQLException{
+//        User user = new User();
+//        user.setId(rs.getInt("id"));
+//        mapUserCommonProperties(user, rs);
+//
+//        return user;
+//    }
+//
+//    private static void mapUserCommonProperties(User user, ResultSet rs) throws SQLException {
+//        user.setFirstName(rs.getString("firstName"));
+//        user.setLastName(rs.getString("lastName"));
+//        user.setEmail(rs.getString("email"));
+//        user.setPassword(rs.getString("password"));
+//        user.setCountry(rs.getString("country"));
+//        user.setRole(rs.getString("role"));
+//    }
+//
+//    private static void close(AutoCloseable itemToBeClosed) {
+//        close(itemToBeClosed, "DB close failed in UserDAO");
+//    }
+//
+//    private static void rollback(Connection con) {
+//        rollback(con, "Cannot rollback transaction in UserDAO");
+//    }
+//}

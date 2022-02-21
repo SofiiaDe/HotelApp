@@ -1,4 +1,4 @@
-package com.epam.javacourse.hotelapp.dao;
+package com.epam.javacourse.hotelapp.repository;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -8,9 +8,9 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Collections;
 
-public abstract class GenericDAO {
+public abstract class GenericRepository {
 
-    private static final Logger logger = LogManager.getLogger(GenericDAO.class);
+    private static final Logger logger = LogManager.getLogger(GenericRepository.class);
 
     public static void close(AutoCloseable itemToBeClosed, String message) {
         if (itemToBeClosed != null) {
