@@ -76,10 +76,12 @@
             <h3 th:text="#{register.welcome}"></h3>
             <p th:text="#{register.welcome.text}"></p>
             <form class="form-signin" method="post" action="/login">
-                <input type="submit" name="login" th:text="#{login.button.login}"><br/>
-<!--                <button class="btn btn-lg btn-primary btn-block" type="submit" th:text="#{login.button.login}"></button>-->
-<!--                <input type="submit" name="login" value="Login"><br/>-->
-<!--                <button class="btn btn-lg btn-primary btn-block" type="submit" th:text="#{login.button.login}"></button>-->
+                <!--                <button class="btn btn-lg btn-primary btn-block" type="submit" th:text="#{login.button.login}"></button>-->
+
+                <button type="submit" th:text="#{login.button.login}"></button>
+                <br/>
+                <!--                <input type="submit" name="login" value="Login"><br/>-->
+                <!--                <button class="btn btn-lg btn-primary btn-block" type="submit" th:text="#{login.button.login}"></button>-->
                 <br/>
             </form>
         </div>
@@ -98,43 +100,68 @@
                 <div class="tab-pane fade show active" id="client" role="tabpanel" aria-labelledby="client-tab">
                     <h3 th:text="#{register.header.as.client}" class="register-heading"></h3>
 
-<!--                    <form class="form-signup" method="post" action="/new">-->
-                    <form class="form-signup" method="post" action="#" th:action="@{/register}" th:object="${user}">
+                    <form class="form-signup" th:method="POST" th:action="@{/register}" th:object="${user}">
 
                         <div class="row register-form">
 
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <input type="text" required="required" name="firstName" class="form-control"
+                                    <input type="text" th:field="*{firstName}" id="firstName" required="required"
+                                           name="firstName" class="form-control"
                                            th:placeholder="#{register.placeholder.first_name}" value=""/>
+                                    <div style="color:red" th:if="${#fields.hasErrors('firstName')}"
+                                         th:errors="*{firstName}">First Name Error
+                                    </div>
                                 </div>
                                 <div class="form-group">
-                                    <input type="text" required="required" name="lastName" class="form-control"
+                                    <input type="text" th:field="*{lastName}" id="lastName" required="required"
+                                           name="lastName" class="form-control"
                                            th:placeholder="#{register.placeholder.last_name}" value=""/>
+                                    <div style="color:red" th:if="${#fields.hasErrors('lastName')}"
+                                         th:errors="*{lastName}">Last Name Error
+                                    </div>
                                 </div>
                                 <div class="form-group">
-                                    <input type="text" required="required" name="country" class="form-control"
+                                    <input type="text" th:field="*{country}" id="country" required="required"
+                                           name="country" class="form-control"
                                            th:placeholder="#{register.placeholder.country}" value=""/>
+                                    <div style="color:red" th:if="${#fields.hasErrors('country')}"
+                                         th:errors="*{country}">Country Error
+                                    </div>
                                 </div>
                                 <div class="form-group">
                                     <input type="text" required="required" name="role" class="form-control"
-                                           th:placeholder="#{register.placeholder.client}" readonly="readonly" value="Client"/>
+                                           th:placeholder="#{register.placeholder.client}"
+                                           readonly="readonly" value="Client"/>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <input type="email" required="required" name="email" class="form-control"
+                                    <input type="email" th:field="*{email}" id="email" required="required"
+                                           name="email" class="form-control"
                                            th:placeholder="#{register.placeholder.email}" value=""/>
+                                    <div style="color:red" th:if="${#fields.hasErrors('email')}"
+                                         th:errors="*{email}">Email Error
+                                    </div>
+
                                 </div>
                                 <div class="form-group">
-                                    <input type="password" required="required" name="password" class="form-control"
+                                    <input type="password" th:field="*{password}" id="password" required="required"
+                                           name="password" class="form-control"
                                            th:placeholder="#{register.placeholder.password}"
                                            value=""/>
+                                    <div style="color:red" th:if="${#fields.hasErrors('password')}"
+                                         th:errors="*{password}">Password Error
+                                    </div>
                                 </div>
                                 <div class="form-group">
-                                    <input type="password" required="required" name="confirmPassword"
+                                    <input type="password" th:field="*{confirmPassword}" id="confirmPassword"
+                                           required="required" name="confirmPassword"
                                            class="form-control"
                                            th:placeholder="#{register.placeholder.confirm.password}" value=""/>
+                                    <div style="color:red" th:if="${#fields.hasErrors('confirmPassword')}"
+                                         th:errors="*{confirmPassword}">Password Error
+                                    </div>
                                 </div>
 
                                 <button class="btn btn-info btn-lg btn-primary btn-block" type="submit"
@@ -142,50 +169,73 @@
                             </div>
                         </div>
                     </form>
-
                 </div>
 
 
                 <div class="tab-pane fade show" id="manager" role="tabpanel" aria-labelledby="manager-tab">
                     <h3 th:text="#{register.header.as.manager}" class="register-heading"></h3>
-                    <form class="form-signup" method="post" action="/register">
-<!--                        <form class="form-signup" method="post" action="${pageContext.request.contextPath}/register">-->
-<!--                            <form action="#" th:action="@{/register}" th:object="${userData}" method="post">-->
+
+                    <form class="form-signup" th:method="POST" th:action="@{/register}" th:object="${user}">
 
                         <div class="row register-form">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <input type="text" required="required" name="firstName" class="form-control"
+                                    <input type="text" th:field="*{firstName}" id="firstNameM" required="required"
+                                           name="firstName" class="form-control"
                                            th:placeholder="#{register.placeholder.first_name}" value=""/>
+                                    <div style="color:red" th:if="${#fields.hasErrors('firstName')}"
+                                         th:errors="*{firstName}">FirstName Error
+                                    </div>
                                 </div>
                                 <div class="form-group">
-                                    <input type="text" required="required" name="lastName" class="form-control"
+                                    <input type="text" th:field="*{lastName}" id="lastNameM" required="required"
+                                           name="lastName" class="form-control"
                                            th:placeholder="#{register.placeholder.last_name}" value=""/>
+                                    <div style="color:red" th:if="${#fields.hasErrors('lastName')}"
+                                         th:errors="*{lastName}">Last Name Error
+                                    </div>
                                 </div>
                                 <div class="form-group">
-                                    <input type="text" required="required" name="country" class="form-control"
+                                    <input type="text" th:field="*{country}" id="countryM" required="required"
+                                           name="country" class="form-control"
                                            th:placeholder="#{register.placeholder.country}" value=""/>
+                                    <div style="color:red" th:if="${#fields.hasErrors('country')}"
+                                         th:errors="*{country}">Country Error
+                                    </div>
                                 </div>
                                 <div class="form-group">
-                                    <input type="text" name="role" class="form-control" th:placeholder="#{register.placeholder.manager}"
-                                           readonly="readonly" value="manager"/>
+                                    <input type="text" required="required" name="role" class="form-control"
+                                           th:placeholder="#{register.placeholder.manager}"
+                                           readonly="readonly" value="Manager"/>
                                 </div>
-
                             </div>
+
                             <div class="col-md-6">
 
                                 <div class="form-group">
-                                    <input type="email" required="required" name="email" class="form-control"
+                                    <input type="email" th:field="*{email}" id="emailM" required="required" name="email"
+                                           class="form-control"
                                            th:placeholder="#{register.placeholder.email}" value=""/>
+                                    <div style="color:red" th:if="${#fields.hasErrors('email')}"
+                                         th:errors="*{email}">Email Error
+                                    </div>
                                 </div>
                                 <div class="form-group">
-                                    <input type="password" required="required" name="password" class="form-control"
+                                    <input type="password" th:field="*{password}" id="passwordM" required="required"
+                                           name="password" class="form-control"
                                            th:placeholder="#{register.placeholder.password}" value=""/>
+                                    <div style="color:red" th:if="${#fields.hasErrors('password')}"
+                                         th:errors="*{password}">Password Error
+                                    </div>
                                 </div>
                                 <div class="form-group">
-                                    <input type="password" required="required" name="confirmPassword"
+                                    <input type="password" th:field="*{confirmPassword}" id="confirmPasswordM"
+                                           required="required" name="confirmPassword"
                                            class="form-control"
                                            th:placeholder="#{register.placeholder.confirm.password}" value=""/>
+                                    <div style="color:red" th:if="${#fields.hasErrors('confirmPassword')}"
+                                         th:errors="*{confirmPassword}">Confirm Password Error
+                                    </div>
                                 </div>
 
                                 <button class="btn btn-info btn-lg btn-block" type="submit"

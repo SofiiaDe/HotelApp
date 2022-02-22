@@ -1,32 +1,30 @@
 package com.epam.javacourse.hotelapp.controller;
 
 import com.epam.javacourse.hotelapp.dto.UserDto;
+import com.epam.javacourse.hotelapp.exception.AppException;
 import com.epam.javacourse.hotelapp.exception.UserAlreadyExistsException;
 import com.epam.javacourse.hotelapp.service.interfaces.IUserService;
+import com.epam.javacourse.hotelapp.utils.validation.Validator;
+import com.epam.javacourse.hotelapp.utils.validation.customannotations.EmailValidator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
+
 import static com.epam.javacourse.hotelapp.utils.Constants.PAGE_REGISTRATION;
-import static com.epam.javacourse.hotelapp.utils.Constants.PARAM_USER;
 
 @Controller
-//@RequestMapping("/register")
 public class RegistrationController {
 
     private static final Logger logger = LogManager.getLogger(RegistrationController.class);
@@ -44,59 +42,69 @@ public class RegistrationController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @GetMapping(value = "/register")
-    public String getRegisterPage(HttpSession session, Model model) {
+    @GetMapping("/register")
+    public String newPerson(@ModelAttribute("user") UserDto userDto) {
         return PAGE_REGISTRATION;
     }
 
-    @PostMapping(value = "/register")
-    public String registerPost(HttpServletRequest request, HttpSession session, @Valid UserDto userDto, Model model) throws UserAlreadyExistsException {
+    @PostMapping("/register")
+    public String create(HttpServletRequest request, @ModelAttribute("user") @Valid UserDto userDto,
+                         BindingResult bindingResult, Model model) throws AppException {
+
+        if (bindingResult.hasErrors())
+            return PAGE_REGISTRATION;
 
         String password = userDto.getPassword();
-        String passHash = passwordEncoder.encode(userDto.getPassword());
+        String email = userDto.getEmail();
+        String firstName = userDto.getFirstName();
+        String lastName = userDto.getLastName();
+        String country = userDto.getCountry();
+        String role = userDto.getRole().trim().toLowerCase();
+
+        if (email == null || password == null ||
+                firstName == null || lastName == null ||
+                country == null || role == null) {
+            return PAGE_REGISTRATION;
+        }
+
+        userDto.setFirstName(firstName);
+        userDto.setLastName(lastName);
+
+        userDto.setEmail(email);
+        if (!Validator.isEmailValid(email, 50)) {
+            throw new AppException("Invalid email");
+        }
+
+        if (!Validator.isPasswordValid(password, 2, 8)) {
+            throw new AppException("Invalid password");
+        }
+
+        String passHash = passwordEncoder.encode(password);
         userDto.setPassword(passHash);
 
-        authWithAuthManager(request, userDto.getEmail(), password);
-        session.setAttribute(PARAM_USER, userDto);
-        logger.info("Create user with id = {}", userDto.getId());
-        return "redirect:/client/info";
+        userDto.setCountry(country);
+        userDto.setRole(role);
+
+        boolean isUserCreated = false;
+        try {
+            userService.createUser(userDto);
+            isUserCreated = true;
+        } catch (UserAlreadyExistsException e) {
+            model.addAttribute("isUserExists", true);
+            logger.warn("Such user is already exists", e);
+        }
+
+        String result;
+        if (isUserCreated) {
+            request.getSession().setAttribute("newUser",userDto);
+            logger.info("Create user with id = {}",userDto.getId());
+            result = "redirect:/login";
+        } else {
+            result = PAGE_REGISTRATION;
+        }
+        return result;
     }
-
-    public void authWithAuthManager(HttpServletRequest request, String username, String password) {
-        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(username, password);
-        authToken.setDetails(new WebAuthenticationDetails(request));
-
-        Authentication authentication = authenticationManager.authenticate(authToken);
-
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-    }
-
-//    @GetMapping("/new")
-//    public String showRegistrationForm(HttpServletRequest request, Model model) {
-//        UserDto userDto = new UserDto();
-//        model.addAttribute("user", userDto);
-//        return PAGE_REGISTRATION;
-//    }
-
-//    /**
-//     * The controller will redirect to the registration form if there are any errors set at validation time.
-//     * @param userDto
-//     * @param request
-//     * @param errors
-//     * @return ModelAndView object which is the convenient class for sending model data (user) tied to the view.
-//     */
-//    @PostMapping("/new")
-//    public ModelAndView registerUser(@ModelAttribute("user") @Valid UserDto userDto,
-//            HttpServletRequest request, Errors errors) {
-//        ModelAndView mav = null;
-//        try {
-//            userService.createUser(userDto);
-//        } catch (UserAlreadyExistsException uaeEx) {
-//            mav.addObject("message", "An account for that username/email already exists.");
-//            return mav;
-//        }
-//        return new ModelAndView("successRegister", "user", userDto);
-//
-//    }
 
 }
+
+

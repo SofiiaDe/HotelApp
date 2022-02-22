@@ -15,9 +15,9 @@ public class Booking implements Serializable {
     @Column(name = "id", insertable = false, updatable = false, nullable = false)
     private int id;
 
-//    @ManyToOne
+    @ManyToOne(optional = false, cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
-    private int userId;
+    private User userId;
 
     @Column(name = "checkin_date")
     private LocalDate checkinDate;
@@ -42,11 +42,11 @@ public class Booking implements Serializable {
         this.id = id;
     }
 
-    public int getUserId() {
+    public User getUserId() {
         return userId;
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(User userId) {
         this.userId = userId;
     }
 

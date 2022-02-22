@@ -1,5 +1,6 @@
 package com.epam.javacourse.hotelapp.controller;
 
+import com.epam.javacourse.hotelapp.dto.ApplicationDto;
 import com.epam.javacourse.hotelapp.dto.UserDto;
 import com.epam.javacourse.hotelapp.exception.AppException;
 import com.epam.javacourse.hotelapp.model.User;

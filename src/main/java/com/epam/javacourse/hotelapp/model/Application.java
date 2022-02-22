@@ -17,8 +17,9 @@ public class Application implements Serializable {
     @Column(name = "id", insertable = false, updatable = false, nullable = false)
     private int id;
 
+    @ManyToOne(optional = false, cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id", nullable = false)
-    private int userId;
+    private User userId;
 
     @Column(name = "room_seats")
     private String roomTypeBySeats;
@@ -41,11 +42,11 @@ public class Application implements Serializable {
         this.id = id;
     }
 
-    public Integer getUserId() {
+    public User getUserId() {
         return userId;
     }
 
-    public void setUserId(Integer userId) {
+    public void setUserId(User userId) {
         this.userId = userId;
     }
 

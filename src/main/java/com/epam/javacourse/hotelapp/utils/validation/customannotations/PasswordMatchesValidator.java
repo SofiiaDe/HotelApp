@@ -1,4 +1,4 @@
-package com.epam.javacourse.hotelapp.utils.validation;
+package com.epam.javacourse.hotelapp.utils.validation.customannotations;
 
 import com.epam.javacourse.hotelapp.dto.UserDto;
 
@@ -14,6 +14,6 @@ public class PasswordMatchesValidator implements ConstraintValidator<PasswordMat
     @Override
     public boolean isValid(Object obj, ConstraintValidatorContext context){
         UserDto user = (UserDto) obj;
-        return user.getPassword().equals(user.getMatchingPassword());
+        return user.getPassword().equals(user.getConfirmPassword());
     }
 }

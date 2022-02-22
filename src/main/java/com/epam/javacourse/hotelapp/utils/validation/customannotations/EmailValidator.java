@@ -1,4 +1,4 @@
-package com.epam.javacourse.hotelapp.utils.validation;
+package com.epam.javacourse.hotelapp.utils.validation.customannotations;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
@@ -6,10 +6,11 @@ import javax.validation.ConstraintValidatorContext;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class EmailValidator implements ConstraintValidator<ValidEmail, String> {
-    private static final String EMAIL_PATTERN = "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$";
+import static com.epam.javacourse.hotelapp.utils.Constants.EMAIL_REGEX;
 
-    private static final Pattern PATTERN = Pattern.compile(EMAIL_PATTERN);
+public class EmailValidator implements ConstraintValidator<ValidEmail, String> {
+
+    private static final Pattern PATTERN = Pattern.compile(EMAIL_REGEX);
 
     @Override
     public boolean isValid(final String username, final ConstraintValidatorContext context) {

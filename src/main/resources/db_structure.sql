@@ -1,10 +1,10 @@
 CREATE TABLE users
 (
     id      INT PRIMARY KEY auto_increment,
-    firstName    VARCHAR(20),
-    lastName VARCHAR(20),
+    first_name    VARCHAR(20),
+    last_name VARCHAR(20),
     email   VARCHAR(50) UNIQUE,
-    password VARCHAR(20),
+    password VARCHAR(100),
     country VARCHAR(20),
     role VARCHAR(13)
 );

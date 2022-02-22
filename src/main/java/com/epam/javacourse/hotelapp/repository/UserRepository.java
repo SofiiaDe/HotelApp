@@ -1,10 +1,13 @@
 package com.epam.javacourse.hotelapp.repository;
 
+import com.epam.javacourse.hotelapp.dto.ApplicationDto;
 import com.epam.javacourse.hotelapp.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Integer> {
@@ -14,5 +17,8 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     boolean existsByEmail(@Param("email") String email);
 
     @Query("SELECT u FROM User u where u.email = :email")
-    User findUserByEmail(@Param("email") String login);
+    User findUserByEmail(@Param("email") String email);
+
+
+
 }

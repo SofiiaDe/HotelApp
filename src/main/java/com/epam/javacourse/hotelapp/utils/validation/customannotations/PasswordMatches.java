@@ -1,4 +1,4 @@
-package com.epam.javacourse.hotelapp.utils.validation;
+package com.epam.javacourse.hotelapp.utils.validation.customannotations;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;

@@ -1,8 +1,8 @@
 package com.epam.javacourse.hotelapp.dto;
 
-import com.epam.javacourse.hotelapp.model.User;
-import com.epam.javacourse.hotelapp.utils.validation.PasswordMatches;
-import com.epam.javacourse.hotelapp.utils.validation.ValidEmail;
+import com.epam.javacourse.hotelapp.utils.validation.customannotations.PasswordMatches;
+import com.epam.javacourse.hotelapp.utils.validation.customannotations.ValidEmail;
+import com.epam.javacourse.hotelapp.utils.validation.customannotations.ValidPassword;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -13,20 +13,31 @@ public class UserDto {
 
     private int id;
 
+    @NotEmpty(message = "First Name can't be empty")
+    @Size(min = 2, max = 20, message = "First Name should be between 2 and 20 characters")
     private String firstName;
+
+    @NotEmpty(message = "Last Name can't be empty")
+    @Size(min = 2, max = 20, message = "Last Name should be between 2 and 20 characters")
     private String lastName;
 
     @ValidEmail
     @NotNull
-    @NotEmpty
+    @NotEmpty(message = "Email can't be empty")
     private String email;
 
+    @ValidPassword(message = "Password must contain at least one digit, at least one lowercase and one uppercase " +
+            "Latin characters as well as at least one special character like ! @ # & ( ) etc.")
     @NotNull
-    @Size(min = 8, max = 20)
+    @NotEmpty(message = "Password can't be empty")
+    @Size(min = 8, max = 20, message = "Password must contain a length of at least 8 characters and a maximum of 20 characters.")
     private String password;
 
-    String matchingPassword;
+    @NotNull
+    @NotEmpty(message = "Password should match")
+    String confirmPassword;
 
+    @NotEmpty(message = "Country can't be empty")
     private String country;
 
     private String role;
@@ -55,12 +66,12 @@ public class UserDto {
         this.password = password;
     }
 
-    public String getMatchingPassword() {
-        return matchingPassword;
+    public String getConfirmPassword() {
+        return confirmPassword;
     }
 
-    public void setMatchingPassword(String matchingPassword) {
-        this.matchingPassword = matchingPassword;
+    public void setConfirmPassword(String confirmPassword) {
+        this.confirmPassword = confirmPassword;
     }
 
     public String getRole() {

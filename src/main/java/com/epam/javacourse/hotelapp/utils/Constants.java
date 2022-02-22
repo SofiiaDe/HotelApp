@@ -10,7 +10,7 @@ public class Constants {
     public static final String PAGE_LOGIN = "login";
     public static final String PAGE_HOME = "home";
     public static final String PAGE_REGISTRATION = "register";
-    public static final String PAGE_CLIENT_ACCOUNT = "/WEB-INF/jsp/client/clientAccount.jsp";
+    public static final String PAGE_CLIENT_ACCOUNT = "clientAccount";
     public static final String PAGE_MANAGER_ACCOUNT = "/WEB-INF/jsp/manager/managerAccount.jsp";
     public static final String PAGE_SUBMIT_APPLICATION = "/WEB-INF/jsp/client/application.jsp";
     public static final String PAGE_PAY_INVOICE = "/WEB-INF/jsp/client/paymentTransaction.jsp";
@@ -27,4 +27,8 @@ public class Constants {
     public static final String PARAM_WEEK_INFO = "weekInfo";
     public static final String PARAM_FOOD = "food";
     public static final String PARAM_EAT_PERIOD = "eat_period";
+
+    public static final String PASSWORD_REGEX = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#&()–\\[{}\\]:;',?\\*~$^+=<>]).{8,20}$";
+    public static final String EMAIL_REGEX = "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$";
+
 }

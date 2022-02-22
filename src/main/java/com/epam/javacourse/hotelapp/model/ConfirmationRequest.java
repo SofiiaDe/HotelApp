@@ -15,8 +15,9 @@ public class ConfirmationRequest implements Serializable {
     @Column(name = "id", insertable = false, updatable = false, nullable = false)
     private int id;
 
+    @ManyToOne(optional = false, cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
-    private int userId;
+    private User userId;
 
     @Column(name = "application_id")
     private int applicationId;
@@ -32,11 +33,11 @@ public class ConfirmationRequest implements Serializable {
     @Column(name = "status")
     private String status;
 
-    public int getUserId() {
+    public User getUserId() {
         return userId;
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(User userId) {
         this.userId = userId;
     }
 

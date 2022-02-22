@@ -1,4 +1,4 @@
-package com.epam.javacourse.hotelapp.utils.validation;
+package com.epam.javacourse.hotelapp.utils.validation.customannotations;
 
 import static java.lang.annotation.ElementType.ANNOTATION_TYPE;
 import static java.lang.annotation.ElementType.FIELD;
