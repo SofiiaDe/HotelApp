@@ -1,5 +1,6 @@
 package com.epam.javacourse.hotelapp.dto;
 
+import com.epam.javacourse.hotelapp.model.User;
 import com.epam.javacourse.hotelapp.utils.validation.PasswordMatches;
 import com.epam.javacourse.hotelapp.utils.validation.ValidEmail;
 
@@ -93,4 +94,6 @@ public class UserDto {
     public void setCountry(String country) {
         this.country = country;
     }
+
+
 }

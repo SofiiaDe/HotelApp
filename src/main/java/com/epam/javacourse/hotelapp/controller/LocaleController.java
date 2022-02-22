@@ -15,7 +15,7 @@ public class LocaleController {
     @Autowired
     MessageSource messageSource;
 
-    @GetMapping(value = "/internalization")
+    @GetMapping(value = "/language")
     public String getLanguage(@RequestParam(name = "lang") String lang, HttpSession session, HttpServletRequest request) {
         session.setAttribute("locale", lang);
 

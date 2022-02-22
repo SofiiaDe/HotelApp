@@ -26,10 +26,13 @@ import static com.epam.javacourse.hotelapp.utils.Constants.PAGE_REGISTRATION;
 import static com.epam.javacourse.hotelapp.utils.Constants.PARAM_USER;
 
 @Controller
-@RequestMapping("registration")
+//@RequestMapping("/register")
 public class RegistrationController {
 
     private static final Logger logger = LogManager.getLogger(RegistrationController.class);
+
+    public RegistrationController() {
+    }
 
     @Autowired
     IUserService userService;
@@ -41,12 +44,12 @@ public class RegistrationController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @GetMapping(value = "/new")
+    @GetMapping(value = "/register")
     public String getRegisterPage(HttpSession session, Model model) {
         return PAGE_REGISTRATION;
     }
 
-    @PostMapping(value = "/new")
+    @PostMapping(value = "/register")
     public String registerPost(HttpServletRequest request, HttpSession session, @Valid UserDto userDto, Model model) throws UserAlreadyExistsException {
 
         String password = userDto.getPassword();

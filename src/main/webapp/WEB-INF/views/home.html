@@ -232,8 +232,8 @@
             <img src="pictures/logo-hotel.jpg" alt="logo">
         </div>
         <li><a href="/rooms" class="navLink" th:text="#{home.menu.button.rooms}">Rooms</a></li>
-        <li><a href="/loginPage" class="navLink" th:text="#{home.menu.button.login}">Login</a></li>
-        <li><a href="/registerPage" class="navLink" th:text="#{home.menu.button.register}">Register</a></li>
+        <li><a href="/login" class="navLink" th:text="#{home.menu.button.login}">Login</a></li>
+        <li><a href="/register" class="navLink" th:text="#{home.menu.button.register}">Register</a></li>
     </ul>
 
     <div class="dropdown">
@@ -244,23 +244,23 @@
             </i>
         </button>
         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-            <div class="search_icon" th:if="${#locale.toString() == 'ru_RU'}">
-                <a th:href="@{${#httpServletRequest.requestURI}(lang='en_US')}">
-                    <i>EN</i>
-                </a>
-            </div>
-            <div class="search_icon" th:if="${#locale.toString() == 'en_US'}">
-                <a th:href="@{${#httpServletRequest.requestURI}(lang='ru_RU')}">
-                    <i>RU</i>
-                </a>
-            </div>
-<!--            <form class="form-inline" method="post" action="controller?command=i18n">-->
-<!--                <button type="submit" name="en" onclick="changeFieldElement('langField', 'en')"-->
-<!--                        class="dropdown-item" th:text="#{main.menu.button.english}"></button>-->
-<!--                <button type="submit" name="uk" onclick="changeFieldElement('langField', 'uk')"-->
-<!--                        class="dropdown-item" th:text="#{main.menu.button.ukrainian}"></button>-->
-<!--                <input name="langField" type="hidden" value="en">-->
-<!--            </form>-->
+<!--            <div class="search_icon" th:if="${#locale.toString() == 'ru_RU'}">-->
+<!--                <a th:href="@{${#httpServletRequest.requestURI}(lang='en_US')}">-->
+<!--                    <i>EN</i>-->
+<!--                </a>-->
+<!--            </div>-->
+<!--            <div class="search_icon" th:if="${#locale.toString() == 'en_US'}">-->
+<!--                <a th:href="@{${#httpServletRequest.requestURI}(lang='ru_RU')}">-->
+<!--                    <i>RU</i>-->
+<!--                </a>-->
+<!--            </div>-->
+            <form class="form-inline" method="get" action="/language">
+                <button type="submit" name="en" onclick="changeFieldElement('langField', 'en')"
+                        class="dropdown-item" th:text="#{main.menu.button.english}"></button>
+                <button type="submit" name="uk" onclick="changeFieldElement('langField', 'uk')"
+                        class="dropdown-item" th:text="#{main.menu.button.ukrainian}"></button>
+                <input name="langField" type="hidden" value="en">
+            </form>
         </div>
     </div>
 

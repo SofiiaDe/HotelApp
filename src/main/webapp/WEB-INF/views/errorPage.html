@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Error</title>
+</head>
+<style>
+    #errorForm{
+        margin-left: 35px;
+        margin-top: 35px;
+    }
+</style>
+<body class="text-center" id="errorForm">
+
+<h2 class="error"
+    th:text="#{error.occurred}">:
+</h2>
+
+
+<!--<div th:if="${not empty errorMessage}">-->
+    <h3>${requestScope.errorMessage}</h3>
+</div>
+
+</body>
+</html>

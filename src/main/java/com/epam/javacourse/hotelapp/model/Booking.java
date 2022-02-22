@@ -15,6 +15,7 @@ public class Booking implements Serializable {
     @Column(name = "id", insertable = false, updatable = false, nullable = false)
     private int id;
 
+//    @ManyToOne
     @JoinColumn(name = "user_id")
     private int userId;
 

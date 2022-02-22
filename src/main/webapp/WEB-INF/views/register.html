@@ -17,7 +17,7 @@
           rel="stylesheet">
 
     <title>Registration page</title>
-    <link rel="stylesheet" href="/css/home.css">
+    <!--    <link rel="stylesheet" href="/css/home.css">-->
 
 
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
@@ -25,15 +25,17 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
     <style>
-        #footer{
+        #footer {
             position: absolute;
             bottom: 0;
             width: 100%;
         }
-        .navLink{
+
+        .navLink {
             color: white !important;
         }
-        body{
+
+        body {
             background-color: floralwhite;
         }
     </style>
@@ -42,13 +44,10 @@
 <body>
 
 <nav class="navbar background">
-    <ul class="nav-list">
-        <div class="logo">
-            <img src="pictures/logo-hotel.jpg" alt="logo">
-        </div>
-        <li><a href="#rooms" class="navLink" th:text="#{home.menu.button.rooms}"></a></li>
-        <li><a href="/Hotel/controller?command=homePage" class="navLink" th:text="#{menu.button.home}"></a></li>
-    </ul>
+    <div class="logo">
+        <img src="pictures/logo-hotel.jpg" alt="logo">
+    </div>
+
 
     <div class="dropdown">
         <button class="btn btn-outline-secondary btn-sm" type="button" id="dropdownMenuButton"
@@ -58,9 +57,9 @@
             </i>
         </button>
         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-            <form class="form-inline" method="post" action="controller?command=i18n">
+            <form class="form-inline" method="post" action="/lang">
                 <button type="submit" name="en" onclick="changeFieldElement('langField', 'en')"
-                        class="dropdown-item"  th:text="#{main.menu.button.english}"></button>
+                        class="dropdown-item" th:text="#{main.menu.button.english}"></button>
                 <button type="submit" name="uk" onclick="changeFieldElement('langField', 'uk')"
                         class="dropdown-item" th:text="#{main.menu.button.ukrainian}"></button>
                 <input name="langField" type="hidden" value="en">
@@ -74,12 +73,14 @@
     <div class="row">
         <div class="col-md-3 register-left">
             <img src="https://image.ibb.co/n7oTvU/logo_white.png" alt=""/>
-            <h3>th:text="#{register.welcome}"</h3>
+            <h3 th:text="#{register.welcome}"></h3>
             <p th:text="#{register.welcome.text}"></p>
-            <form class="form-signin" method="post" action="controller?command=loginPage">
-                <input type="submit" name="login" value="Login"><br/>
-                <%--                <button class="btn btn-lg btn-primary btn-block" type="submit" th:text="#{login.button.login}"></button><br/>--%>
-
+            <form class="form-signin" method="post" action="/login">
+                <input type="submit" name="login" th:text="#{login.button.login}"><br/>
+<!--                <button class="btn btn-lg btn-primary btn-block" type="submit" th:text="#{login.button.login}"></button>-->
+<!--                <input type="submit" name="login" value="Login"><br/>-->
+<!--                <button class="btn btn-lg btn-primary btn-block" type="submit" th:text="#{login.button.login}"></button>-->
+                <br/>
             </form>
         </div>
         <div class="col-md-9 register-right">
@@ -95,51 +96,49 @@
             </ul>
             <div class="tab-content" id="myTabContent">
                 <div class="tab-pane fade show active" id="client" role="tabpanel" aria-labelledby="client-tab">
-                    <h3> class="register-heading" th:text="#{register.header.as.client}"></h3>
-                    <form class="form-signup" method="post" action="controller?command=registration">
+                    <h3 th:text="#{register.header.as.client}" class="register-heading"></h3>
+
+<!--                    <form class="form-signup" method="post" action="/new">-->
+                    <form class="form-signup" method="post" action="#" th:action="@{/register}" th:object="${user}">
 
                         <div class="row register-form">
 
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <input type="text" required="required" name="firstName" class="form-control"
-                                           placeholder="First_name *" />
-                                    value=""/>
+                                           th:placeholder="#{register.placeholder.first_name}" value=""/>
                                 </div>
                                 <div class="form-group">
                                     <input type="text" required="required" name="lastName" class="form-control"
-                                           placeholder="Last name *"
-                                    value=""/>
+                                           th:placeholder="#{register.placeholder.last_name}" value=""/>
                                 </div>
                                 <div class="form-group">
                                     <input type="text" required="required" name="country" class="form-control"
-                                           placeholder="Country *"
-                                    value=""/>
+                                           th:placeholder="#{register.placeholder.country}" value=""/>
                                 </div>
                                 <div class="form-group">
-                                    <input type="text" required="required" name="role" class="form-control" placeholder="Role *"
-                                           readonly="readonly" value="Client"/>
+                                    <input type="text" required="required" name="role" class="form-control"
+                                           th:placeholder="#{register.placeholder.client}" readonly="readonly" value="Client"/>
                                 </div>
-
-
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <input type="email" required="required" name="email" class="form-control"
-                                           placeholder="email *"
-                                    value=""/>
+                                           th:placeholder="#{register.placeholder.email}" value=""/>
                                 </div>
                                 <div class="form-group">
-                                    <input type="password" required="required" name="password" class="form-control" placeholder="password *"
-                                    value=""/>
+                                    <input type="password" required="required" name="password" class="form-control"
+                                           th:placeholder="#{register.placeholder.password}"
+                                           value=""/>
                                 </div>
                                 <div class="form-group">
-                                    <input type="password" required="required" name="confirmPassword" class="form-control"
-                                           placeholder="password *"
-                                    value=""/>
+                                    <input type="password" required="required" name="confirmPassword"
+                                           class="form-control"
+                                           th:placeholder="#{register.placeholder.confirm.password}" value=""/>
                                 </div>
 
-                                <button class="btn btn-info btn-lg btn-primary btn-block" type="submit" th:text="#{register.button}"></button>
+                                <button class="btn btn-info btn-lg btn-primary btn-block" type="submit"
+                                        th:text="#{register.button}"></button>
                             </div>
                         </div>
                     </form>
@@ -148,25 +147,27 @@
 
 
                 <div class="tab-pane fade show" id="manager" role="tabpanel" aria-labelledby="manager-tab">
-                    <h3> class="register-heading" th:text="#{register.header.as.manager}" </h3>
-                    <form class="form-signup" method="post" action="controller?command=registration">
+                    <h3 th:text="#{register.header.as.manager}" class="register-heading"></h3>
+                    <form class="form-signup" method="post" action="/register">
+<!--                        <form class="form-signup" method="post" action="${pageContext.request.contextPath}/register">-->
+<!--                            <form action="#" th:action="@{/register}" th:object="${userData}" method="post">-->
 
                         <div class="row register-form">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <input type="text" required="required" name="firstName" class="form-control" placeholder="first_name *"
-                                    value=""/>
+                                    <input type="text" required="required" name="firstName" class="form-control"
+                                           th:placeholder="#{register.placeholder.first_name}" value=""/>
                                 </div>
                                 <div class="form-group">
-                                    <input type="text" required="required" name="lastName" class="form-control" placeholder="last_name *"
-                                    value=""/>
+                                    <input type="text" required="required" name="lastName" class="form-control"
+                                           th:placeholder="#{register.placeholder.last_name}" value=""/>
                                 </div>
                                 <div class="form-group">
-                                    <input type="text" required="required" name="country" class="form-control" placeholder="country *"
-                                    value=""/>
+                                    <input type="text" required="required" name="country" class="form-control"
+                                           th:placeholder="#{register.placeholder.country}" value=""/>
                                 </div>
                                 <div class="form-group">
-                                    <input type="text" name="role" class="form-control" placeholder="Role *"
+                                    <input type="text" name="role" class="form-control" th:placeholder="#{register.placeholder.manager}"
                                            readonly="readonly" value="manager"/>
                                 </div>
 
@@ -174,20 +175,21 @@
                             <div class="col-md-6">
 
                                 <div class="form-group">
-                                    <input type="email" required="required" name="email" class="form-control" placeholder="email *"
-                                    value=""/>
+                                    <input type="email" required="required" name="email" class="form-control"
+                                           th:placeholder="#{register.placeholder.email}" value=""/>
                                 </div>
                                 <div class="form-group">
-                                    <input type="password" required="required" name="password" class="form-control" placeholder="password *"
-                                    value=""/>
+                                    <input type="password" required="required" name="password" class="form-control"
+                                           th:placeholder="#{register.placeholder.password}" value=""/>
                                 </div>
                                 <div class="form-group">
-                                    <input type="password" required="required" name="confirmPassword" class="form-control"
-                                           placeholder="confirm password *"
-                                    value=""/>
+                                    <input type="password" required="required" name="confirmPassword"
+                                           class="form-control"
+                                           th:placeholder="#{register.placeholder.confirm.password}" value=""/>
                                 </div>
 
-                                <button class="btn btn-info btn-lg btn-block" type="submit" th:text="#{register.button}"></button>
+                                <button class="btn btn-info btn-lg btn-block" type="submit"
+                                        th:text="#{register.button}"></button>
 
                             </div>
                         </div>
@@ -201,11 +203,11 @@
 
 <footer class="background" id="footer">
     <p class="text-footer"
-        th:text="#{home.copyright}">
+       th:text="#{home.copyright}">
     </p>
 </footer>
 
-!-- JavaScript -->
+<!-- JavaScript -->
 <!-- jQuery -->
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"

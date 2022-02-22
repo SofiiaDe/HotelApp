@@ -8,7 +8,7 @@ import static com.epam.javacourse.hotelapp.utils.Constants.PAGE_HOME;
 @Controller
 public class HomePageController {
 
-    @GetMapping("/home")
+    @GetMapping("/")
     public String getHomePage() {
         return PAGE_HOME;
     }

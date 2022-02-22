@@ -24,12 +24,6 @@ public class SpringConfig implements WebMvcConfigurer {
         this.applicationContext = applicationContext;
     }
 
-//    @Bean
-//    @Override
-//    public LocaleResolver localeResolver() {
-//        return null;
-//    }
-
     @Bean
     public SpringResourceTemplateResolver templateResolver() {
         SpringResourceTemplateResolver templateResolver = new SpringResourceTemplateResolver();
