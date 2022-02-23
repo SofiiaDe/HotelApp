@@ -5,11 +5,14 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.crypto.password.Pbkdf2PasswordEncoder;
 
@@ -26,6 +29,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new Pbkdf2PasswordEncoder();
     }
 
+//    @Bean
+//    public PasswordEncoder passwordEncoder() {
+//        return PasswordEncoderFactories.createDelegatingPasswordEncoder(); // with new spring security 5
+//    }
+
     @Autowired
     public void configureGlobalAuthentication(AuthenticationManagerBuilder auth) throws Exception {
         auth
@@ -39,24 +47,27 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/", "/locale/*", "/info/*", "/user/*", "/client/*")
+                .antMatchers("/", "/login", "/register", "/locale/*", "/info/*", "/user/*")
                 .permitAll()
-                .antMatchers("/manager/*")
-                .hasRole("MANAGER")
-                .antMatchers("/user/*", "/client/*")
-                .hasAnyRole("MANAGER", "USER")
+                .antMatchers("/managerAccount/**").access("hasRole('ROLE_MANAGER')")
+                .antMatchers("/clientAccount/**").access("hasRole('ROLE_CLIENT')")
                 .and()
                 .exceptionHandling()
                 .accessDeniedPage("/")
                 .and()
                 .formLogin()
-                .loginPage("/register")
+//                .loginPage("/register")
+                .loginPage("/login")
                 .loginProcessingUrl("/login")
-                .failureUrl("/register?error")
+                .defaultSuccessUrl("/home") // to be changed to account page
+                .failureUrl("/login?error=true")
+//                .failureUrl("/register?error")
                 .usernameParameter("email")
                 .passwordParameter("password")
                 .permitAll()
                 .successForwardUrl("/")
+                .and()
+                .exceptionHandling().accessDeniedPage("/errorPage")
                 .and()
                 .logout()
                 .permitAll()
@@ -67,8 +78,27 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Override
+    public void configure(WebSecurity web) {
+        web.ignoring()
+                .antMatchers("/resources/**", "/static/**");
+    }
+
+    @Override
     @Bean
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
+    }
+
+    @Bean
+    public DaoAuthenticationProvider authProvider() {
+        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+        authProvider.setUserDetailsService(userDetailsService);
+        authProvider.setPasswordEncoder(passwordEncoder());
+        return authProvider;
+    }
+
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) {
+        auth.authenticationProvider(authProvider());
     }
 }

@@ -13,7 +13,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
@@ -27,19 +29,50 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         User user = userRepository.findUserByEmail(email);
         if (user == null) {
-            logger.error("No user found with username: {}", email);
-            throw new UsernameNotFoundException("No user found with username: " + email);
+            logger.error("No user found with email: {}", email);
+            throw new UsernameNotFoundException("No user found with email: " + email);
         }
-        boolean enabled = true;
-        boolean accountNonExpired = true;
-        boolean credentialsNonExpired = true;
-        boolean accountNonLocked = true;
 
         Set<GrantedAuthority> roles = new HashSet<>();
-        roles.add(new SimpleGrantedAuthority("ROLE_" + user.getRole()));
+        roles.add(new SimpleGrantedAuthority("ROLE_" + user.getRole().toUpperCase()));
 
         return new org.springframework.security.core.userdetails.User(
-                user.getEmail(), user.getPassword().toLowerCase(), enabled, accountNonExpired,
-                credentialsNonExpired, accountNonLocked, roles);
+                user.getEmail(), user.getPassword(), roles);
     }
+
+//    @Override
+//    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+//        User user = userRepository.findUserByEmail(email);
+//        if (user == null) {
+//            logger.error("No user found with email: {}", email);
+//            throw new UsernameNotFoundException("No user found with email: " + email);
+//        }
+//        List<SimpleGrantedAuthority> grantedAuthorities = user
+//                .getAuthorities()
+//                .map(authority -> new SimpleGrantedAuthority(authority))
+//                .collect(Collectors.toList()); // (1)
+//        return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), grantedAuthorities);
+//    }
+
+
+
+//    @Override
+//    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+//        User user = userRepository.findUserByEmail(email);
+//        if (user == null) {
+//            logger.error("No user found with email: {}", email);
+//            throw new UsernameNotFoundException("No user found with email: " + email);
+//        }
+//        boolean enabled = true;
+//        boolean accountNonExpired = true;
+//        boolean credentialsNonExpired = true;
+//        boolean accountNonLocked = true;
+//
+//        Set<GrantedAuthority> roles = new HashSet<>();
+//        roles.add(new SimpleGrantedAuthority("ROLE_" + user.getRole().toUpperCase()));
+//
+//        return new org.springframework.security.core.userdetails.User(
+//                user.getEmail(), user.getPassword().toLowerCase(), enabled, accountNonExpired,
+//                credentialsNonExpired, accountNonLocked, roles);
+//    }
 }

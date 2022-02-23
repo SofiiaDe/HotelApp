@@ -18,7 +18,7 @@ public interface ApplicationRepository extends JpaRepository<Application, Intege
 //void deleteInBulkByRoleId(long roleId);
 
     @Query("SELECT a FROM Application a WHERE a.userId = ?1")
-
-//    @Query("SELECT a FROM Application a WHERE a.user.userId = ?1")
     List<ApplicationDto> findApplicationsByUserId(int userId) throws DBException;
+
+
 }
