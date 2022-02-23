@@ -17,16 +17,16 @@ import java.util.List;
 import static com.epam.javacourse.hotelapp.utils.Constants.PAGE_CLIENT_ACCOUNT;
 
 @Controller
-@RequestMapping(value = "/client")
+//@RequestMapping(value = "/client")
 public class ClientAccountController {
 
     @Autowired
     private IApplicationService applicationService;
 
-    @GetMapping(value = "/edit")
-    public String getEditPage(HttpSession session, Model model) throws AppException {
+//    @GetMapping(value = "/clientAccount")
+//    public String getEditPage(HttpSession session, Model model) throws AppException {
 
-        User authorisedUser = (User) session.getAttribute("authorisedUser");
+//        User authorisedUser = (User) session.getAttribute("authorisedUser");
 
 
 //        List<ApplicationDto> userApplications = applicationService.getUserDetailedApplications(authorisedUser.getId());
@@ -54,7 +54,7 @@ public class ClientAccountController {
 //        request.setAttribute("page", page);
 //        request.setAttribute("pageCount", pageCount);
 //    }
-        return PAGE_CLIENT_ACCOUNT;
+//        return PAGE_CLIENT_ACCOUNT;
 }
 
-}
+

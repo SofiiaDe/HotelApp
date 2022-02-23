@@ -1,6 +1,7 @@
 package com.epam.javacourse.hotelapp.repository;
 
 import com.epam.javacourse.hotelapp.dto.ApplicationDto;
+import com.epam.javacourse.hotelapp.exception.DBException;
 import com.epam.javacourse.hotelapp.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -19,6 +20,10 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     @Query("SELECT u FROM User u where u.email = :email")
     User findUserByEmail(@Param("email") String email);
 
+    @Query("SELECT u FROM User u WHERE u.id IN :ids")
+    List<User> findUsersByIds(@Param("ids") List<Integer> ids) throws DBException;
 
 
 }
+
+

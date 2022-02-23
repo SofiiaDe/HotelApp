@@ -17,6 +17,7 @@ public class UserServiceImpl implements IUserService {
     private UserRepository userRepository;
 
     @Override
+    @Transactional(readOnly = true)
     public User createUser(UserDto userDto) throws UserAlreadyExistsException {
         if (emailExist(userDto.getEmail())) {
             throw new UserAlreadyExistsException("There is an account with that email address: "
@@ -39,7 +40,7 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    @Transactional(readOnly = true)
+//    @Transactional(readOnly = true)
     public User getUserByEmail(String email) throws AppException {
         return userRepository.findUserByEmail(email);
     }

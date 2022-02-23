@@ -1,50 +1,53 @@
 package com.epam.javacourse.hotelapp.dto;
 
 import com.epam.javacourse.hotelapp.model.User;
-import com.epam.javacourse.hotelapp.utils.validation.customannotations.PasswordMatches;
+import com.epam.javacourse.hotelapp.utils.Helpers;
+import com.epam.javacourse.hotelapp.utils.enums.BookingStatus;
 
 import java.time.LocalDate;
 
-@PasswordMatches
-public class ApplicationDto {
+public class BookingDto {
 
     private int id;
+    private String bookedByUser;
+    private String bookedByUserEmail;
+    private int userId;
     private LocalDate checkinDate;
     private LocalDate checkoutDate;
     private String roomTypeBySeats;
     private String roomClass;
-    private String bookedByUser;
-    private String bookedByUserEmail;
-    private int userId;
+    private boolean isPaid;
+    private int roomNumber;
 
-    // For client account
-    public ApplicationDto(int id, LocalDate checkinDate, LocalDate checkoutDate,
-                                   String roomTypeBySeats, String roomClass) {
+
+    // For User account
+    public  BookingDto(int id, LocalDate checkinDate, LocalDate checkoutDate,
+                               String roomTypeBySeats, String roomClass, boolean isPaid) {
         this.id = id;
         this.checkinDate = checkinDate;
         this.checkoutDate = checkoutDate;
         this.roomTypeBySeats = roomTypeBySeats;
         this.roomClass = roomClass;
+        this.isPaid = isPaid;
     }
 
-    // For manager account
-    public ApplicationDto(int id, String bookedByUser, String bookedByUserEmail,
-                               LocalDate checkinDate, LocalDate checkoutDate, String roomTypeBySeats, String roomClass) {
+    // For Manager account
+    public BookingDto(int id, String bookedByUser, String bookedByUserEmail,
+                           LocalDate checkinDate, LocalDate checkoutDate, int roomNumber, boolean isPaid) {
         this.id = id;
         this.bookedByUser = bookedByUser;
         this.bookedByUserEmail = bookedByUserEmail;
         this.checkinDate = checkinDate;
         this.checkoutDate = checkoutDate;
-        this.roomTypeBySeats = roomTypeBySeats;
-        this.roomClass = roomClass;
+        this.roomNumber = roomNumber;
+        this.isPaid = isPaid;
     }
 
-    public ApplicationDto() {
-
+    public BookingDto() {
     }
 
-    public String getBookedByUser() {
-        return bookedByUser;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public int getUserId() {
@@ -59,16 +62,8 @@ public class ApplicationDto {
         this.bookedByUser = bookedByUser;
     }
 
-    public String getBookedByUserEmail() {
-        return bookedByUserEmail;
-    }
-
     public void setBookedByUserEmail(String bookedByUserEmail) {
         this.bookedByUserEmail = bookedByUserEmail;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public void setCheckinDate(LocalDate checkinDate) {
@@ -85,6 +80,30 @@ public class ApplicationDto {
 
     public void setRoomClass(String roomClass) {
         this.roomClass = roomClass;
+    }
+
+    public void setPaid(boolean paid) {
+        isPaid = paid;
+    }
+
+    public void setRoomNumber(int roomNumber) {
+        this.roomNumber = roomNumber;
+    }
+
+    public String getBookedByUser() {
+        return bookedByUser;
+    }
+
+    public String getBookedByUserEmail() {
+        return bookedByUserEmail;
+    }
+
+    public boolean isPaid() {
+        return isPaid;
+    }
+
+    public int getRoomNumber() {
+        return roomNumber;
     }
 
     public int getId() {
@@ -105,5 +124,13 @@ public class ApplicationDto {
 
     public String getRoomClass() {
         return roomClass;
+    }
+
+    public boolean getIsPaid() {
+        return isPaid;
+    }
+
+    public BookingStatus getBookingStatus(){
+        return Helpers.calculateBookingStatus(getCheckinDate(), getCheckoutDate(), getIsPaid());
     }
 }

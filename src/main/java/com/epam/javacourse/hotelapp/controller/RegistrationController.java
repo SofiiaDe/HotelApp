@@ -5,7 +5,6 @@ import com.epam.javacourse.hotelapp.exception.AppException;
 import com.epam.javacourse.hotelapp.exception.UserAlreadyExistsException;
 import com.epam.javacourse.hotelapp.service.interfaces.IUserService;
 import com.epam.javacourse.hotelapp.utils.validation.Validator;
-import com.epam.javacourse.hotelapp.utils.validation.customannotations.EmailValidator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;

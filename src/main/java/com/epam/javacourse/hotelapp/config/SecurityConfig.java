@@ -12,7 +12,6 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.crypto.password.Pbkdf2PasswordEncoder;
 
@@ -29,10 +28,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new Pbkdf2PasswordEncoder();
     }
 
-//    @Bean
-//    public PasswordEncoder passwordEncoder() {
-//        return PasswordEncoderFactories.createDelegatingPasswordEncoder(); // with new spring security 5
-//    }
 
     @Autowired
     public void configureGlobalAuthentication(AuthenticationManagerBuilder auth) throws Exception {
@@ -53,21 +48,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/clientAccount/**").access("hasRole('ROLE_CLIENT')")
                 .and()
                 .exceptionHandling()
-                .accessDeniedPage("/")
+                .accessDeniedPage("/errorPage")
                 .and()
                 .formLogin()
-//                .loginPage("/register")
                 .loginPage("/login")
                 .loginProcessingUrl("/login")
-                .defaultSuccessUrl("/home") // to be changed to account page
+                .defaultSuccessUrl("/user") // to be changed to account page
                 .failureUrl("/login?error=true")
-//                .failureUrl("/register?error")
                 .usernameParameter("email")
                 .passwordParameter("password")
                 .permitAll()
-                .successForwardUrl("/")
-                .and()
-                .exceptionHandling().accessDeniedPage("/errorPage")
                 .and()
                 .logout()
                 .permitAll()

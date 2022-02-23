@@ -22,8 +22,9 @@ public class ConfirmationRequest implements Serializable {
     @Column(name = "application_id")
     private int applicationId;
 
-    @Column(name = "room_id")
-    private int roomId;
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "room_id")
+    private Room roomId;
 
     @Column(name = "confirm_request_date")
     private LocalDate confirmRequestDate;
@@ -57,13 +58,21 @@ public class ConfirmationRequest implements Serializable {
         this.applicationId = applicationId;
     }
 
-    public int getRoomId() {
+    public Room getRoomId() {
         return roomId;
     }
 
-    public void setRoomId(int roomId) {
+    public void setRoomId(Room roomId) {
         this.roomId = roomId;
     }
+
+//    public int getRoomId() {
+//        return roomId;
+//    }
+//
+//    public void setRoomId(int roomId) {
+//        this.roomId = roomId;
+//    }
 
     public LocalDate getConfirmRequestDate() {
         return confirmRequestDate;

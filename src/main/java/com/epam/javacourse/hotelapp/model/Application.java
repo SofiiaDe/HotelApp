@@ -1,7 +1,5 @@
 package com.epam.javacourse.hotelapp.model;
 
-import org.hibernate.annotations.LazyToOne;
-
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;

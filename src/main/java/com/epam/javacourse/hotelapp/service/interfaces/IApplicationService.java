@@ -9,9 +9,9 @@ public interface IApplicationService {
 
 //    void create(Application application) throws AppException;
 //
-//    List<Application> getAllApplications() throws AppException;
+//    List<ApplicationDto> getAllApplications() throws AppException;
 //
-//    List<ApplicationDetailed> getAllDetailedApplications() throws AppException;
+    List<ApplicationDto> getAllDetailedApplications() throws AppException;
 //
 //    List<Application> getApplicationsByUserId(int userId) throws AppException;
 //

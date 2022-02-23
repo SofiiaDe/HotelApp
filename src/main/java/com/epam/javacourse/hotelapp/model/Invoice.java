@@ -1,12 +1,13 @@
 package com.epam.javacourse.hotelapp.model;
 
-import org.hibernate.annotations.Entity;
-
 import javax.persistence.*;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-public class Invoice {
+@Entity
+@Table(name = "invoices")
+public class Invoice implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -17,14 +18,14 @@ public class Invoice {
 
     @ManyToOne(optional = false, cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id", nullable = false)
-    private int userId;
+    private User userId;
 
     @Column(name = "amount")
     private BigDecimal amount;
 
-    @ManyToOne(optional = false, cascade = CascadeType.ALL)
+    @OneToOne(optional = false, cascade = CascadeType.ALL)
     @JoinColumn(name = "booking_id")
-    private int bookingId;
+    private Booking bookingId;
 
     @Column(name = "invoice_date")
     private LocalDate invoiceDate;
@@ -40,19 +41,19 @@ public class Invoice {
         this.id = id;
     }
 
-    public int getUserId() {
+    public User getUserId() {
         return userId;
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(User userId) {
         this.userId = userId;
     }
 
-    public int getBookingId() {
+    public Booking getBookingId() {
         return bookingId;
     }
 
-    public void setBookingId(int bookingId) {
+    public void setBookingId(Booking bookingId) {
         this.bookingId = bookingId;
     }
 
@@ -85,9 +86,4 @@ public class Invoice {
     }
 }
 
-enum InvoiceStatus{
-    NEW,
-    PAID,
-    CANCELLED,
-}
 

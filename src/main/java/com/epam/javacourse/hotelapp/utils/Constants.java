@@ -11,7 +11,7 @@ public class Constants {
     public static final String PAGE_HOME = "home";
     public static final String PAGE_REGISTRATION = "register";
     public static final String PAGE_CLIENT_ACCOUNT = "clientAccount";
-    public static final String PAGE_MANAGER_ACCOUNT = "/WEB-INF/jsp/manager/managerAccount.jsp";
+    public static final String PAGE_MANAGER_ACCOUNT = "managerAccount";
     public static final String PAGE_SUBMIT_APPLICATION = "/WEB-INF/jsp/client/application.jsp";
     public static final String PAGE_PAY_INVOICE = "/WEB-INF/jsp/client/paymentTransaction.jsp";
     public static final String PAGE_FREE_ROOMS = "/WEB-INF/jsp/client/freeRoomsToBook.jsp";

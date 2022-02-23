@@ -1,6 +1,5 @@
 package com.epam.javacourse.hotelapp.utils.mappers;
 
-import com.epam.javacourse.hotelapp.dto.ApplicationDto;
 import com.epam.javacourse.hotelapp.dto.UserDto;
 import com.epam.javacourse.hotelapp.model.User;
 
