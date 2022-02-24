@@ -19,8 +19,9 @@ public class ConfirmationRequest implements Serializable {
     @JoinColumn(name = "user_id")
     private User userId;
 
-    @Column(name = "application_id")
-    private int applicationId;
+    @OneToOne
+    @JoinColumn(name = "application_id")
+    private Application applicationId;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "room_id")
@@ -50,11 +51,11 @@ public class ConfirmationRequest implements Serializable {
         this.confirmRequestDueDate = confirmRequestDueDate;
     }
 
-    public int getApplicationId() {
+    public Application getApplicationId() {
         return applicationId;
     }
 
-    public void setApplicationId(int applicationId) {
+    public void setApplicationId(Application applicationId) {
         this.applicationId = applicationId;
     }
 
@@ -65,14 +66,6 @@ public class ConfirmationRequest implements Serializable {
     public void setRoomId(Room roomId) {
         this.roomId = roomId;
     }
-
-//    public int getRoomId() {
-//        return roomId;
-//    }
-//
-//    public void setRoomId(int roomId) {
-//        this.roomId = roomId;
-//    }
 
     public LocalDate getConfirmRequestDate() {
         return confirmRequestDate;

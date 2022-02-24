@@ -4,6 +4,7 @@ import com.epam.javacourse.hotelapp.utils.validation.customannotations.PasswordM
 import com.epam.javacourse.hotelapp.utils.validation.customannotations.ValidEmail;
 import com.epam.javacourse.hotelapp.utils.validation.customannotations.ValidPassword;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -13,31 +14,28 @@ public class UserDto {
 
     private int id;
 
-    @NotEmpty(message = "First Name can't be empty")
+    @NotBlank(message = "First Name can't be empty")
     @Size(min = 2, max = 20, message = "First Name should be between 2 and 20 characters")
     private String firstName;
 
-    @NotEmpty(message = "Last Name can't be empty")
+    @NotBlank(message = "Last Name can't be empty")
     @Size(min = 2, max = 20, message = "Last Name should be between 2 and 20 characters")
     private String lastName;
 
     @ValidEmail
-    @NotNull
-    @NotEmpty(message = "Email can't be empty")
+    @NotBlank(message = "Email can't be empty")
     private String email;
 
     @ValidPassword(message = "Password must contain at least one digit, at least one lowercase and one uppercase " +
             "Latin characters as well as at least one special character like ! @ # & ( ) etc.")
-    @NotNull
-    @NotEmpty(message = "Password can't be empty")
+    @NotBlank(message = "Password can't be empty")
     @Size(min = 8, max = 20, message = "Password must contain a length of at least 8 characters and a maximum of 20 characters.")
     private String password;
 
-    @NotNull
-    @NotEmpty(message = "Password should match")
+    @NotBlank(message = "Password should match")
     String confirmPassword;
 
-    @NotEmpty(message = "Country can't be empty")
+    @NotBlank(message = "Country can't be empty")
     private String country;
 
     private String role;

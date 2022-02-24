@@ -1,7 +1,9 @@
 package com.epam.javacourse.hotelapp.utils.mappers;
 
+import com.epam.javacourse.hotelapp.dto.ApplicationClientDto;
 import com.epam.javacourse.hotelapp.dto.ApplicationDto;
 import com.epam.javacourse.hotelapp.model.Application;
+
 
 public class ApplicationMapper implements DtoMapper<ApplicationDto, Application>{
 
@@ -9,7 +11,6 @@ public class ApplicationMapper implements DtoMapper<ApplicationDto, Application>
     public ApplicationDto mapToDto(Application application){
         ApplicationDto dto = new ApplicationDto();
         dto.setId(application.getId());
-        dto.setUserId(application.getUserId().getId());
         dto.setCheckinDate(application.getCheckinDate());
         dto.setCheckoutDate(application.getCheckoutDate());
         dto.setRoomTypeBySeats(application.getRoomTypeBySeats());

@@ -1,5 +1,6 @@
 package com.epam.javacourse.hotelapp.controller;
 
+import com.epam.javacourse.hotelapp.dto.UserDto;
 import com.epam.javacourse.hotelapp.exception.AppException;
 import com.epam.javacourse.hotelapp.model.User;
 import com.epam.javacourse.hotelapp.service.interfaces.IUserService;
@@ -8,7 +9,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.servlet.ModelAndView;
 
+
+import javax.servlet.http.HttpSession;
 
 import static com.epam.javacourse.hotelapp.utils.Constants.*;
 
@@ -19,9 +23,10 @@ public class UserController {
     private IUserService userService;
 
     @GetMapping(value = "/user")
-    public String redirectUserToAccount() throws AppException {
+    public ModelAndView redirectUserToAccount(HttpSession session) throws AppException {
 
-        User user;
+//        User user = null;
+        UserDto user = null;
         String role = null;
         try {
             Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -35,18 +40,15 @@ public class UserController {
             throw new AppException(errorMessage, exception);
         }
 
-        String result = null;
 
         if (role == null || role.isEmpty()) {
-            result = PAGE_LOGIN;
+            return new ModelAndView(PAGE_LOGIN);
         }
 
-        if ("manager" .equalsIgnoreCase(role)) {
-            result = PAGE_MANAGER_ACCOUNT;
-        } else if ("client" .equalsIgnoreCase(role)) {
-            result = PAGE_CLIENT_ACCOUNT;
-        }
+        session.setAttribute("authorisedUser", user);
+        session.setAttribute("userRole", role);
 
-        return result;
+        return ("client".equalsIgnoreCase(role)) ? new ModelAndView("redirect:/client/account") :
+                new ModelAndView("redirect:/manager/account");
     }
 }

@@ -6,15 +6,21 @@ import com.epam.javacourse.hotelapp.exception.UserAlreadyExistsException;
 import com.epam.javacourse.hotelapp.model.User;
 import com.epam.javacourse.hotelapp.repository.UserRepository;
 import com.epam.javacourse.hotelapp.service.interfaces.IUserService;
+import com.epam.javacourse.hotelapp.utils.mappers.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class UserServiceImpl implements IUserService {
 
     @Autowired
     private UserRepository userRepository;
+
+    UserMapper userMapper = new UserMapper();
 
     @Override
     @Transactional(readOnly = true)
@@ -40,9 +46,18 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-//    @Transactional(readOnly = true)
-    public User getUserByEmail(String email) throws AppException {
-        return userRepository.findUserByEmail(email);
+    @Transactional(readOnly = true)
+    public UserDto getUserByEmail(String email) throws AppException {
+        return userMapper.mapToDto(userRepository.findUserByEmail(email));
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<UserDto> getUsersByIds(List<Integer> ids) throws AppException {
+        List<User> users = userRepository.findUsersByIds(ids);
+        List<UserDto> result = new ArrayList<>();
+        users.forEach(x -> result.add(userMapper.mapToDto(x)));
+        return result;
     }
 
 }

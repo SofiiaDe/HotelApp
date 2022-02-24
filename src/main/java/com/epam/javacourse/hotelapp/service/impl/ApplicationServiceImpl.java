@@ -1,6 +1,8 @@
 package com.epam.javacourse.hotelapp.service.impl;
 
+import com.epam.javacourse.hotelapp.dto.ApplicationClientDto;
 import com.epam.javacourse.hotelapp.dto.ApplicationDto;
+import com.epam.javacourse.hotelapp.dto.ApplicationManagerDto;
 import com.epam.javacourse.hotelapp.exception.AppException;
 import com.epam.javacourse.hotelapp.exception.DBException;
 import com.epam.javacourse.hotelapp.model.Application;
@@ -10,11 +12,15 @@ import com.epam.javacourse.hotelapp.repository.UserRepository;
 import com.epam.javacourse.hotelapp.service.interfaces.IApplicationService;
 import com.epam.javacourse.hotelapp.utils.mappers.ApplicationMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -26,25 +32,33 @@ public class ApplicationServiceImpl implements IApplicationService {
     @Autowired
     UserRepository userRepository;
 
+    ApplicationMapper mapper = new ApplicationMapper();
+
     @Override
-    public List<ApplicationDto> getUserDetailedApplications(int userID) throws AppException {
+    @Transactional(readOnly = true)
+    public List<ApplicationDto> getApplicationsByUserId(int userId) throws AppException {
+        final List<ApplicationDto> result = new ArrayList<>();
+        List<Application> applications = applicationRepository.findApplicationsByUserId(userId);
+
+        applications.forEach(x -> result.add(mapper.mapToDto(x)));
+        return result;
+    }
+
+    @Override
+    public List<ApplicationClientDto> getUserDetailedApplications(int userID) throws AppException {
 
         try {
-            List<Application> userApplications = applicationRepository.findApplicationsByUserId(userID);
-            List<ApplicationDto> allUserApplications = new ArrayList<>();
-
-            ApplicationMapper mapper = new ApplicationMapper();
-            userApplications.forEach(x -> allUserApplications.add(mapper.mapToDto(x)));
+            List<Application> allUserApplications = applicationRepository.findApplicationsByUserId(userID);
 
             if (allUserApplications.isEmpty()) {
                 return Collections.emptyList();
             }
 
-            List<ApplicationDto> result = new ArrayList<>();
+            ArrayList<ApplicationClientDto> result = new ArrayList<>();
 
-            for (ApplicationDto application : allUserApplications) {
+            for (Application application : allUserApplications) {
                 result.add(
-                        new ApplicationDto(application.getId(),
+                         new ApplicationClientDto(application.getId(),
                                 application.getCheckinDate(),
                                 application.getCheckoutDate(),
                                 application.getRoomTypeBySeats(),
@@ -58,33 +72,34 @@ public class ApplicationServiceImpl implements IApplicationService {
     }
 
     @Override
-    public List<ApplicationDto> getAllDetailedApplications() throws AppException {
+    public List<ApplicationManagerDto> getAllDetailedApplications() throws AppException {
         try {
-            List<Application> applications = applicationRepository.findAll();
-            List<ApplicationDto> allApplications = new ArrayList<>();
-
-            ApplicationMapper mapper = new ApplicationMapper();
-            applications.forEach((x) -> allApplications.add(mapper.mapToDto(x)));
-
+            List<Application> allApplications = applicationRepository.findAll();
 
             if (allApplications.isEmpty()) {
                 return Collections.emptyList();
             }
 
-            List<Integer> userIds = applications.stream()
+            List<Integer> userIds = allApplications.stream()
                     .map(Application::getUserId)
                     .map(User::getId)
                     .distinct().collect(Collectors.toList());
 
-            List<User> data = userRepository.findUsersByIds(userIds);
+            List<User> users = userRepository.findUsersByIds(userIds);
 
-            ArrayList<ApplicationDto> result = new ArrayList<>();
+            List<ApplicationManagerDto> result = new ArrayList<>();
 
-            for (ApplicationDto application : allApplications) {
-                var user = data.stream().filter(u -> u.getId() == application.getUserId())
-                        .findFirst().get();
+            for (Application application : allApplications) {
+                Optional<User> optionalUser = users.stream()
+                        .filter(u -> u.getId() == application.getUserId().getId())
+                        .findFirst();
+                if (optionalUser.isEmpty()) {
+                    throw new ChangeSetPersister.NotFoundException();
+                }
+                User user = optionalUser.get();
                 result.add(
-                        new ApplicationDto(application.getId(),
+                        new ApplicationManagerDto(
+                                application.getId(),
                                 user.getFirstName() + ' ' + user.getLastName(),
                                 user.getEmail(),
                                 application.getCheckinDate(),
@@ -93,11 +108,11 @@ public class ApplicationServiceImpl implements IApplicationService {
                                 application.getRoomClass()
                         ));
             }
-
             return result;
 
-        } catch (DBException exception) {
+        } catch (DBException | ChangeSetPersister.NotFoundException exception) {
             throw new AppException("Can't retrieve all applications to show in the manager's account", exception);
         }
+
     }
 }

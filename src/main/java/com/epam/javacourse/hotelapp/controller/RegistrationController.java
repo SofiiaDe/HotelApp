@@ -95,8 +95,8 @@ public class RegistrationController {
 
         String result;
         if (isUserCreated) {
-            request.getSession().setAttribute("newUser",userDto);
-            logger.info("Create user with id = {}",userDto.getId());
+            request.getSession().setAttribute("newUser", userDto);
+            logger.info("Create user with id = {}", userDto.getId());
             result = "redirect:/login";
         } else {
             result = PAGE_REGISTRATION;
