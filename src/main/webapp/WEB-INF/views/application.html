@@ -1,7 +1,8 @@
 <!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
 <html>
-<c:set var="title" value="Application form for client to book room" scope="page"/>
-<jsp:include page="/WEB-INF/components/head.jsp"/>
 <head>
 
   <title>Application form for client to book room</title>
@@ -15,7 +16,7 @@
     margin-right: 10px;
   }
 </style>
-<body>
+
 
 <style>
     #userName {
@@ -24,16 +25,20 @@
     }
 </style>
 
+<body>
+
+<div th:insert="fragments/header"></div>
+
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <a class="navbar-brand" href="/Hotel/controller?command=clientAccount">
-        <img src="pictures/logo-hotel.jpg" width="30" height="30" class="d-inline-block align-top" alt="">
-        th:text="#{client.menu.label.client"/>
+    <a class="navbar-brand" href="/client/account">
+        <img src="pictures/logo-hotel.jpg" width="30" height="30" class="d-inline-block align-top" alt=""
+        th:text="#{client.menu.label.client}"/>
     </a>
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item active">
-                <a class="nav-link" href="controller?command=applicationPage"
+                <a class="nav-link" href="/application"
                    th:text="#{client.menu.button.submit.application}"> <span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item">
@@ -42,7 +47,7 @@
         </ul>
 
 
-        <div id="userName">${sessionScope.authorisedUser.firstName} ${sessionScope.authorisedUser.lastName}</div>
+<!--        <div id="userName" ${sessionScope.authorisedUser.firstName} ${sessionScope.authorisedUser.lastName}</div>-->
         <div class="dropdown">
             <button class="btn btn-outline-secondary btn-sm" type="button" id="dropdownMenuButton"
                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -51,23 +56,23 @@
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                 <form class="form-inline" method="post" action="controller?command=i18n">
                     <button type="submit" name="en" onclick="changeFieldElement('langField', 'en')"
-                            class="dropdown-item">th:text="#{main.menu.button.english"/></button>
+                            class="dropdown-item" th:text="#{main.menu.button.english}"></button>
                     <button type="submit" name="uk" onclick="changeFieldElement('langField', 'uk')"
-                            class="dropdown-item">th:text="#{main.menu.button.ukrainian"/></button>
+                            class="dropdown-item" th:text="#{main.menu.button.ukrainian}"></button>
                     <input name="langField" type="hidden" value="en">
                 </form>
             </div>
         </div>
+
         <form class="form-inline my-2 my-lg-0" method="post" action="controller?command=logout">
             <button class="btn btn-outline-success my-2 my-sm-0" type="submit" th:text="#{main.menu.button.logout}"></button>
         </form>
     </div>
 </nav>
 
+<form th:method="POST" th:action="@{/client/application}" id="appForm" th:object="${application}">
 
-<form method="post" action="controller?command=submitApplication" id="appForm">
-
-  <h2>th:text="#{application.header.choose_type"/></h2>
+  <h2 th:text="#{application.header.choose_type}"></h2>
   <p>
     <input type="radio" th:text="#{room.type.single}" value="single" checked name="room_seats"/>
   </p>
@@ -95,8 +100,10 @@
   <h2 th:text="#{application.header.choose_time}"></h2>
 
   <form>
-    <jsp:useBean id="now" class="java.util.Date" />
-    <fmt:formatDate var="currentDate" value="${now}" pattern="yyyy-MM-dd" />
+<!--    <jsp:useBean id="now" class="java.util.Date" />-->
+<!--      <${#calendars.format(#calendars.createNow(), 'dd MMM yyyy HH:mm')}>-->
+
+      <!--    <fmt:formatDate var="currentDate" value="${now}" pattern="yyyy-MM-dd" />-->
     <p>
       <label for="date" th:text="#{checkin.date}">: </label>
       <input type="date" id="date" name="checkin_date"/>
@@ -112,21 +119,8 @@
   </form>
 </form>
 
-<!--JavaScript-->
-<!-- jQuery -->
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-        crossorigin="anonymous"></script>
+<div th:insert="fragments/scripts.html"></div>
 
-<!-- Popper.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
-        integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
-        crossorigin="anonymous"></script>
-
-<!-- Bootstrap JS -->
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
-        integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
-        crossorigin="anonymous"></script>
 
 <script>
     function changeFieldElement(element, value) {

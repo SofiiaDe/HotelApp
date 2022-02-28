@@ -6,11 +6,13 @@ import com.epam.javacourse.hotelapp.exception.DBException;
 import com.epam.javacourse.hotelapp.model.Application;
 import com.epam.javacourse.hotelapp.model.ConfirmationRequest;
 import com.epam.javacourse.hotelapp.model.User;
-import com.epam.javacourse.hotelapp.repository.ConfirmRequestRepository;
+import com.epam.javacourse.hotelapp.repository.*;
 import com.epam.javacourse.hotelapp.service.interfaces.IApplicationService;
 import com.epam.javacourse.hotelapp.service.interfaces.IConfirmationRequest;
 import com.epam.javacourse.hotelapp.service.interfaces.IUserService;
+import com.epam.javacourse.hotelapp.utils.mappers.ApplicationMapper;
 import com.epam.javacourse.hotelapp.utils.mappers.ConfirmationRequestMapper;
+import com.epam.javacourse.hotelapp.utils.mappers.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,12 +29,20 @@ public class ConfirmRequestServiceImpl implements IConfirmationRequest {
     ConfirmRequestRepository confirmRequestRepository;
 
     @Autowired
-    IApplicationService applicationService;
+    InvoiceRepository invoiceRepository;
 
     @Autowired
-    IUserService userService;
+    BookingRepository bookingRepository;
 
-    ConfirmationRequestMapper mapper = new ConfirmationRequestMapper();
+    @Autowired
+    RoomRepository roomRepository;
+
+    @Autowired
+    UserRepository userRepository;
+
+    @Autowired
+    ApplicationRepository applicationRepository;
+
 
     @Override
     public LocalDate getConfirmRequestDueDate(ConfirmationRequestDto confirmRequest) {
@@ -56,7 +66,11 @@ public class ConfirmRequestServiceImpl implements IConfirmationRequest {
                     .distinct()
                     .collect(Collectors.toList());
 
-            List<UserDto> userDtos = userService.getUsersByIds(userIds);
+            List<UserDto> userDtos = userRepository.findUsersByIds(userIds)
+                    .stream()
+                    .map(UserMapper::mapToDto)
+                    .collect(Collectors.toList());
+
             List<ConfirmationRequestManagerDto> result = new ArrayList<>();
 
             for (ConfirmationRequest confirmRequest : allConfirmRequests) {
@@ -89,7 +103,10 @@ public class ConfirmRequestServiceImpl implements IConfirmationRequest {
                 return Collections.emptyList();
             }
 
-            List<ApplicationDto> userApplications = applicationService.getApplicationsByUserId(userID);
+            List<ApplicationDto> userApplications = applicationRepository.findApplicationsByUserId(userID)
+                    .stream()
+                    .map(ApplicationMapper::mapToDto)
+                    .collect(Collectors.toList());
 
             List<ConfirmationRequestClientDto> result = new ArrayList<>();
 
@@ -101,7 +118,7 @@ public class ConfirmRequestServiceImpl implements IConfirmationRequest {
                 result.add(
                         new ConfirmationRequestClientDto(confirmRequest.getId(),
                                 confirmRequest.getConfirmRequestDate(),
-                                getConfirmRequestDueDate(mapper.mapToDto(confirmRequest)),
+                                getConfirmRequestDueDate(ConfirmationRequestMapper.mapToDto(confirmRequest)),
                                 application.getRoomTypeBySeats(),
                                 application.getRoomClass(),
                                 application.getCheckinDate(),

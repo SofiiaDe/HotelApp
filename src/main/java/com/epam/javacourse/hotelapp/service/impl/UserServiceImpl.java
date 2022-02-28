@@ -20,8 +20,6 @@ public class UserServiceImpl implements IUserService {
     @Autowired
     private UserRepository userRepository;
 
-    UserMapper userMapper = new UserMapper();
-
     @Override
     @Transactional(readOnly = true)
     public User createUser(UserDto userDto) throws UserAlreadyExistsException {
@@ -48,7 +46,7 @@ public class UserServiceImpl implements IUserService {
     @Override
     @Transactional(readOnly = true)
     public UserDto getUserByEmail(String email) throws AppException {
-        return userMapper.mapToDto(userRepository.findUserByEmail(email));
+        return UserMapper.mapToDto(userRepository.findUserByEmail(email));
     }
 
     @Override
@@ -56,7 +54,7 @@ public class UserServiceImpl implements IUserService {
     public List<UserDto> getUsersByIds(List<Integer> ids) throws AppException {
         List<User> users = userRepository.findUsersByIds(ids);
         List<UserDto> result = new ArrayList<>();
-        users.forEach(x -> result.add(userMapper.mapToDto(x)));
+        users.forEach(x -> result.add(UserMapper.mapToDto(x)));
         return result;
     }
 

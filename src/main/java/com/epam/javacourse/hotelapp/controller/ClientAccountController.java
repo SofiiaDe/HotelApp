@@ -2,6 +2,7 @@ package com.epam.javacourse.hotelapp.controller;
 
 import com.epam.javacourse.hotelapp.dto.*;
 import com.epam.javacourse.hotelapp.exception.AppException;
+import com.epam.javacourse.hotelapp.model.Application;
 import com.epam.javacourse.hotelapp.model.User;
 import com.epam.javacourse.hotelapp.service.interfaces.IApplicationService;
 import com.epam.javacourse.hotelapp.service.interfaces.IBookingService;
@@ -10,30 +11,26 @@ import com.epam.javacourse.hotelapp.service.interfaces.IInvoiceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 import java.util.Comparator;
 import java.util.List;
+
+import static com.epam.javacourse.hotelapp.utils.Constants.PAGE_REGISTRATION;
+import static com.epam.javacourse.hotelapp.utils.Constants.PAGE_SUBMIT_APPLICATION;
 
 @Controller
 @RequestMapping(value = "/client")
 public class ClientAccountController {
 
-//    @Autowired
-//    private IApplicationService applicationService;
-//
-//    @Autowired
-//    private IBookingService bookingService;
-//
-//    @Autowired
-//    private IConfirmationRequest confirmRequestService;
-//
-//    @Autowired
-//    private IInvoiceService invoiceService;
 
     private final IApplicationService applicationService;
     private final IBookingService bookingService;
@@ -51,7 +48,7 @@ public class ClientAccountController {
     @GetMapping(value = "/account")
     public ModelAndView getClientAccount(HttpSession session) throws AppException {
 
-        ModelAndView modelAndView = new ModelAndView("redirect:/client/account");
+
         UserDto authorisedUser = (UserDto) session.getAttribute("authorisedUser");
 
         List<ApplicationClientDto> userApplications = applicationService.getUserDetailedApplications(authorisedUser.getId());
@@ -74,6 +71,7 @@ public class ClientAccountController {
         List<InvoiceClientDto> userInvoices = invoiceService.getUserDetailedInvoices(authorisedUser.getId());
         userInvoices.sort(Comparator.comparing(InvoiceClientDto::getInvoiceDate));
 
+        ModelAndView modelAndView = new ModelAndView("clientAccount");
 
         modelAndView.addObject("myApplications", userApplications);
         modelAndView.addObject("myBookings", userBookings);
@@ -83,12 +81,53 @@ public class ClientAccountController {
         return modelAndView;
     }
 
-    @PostMapping(value = "/book")
-    ModelAndView bookRoom() {
-
-        return new ModelAndView("redirect:/client/account");
+    @GetMapping("/application")
+    public String applicationPage(  @ModelAttribute("application") @Valid ApplicationDto applicationDto) {
+        return PAGE_SUBMIT_APPLICATION;
     }
 
+    @PostMapping(value = "/application")
+    public ModelAndView submitApplication(HttpServletRequest request,
+                                          @ModelAttribute("application") @Valid ApplicationDto applicationDto,
+                                          BindingResult bindingResult, Model model) {
+
+//        HttpSession session = request.getSession();
+//        User authorisedUser = (User) session.getAttribute("authorisedUser");
+//
+//        String roomTypeBySeats = request.getParameter("room_seats");
+//        String roomClass = request.getParameter("room_class");
+//
+//        String address = Path.PAGE_ERROR;
+//
+//        String checkinDate = request.getParameter("checkin_date");
+//        String checkoutDate = request.getParameter("checkout_date");
+//
+//        LocalDate checkin = Validator.dateParameterToLocalDate(checkinDate, request);
+//        LocalDate checkout = Validator.dateParameterToLocalDate(checkoutDate, request);
+//
+//        if (!Validator.isCorrectDate(checkin, checkout, request)) {
+//            return new AddressCommandResult(address);
+//        }
+//
+//        Application newApplication = new Application();
+//        newApplication.setUserId(authorisedUser.getId());
+//        newApplication.setRoomTypeBySeats(roomTypeBySeats);
+//        newApplication.setRoomClass(roomClass);
+//        newApplication.setCheckinDate(checkin);
+//        newApplication.setCheckoutDate(checkout);
+//
+//        applicationService.create(newApplication);
+//
+        return new ModelAndView("clientAccount");
+    }
+
+    @PostMapping(value = "/book")
+    public ModelAndView bookRoom(HttpSession session) {
+
+
+
+        return new ModelAndView("clientAccount");
+    }
 
 
 }

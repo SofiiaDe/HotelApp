@@ -3,10 +3,9 @@ package com.epam.javacourse.hotelapp.utils.mappers;
 import com.epam.javacourse.hotelapp.dto.ConfirmationRequestDto;
 import com.epam.javacourse.hotelapp.model.ConfirmationRequest;
 
-public class ConfirmationRequestMapper implements DtoMapper<ConfirmationRequestDto, ConfirmationRequest>{
+public class ConfirmationRequestMapper {
 
-    @Override
-    public ConfirmationRequestDto mapToDto(ConfirmationRequest confirmRequest){
+    public static ConfirmationRequestDto mapToDto(ConfirmationRequest confirmRequest){
         ConfirmationRequestDto dto = new ConfirmationRequestDto();
         dto.setId(confirmRequest.getId());
         dto.setUserId(confirmRequest.getUserId().getId());
@@ -18,8 +17,8 @@ public class ConfirmationRequestMapper implements DtoMapper<ConfirmationRequestD
         return dto;
     }
 
-    @Override
-    public ConfirmationRequest mapFromDto(ConfirmationRequestDto dto){
+
+    public static ConfirmationRequest mapFromDto(ConfirmationRequestDto dto){
         ConfirmationRequest confirmRequest = new ConfirmationRequest();
         confirmRequest.setId(dto.getId());
         confirmRequest.setUserId(dto.getUser());

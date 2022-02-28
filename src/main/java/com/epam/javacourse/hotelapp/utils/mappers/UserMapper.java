@@ -3,10 +3,9 @@ package com.epam.javacourse.hotelapp.utils.mappers;
 import com.epam.javacourse.hotelapp.dto.UserDto;
 import com.epam.javacourse.hotelapp.model.User;
 
-public class UserMapper implements DtoMapper<UserDto, User>{
+public class UserMapper {
 
-    @Override
-    public UserDto mapToDto(User user){
+    public static UserDto mapToDto(User user){
         UserDto dto = new UserDto();
         dto.setId(user.getId());
         dto.setFirstName(user.getFirstName());
@@ -18,8 +17,8 @@ public class UserMapper implements DtoMapper<UserDto, User>{
         return dto;
     }
 
-    @Override
-    public User mapFromDto(UserDto dto){
+
+    public static User mapFromDto(UserDto dto){
         User user = new User();
         user.setId(dto.getId());
         user.setFirstName(dto.getFirstName());

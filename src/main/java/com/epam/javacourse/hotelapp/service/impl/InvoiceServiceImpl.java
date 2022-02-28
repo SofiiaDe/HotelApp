@@ -6,12 +6,17 @@ import com.epam.javacourse.hotelapp.exception.DBException;
 import com.epam.javacourse.hotelapp.model.Invoice;
 import com.epam.javacourse.hotelapp.model.Room;
 import com.epam.javacourse.hotelapp.model.User;
+import com.epam.javacourse.hotelapp.repository.BookingRepository;
 import com.epam.javacourse.hotelapp.repository.InvoiceRepository;
+import com.epam.javacourse.hotelapp.repository.RoomRepository;
+import com.epam.javacourse.hotelapp.repository.UserRepository;
 import com.epam.javacourse.hotelapp.service.interfaces.IBookingService;
 import com.epam.javacourse.hotelapp.service.interfaces.IInvoiceService;
 import com.epam.javacourse.hotelapp.service.interfaces.IRoomService;
 import com.epam.javacourse.hotelapp.service.interfaces.IUserService;
+import com.epam.javacourse.hotelapp.utils.mappers.BookingMapper;
 import com.epam.javacourse.hotelapp.utils.mappers.InvoiceMapper;
+import com.epam.javacourse.hotelapp.utils.mappers.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
@@ -30,21 +35,20 @@ public class InvoiceServiceImpl implements IInvoiceService {
     InvoiceRepository invoiceRepository;
 
     @Autowired
-    IUserService userService;
+    BookingRepository bookingRepository;
 
     @Autowired
-    IBookingService bookingService;
+    RoomRepository roomRepository;
 
     @Autowired
-    IRoomService roomService;
+    UserRepository userRepository;
 
-    InvoiceMapper invoiceMapper = new InvoiceMapper();
 
     @Override
     public List<InvoiceDto> getInvoicesByBookingsIds(List<Integer> bookingsIds) throws AppException {
         List<Invoice> invoices = invoiceRepository.findInvoicesByBookingsIds(bookingsIds);
         List<InvoiceDto> result = new ArrayList<>();
-        invoices.forEach(x -> result.add(invoiceMapper.mapToDto(x)));
+        invoices.forEach(x -> result.add(InvoiceMapper.mapToDto(x)));
         return result;
     }
 
@@ -69,7 +73,10 @@ public class InvoiceServiceImpl implements IInvoiceService {
                     .map(User::getId)
                     .distinct()
                     .collect(Collectors.toList());
-            List<UserDto> users = userService.getUsersByIds(userIds);
+            List<UserDto> users = userRepository.findUsersByIds(userIds).stream()
+                    .map(UserMapper::mapToDto)
+                    .collect(Collectors.toList());
+
             ArrayList<InvoiceManagerDto> result = new ArrayList<>();
 
             for (Invoice invoice : allInvoices) {
@@ -100,7 +107,10 @@ public class InvoiceServiceImpl implements IInvoiceService {
                 return Collections.emptyList();
             }
 
-            List<BookingDto> userBookings = bookingService.getBookingsByUserId(userID);
+            List<BookingDto> userBookings = bookingRepository.findBookingsByUserId(userID)
+                    .stream()
+                    .map(BookingMapper::mapToDto)
+                    .collect(Collectors.toList());
 
             List<InvoiceClientDto> result = new ArrayList<>();
 
@@ -109,15 +119,18 @@ public class InvoiceServiceImpl implements IInvoiceService {
                         .filter(b -> b.getId() == invoice.getBookingId().getId())
                         .findFirst()
                         .get();
-                Optional<Room> optionalRoom = roomService.getRoomById(booking.getRoomId());
-                if (optionalRoom.isEmpty()) {
-                    throw new ChangeSetPersister.NotFoundException();
-                }
-                Room room = optionalRoom.get();
+//                Optional<Room> optionalRoom = roomService.getRoomById(booking.getRoomId());
+//                if (optionalRoom.isEmpty()) {
+//                    throw new ChangeSetPersister.NotFoundException();
+//                }
+//                Room room = optionalRoom.get();
+
+                Room room = roomRepository.getById(booking.getRoomId());
+
                 result.add(
                         new InvoiceClientDto(invoice.getId(),
                                 invoice.getInvoiceDate(),
-                                getInvoiceDueDate(invoiceMapper.mapToDto(invoice)),
+                                getInvoiceDueDate(InvoiceMapper.mapToDto(invoice)),
                                 invoice.getAmount(),
                                 invoice.getBookingId().getId(),
                                 room.getPrice(),
@@ -127,7 +140,7 @@ public class InvoiceServiceImpl implements IInvoiceService {
                         ));
             }
             return result;
-        } catch (DBException | ChangeSetPersister.NotFoundException exception) {
+        } catch (DBException exception) {
             throw new AppException("Can't retrieve client's invoices to show in the client's account", exception);
         }
     }

@@ -5,10 +5,9 @@ import com.epam.javacourse.hotelapp.dto.ApplicationDto;
 import com.epam.javacourse.hotelapp.model.Application;
 
 
-public class ApplicationMapper implements DtoMapper<ApplicationDto, Application>{
+public class ApplicationMapper {
 
-    @Override
-    public ApplicationDto mapToDto(Application application){
+    public static ApplicationDto mapToDto(Application application){
         ApplicationDto dto = new ApplicationDto();
         dto.setId(application.getId());
         dto.setCheckinDate(application.getCheckinDate());
@@ -18,8 +17,7 @@ public class ApplicationMapper implements DtoMapper<ApplicationDto, Application>
         return dto;
     }
 
-    @Override
-    public Application mapFromDto(ApplicationDto dto){
+    public static Application mapFromDto(ApplicationDto dto){
         Application application = new Application();
         application.setId(dto.getId());
         application.setCheckinDate(dto.getCheckinDate());

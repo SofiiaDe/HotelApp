@@ -3,10 +3,9 @@ package com.epam.javacourse.hotelapp.utils.mappers;
 import com.epam.javacourse.hotelapp.dto.InvoiceDto;
 import com.epam.javacourse.hotelapp.model.Invoice;
 
-public class InvoiceMapper implements DtoMapper<InvoiceDto, Invoice>{
+public class InvoiceMapper {
 
-@Override
-public InvoiceDto mapToDto(Invoice invoice){
+    public static InvoiceDto mapToDto(Invoice invoice) {
         InvoiceDto dto = new InvoiceDto();
         dto.setId(invoice.getId());
         dto.setUserId(invoice.getUserId().getId());
@@ -15,10 +14,9 @@ public InvoiceDto mapToDto(Invoice invoice){
         dto.setInvoiceDate(invoice.getInvoiceDate());
         dto.setStatus(invoice.getInvoiceStatus());
         return dto;
-        }
+    }
 
-@Override
-public Invoice mapFromDto(InvoiceDto dto){
+    public static Invoice mapFromDto(InvoiceDto dto) {
         Invoice invoice = new Invoice();
         invoice.setId(dto.getId());
         invoice.setUserId(dto.getUser());
@@ -27,5 +25,5 @@ public Invoice mapFromDto(InvoiceDto dto){
         invoice.setInvoiceDate(dto.getInvoiceDate());
         invoice.setInvoiceStatus(dto.getStatus());
         return invoice;
-        }
+    }
 }

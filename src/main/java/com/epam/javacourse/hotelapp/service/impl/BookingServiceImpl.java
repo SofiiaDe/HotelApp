@@ -8,12 +8,17 @@ import com.epam.javacourse.hotelapp.model.Invoice;
 import com.epam.javacourse.hotelapp.model.Room;
 import com.epam.javacourse.hotelapp.model.User;
 import com.epam.javacourse.hotelapp.repository.BookingRepository;
+import com.epam.javacourse.hotelapp.repository.InvoiceRepository;
+import com.epam.javacourse.hotelapp.repository.RoomRepository;
+import com.epam.javacourse.hotelapp.repository.UserRepository;
 import com.epam.javacourse.hotelapp.service.interfaces.IBookingService;
 import com.epam.javacourse.hotelapp.service.interfaces.IInvoiceService;
 import com.epam.javacourse.hotelapp.service.interfaces.IRoomService;
 import com.epam.javacourse.hotelapp.service.interfaces.IUserService;
 import com.epam.javacourse.hotelapp.utils.enums.BookingStatus;
 import com.epam.javacourse.hotelapp.utils.mappers.BookingMapper;
+import com.epam.javacourse.hotelapp.utils.mappers.InvoiceMapper;
+import com.epam.javacourse.hotelapp.utils.mappers.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
@@ -31,21 +36,20 @@ public class BookingServiceImpl implements IBookingService {
     BookingRepository bookingRepository;
 
     @Autowired
-    IRoomService roomService;
+    RoomRepository roomRepository;
 
     @Autowired
-    IUserService userService;
+    UserRepository userRepository;
 
     @Autowired
-    IInvoiceService invoiceService;
+    InvoiceRepository invoiceRepository;
 
-    BookingMapper bookingMapper = new BookingMapper();
 
     @Override
     public List<BookingDto> getBookingsByUserId(int userId) throws AppException {
         List<Booking> bookings = bookingRepository.findBookingsByUserId(userId);
         List<BookingDto> result = new ArrayList<>();
-        bookings.forEach(x -> result.add(bookingMapper.mapToDto(x)));
+        bookings.forEach(x -> result.add(BookingMapper.mapToDto(x)));
         return result;
     }
 
@@ -65,12 +69,15 @@ public class BookingServiceImpl implements IBookingService {
         }
 
         for (Booking booking : allUserBookings) {
-            Room room = null;
-            var optionalRoom = roomService.getRoomById(booking.getRoomId());
-            if(optionalRoom.isPresent()) {
-                room = optionalRoom.get();
-            }
+//            Room room = null;
+            var room = roomRepository.getById(booking.getRoomId());
+
             result.add(
+//            var optionalRoom = roomService.getRoomById(booking.getRoomId());
+//            if(optionalRoom.isPresent()) {
+//                room = optionalRoom.get();
+//            }
+//            result.add(
                     new BookingClientDto(booking.getId(),
                             booking.getCheckinDate(),
                             booking.getCheckoutDate(),
@@ -87,9 +94,10 @@ public class BookingServiceImpl implements IBookingService {
     @Override
     public List<BookingManagerDto> getAllDetailedBookings(BookingStatus bookingStatus) throws AppException {
         List<Booking> allBookings;
-        List<UserDto> users;
+        List<User> users;
         ArrayList<BookingManagerDto> result;
         List<InvoiceDto> invoiceDtos;
+        List<Invoice> invoices;
 
         try {
             allBookings = bookingRepository.findAll();
@@ -97,19 +105,39 @@ public class BookingServiceImpl implements IBookingService {
             List<Integer> userIds = allBookings.stream().map(Booking::getUserId)
                     .map(User::getId)
                     .distinct().collect(Collectors.toList());
-            users = userService.getUsersByIds(userIds);
+//            users = userService.getUsersByIds(userIds);
+            users = userRepository.findUsersByIds(userIds);
+
 
             result = new ArrayList<>();
-            invoiceDtos = invoiceService.getInvoicesByBookingsIds(allBookings.stream().map(Booking::getId).collect(Collectors.toList()));
+
+            invoices = invoiceRepository.findInvoicesByBookingsIds(allBookings.stream()
+                            .map(Booking::getId)
+                            .collect(Collectors.toList()));
+
+            invoiceDtos = invoices.stream()
+                    .map(InvoiceMapper::mapToDto)
+                    .collect(Collectors.toList());
+
+//            invoiceDtos = (List<InvoiceDto>) invoiceMapper.mapToDto(
+//                    invoiceRepository.findInvoicesByBookingsIds(allBookings.stream()
+//                            .map(Booking::getId)
+//                            .collect(Collectors.toList())));
 
 
         for (Booking booking : allBookings) {
-            UserDto bookingUser = users.stream().filter(u -> u.getId() == booking.getUserId().getId()).findFirst().get();
-            Optional<Room> optionalRoom = roomService.getRoomById(booking.getRoomId());
-            if (optionalRoom.isEmpty()) {
-                throw new ChangeSetPersister.NotFoundException();
-            }
-            Room room = optionalRoom.get();
+            UserDto bookingUser = UserMapper.mapToDto(
+                    users.stream()
+                    .filter(u -> u.getId() == booking.getUserId().getId())
+                            .findFirst().get());
+//            Optional<Room> optionalRoom = roomRepository.getById(booking.getRoomId());
+//            if (optionalRoom.isEmpty()) {
+//                throw new ChangeSetPersister.NotFoundException();
+//            }
+//            Room room = optionalRoom.get();
+
+            Room room = roomRepository.getById(booking.getRoomId());
+
             result.add(
                     new BookingManagerDto(booking.getId(),
                             bookingUser.getFirstName() + ' ' + bookingUser.getLastName(),
@@ -120,7 +148,7 @@ public class BookingServiceImpl implements IBookingService {
                             invoiceDtos.stream().filter(i -> i.getBookingId() == booking.getId()).findFirst().get().getStatus().equals("paid")
                     ));
         }
-        } catch (DBException | ChangeSetPersister.NotFoundException exception) {
+        } catch (DBException exception) {
             throw new AppException("Can't retrieve list of all bookings to show in the manager's account", exception);
         }
         return result;

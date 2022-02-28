@@ -7,8 +7,7 @@ import com.epam.javacourse.hotelapp.exception.AppException;
 import com.epam.javacourse.hotelapp.exception.DBException;
 import com.epam.javacourse.hotelapp.model.Application;
 import com.epam.javacourse.hotelapp.model.User;
-import com.epam.javacourse.hotelapp.repository.ApplicationRepository;
-import com.epam.javacourse.hotelapp.repository.UserRepository;
+import com.epam.javacourse.hotelapp.repository.*;
 import com.epam.javacourse.hotelapp.service.interfaces.IApplicationService;
 import com.epam.javacourse.hotelapp.utils.mappers.ApplicationMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +31,15 @@ public class ApplicationServiceImpl implements IApplicationService {
     @Autowired
     UserRepository userRepository;
 
-    ApplicationMapper mapper = new ApplicationMapper();
+    @Autowired
+    InvoiceRepository invoiceRepository;
+
+    @Autowired
+    BookingRepository bookingRepository;
+
+    @Autowired
+    RoomRepository roomRepository;
+
 
     @Override
     @Transactional(readOnly = true)
@@ -40,7 +47,7 @@ public class ApplicationServiceImpl implements IApplicationService {
         final List<ApplicationDto> result = new ArrayList<>();
         List<Application> applications = applicationRepository.findApplicationsByUserId(userId);
 
-        applications.forEach(x -> result.add(mapper.mapToDto(x)));
+        applications.forEach(x -> result.add(ApplicationMapper.mapToDto(x)));
         return result;
     }
 
