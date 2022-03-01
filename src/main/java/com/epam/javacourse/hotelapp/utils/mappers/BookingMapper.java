@@ -1,6 +1,5 @@
 package com.epam.javacourse.hotelapp.utils.mappers;
 
-import com.epam.javacourse.hotelapp.dto.BookingClientDto;
 import com.epam.javacourse.hotelapp.dto.BookingDto;
 import com.epam.javacourse.hotelapp.model.Booking;
 
@@ -14,7 +13,7 @@ public class BookingMapper {
         dto.setCheckinDate(booking.getCheckinDate());
         dto.setCheckoutDate(booking.getCheckoutDate());
         dto.setRoomId(booking.getRoomId());
-        dto.setApplicationId(booking.getApplicationId());
+        dto.setClaimId(booking.getClaimId());
         return dto;
     }
 
@@ -26,7 +25,7 @@ public class BookingMapper {
         booking.setCheckinDate(dto.getCheckinDate());
         booking.setCheckoutDate(dto.getCheckoutDate());
         booking.setRoomId(dto.getRoomId());
-        booking.setApplicationId(dto.getApplicationId());
+        booking.setClaimId(dto.getClaimId());
         return booking;
     }
 }

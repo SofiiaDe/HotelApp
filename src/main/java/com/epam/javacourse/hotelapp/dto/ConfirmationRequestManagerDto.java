@@ -7,17 +7,17 @@ public class ConfirmationRequestManagerDto {
     private int id;
     private String bookedByUser;
     private String bookedByUserEmail;
-    private int applicationId;
+    private int claimId;
     private int roomId;
     private LocalDate confirmRequestDate;
     private String status;
 
     public ConfirmationRequestManagerDto(int id, String bookedByUser, String bookedByUserEmail,
-                                       int applicationId, int roomId, LocalDate confirmRequestDate, String status) {
+                                         int claimId, int roomId, LocalDate confirmRequestDate, String status) {
         this.id = id;
         this.bookedByUser = bookedByUser;
         this.bookedByUserEmail = bookedByUserEmail;
-        this.applicationId = applicationId;
+        this.claimId = claimId;
         this.roomId = roomId;
         this.confirmRequestDate = confirmRequestDate;
         this.status = status;
@@ -35,8 +35,8 @@ public class ConfirmationRequestManagerDto {
         return bookedByUserEmail;
     }
 
-    public int getApplicationId() {
-        return applicationId;
+    public int getClaimId() {
+        return claimId;
     }
 
     public int getRoomId() {

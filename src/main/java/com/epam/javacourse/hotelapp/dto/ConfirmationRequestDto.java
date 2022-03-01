@@ -1,37 +1,33 @@
 package com.epam.javacourse.hotelapp.dto;
 
-import com.epam.javacourse.hotelapp.model.Application;
+import com.epam.javacourse.hotelapp.model.Claim;
 import com.epam.javacourse.hotelapp.model.Room;
 import com.epam.javacourse.hotelapp.model.User;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import java.time.LocalDate;
 
 public class ConfirmationRequestDto {
 
     private int id;
     private int userId;
-    private int applicationId;
+    private int claimId;
     private int roomId;
     private LocalDate confirmRequestDate;
     private String status;
     private LocalDate confirmRequestDueDate;
     private User user;
-    private Application application;
+    private Claim claim;
     private Room room;
 
     public ConfirmationRequestDto() {
     }
 
-    public ConfirmationRequestDto(int id, int userId, int applicationId, int roomId,
+    public ConfirmationRequestDto(int id, int userId, int claimId, int roomId,
                                   LocalDate confirmRequestDate, String status,
                                   LocalDate confirmRequestDueDate) {
         this.id = id;
         this.userId = userId;
-        this.applicationId = applicationId;
+        this.claimId = this.claimId;
         this.roomId = roomId;
         this.confirmRequestDate = confirmRequestDate;
         this.status = status;
@@ -54,12 +50,12 @@ public class ConfirmationRequestDto {
         this.userId = userId;
     }
 
-    public int getApplicationId() {
-        return applicationId;
+    public int getClaimId() {
+        return claimId;
     }
 
-    public void setApplicationId(int applicationId) {
-        this.applicationId = applicationId;
+    public void setClaimId(int claimId) {
+        this.claimId = claimId;
     }
 
     public int getRoomId() {
@@ -102,12 +98,12 @@ public class ConfirmationRequestDto {
         this.user = user;
     }
 
-    public Application getApplication() {
-        return application;
+    public Claim getClaim() {
+        return claim;
     }
 
-    public void setApplication(Application application) {
-        this.application = application;
+    public void setClaim(Claim claim) {
+        this.claim = claim;
     }
 
     public Room getRoom() {

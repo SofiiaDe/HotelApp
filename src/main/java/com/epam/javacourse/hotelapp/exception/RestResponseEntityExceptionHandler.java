@@ -63,7 +63,7 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 
     @ExceptionHandler({InvalidDataAccessApiUsageException.class, DataAccessException.class})
     protected ResponseEntity<Object> handleConflict(final RuntimeException ex, final WebRequest request) {
-        final String bodyOfResponse = "This should be application specific";
+        final String bodyOfResponse = "Something went wrong";
         return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), HttpStatus.CONFLICT, request);
     }
 

@@ -6,13 +6,13 @@ public class Constants {
     }
 
     public static final String PAGE_GET_USERS = "/WEB-INF/jsp/manager/getAllUsers.jsp";
-    public static final String PAGE_ERROR = "/WEB-INF/jsp/errorPage.jsp";
+    public static final String PAGE_ERROR = "errorPage";
     public static final String PAGE_LOGIN = "login";
     public static final String PAGE_HOME = "home";
     public static final String PAGE_REGISTRATION = "register";
     public static final String PAGE_CLIENT_ACCOUNT = "clientAccount";
     public static final String PAGE_MANAGER_ACCOUNT = "managerAccount";
-    public static final String PAGE_SUBMIT_APPLICATION = "application";
+    public static final String PAGE_SUBMIT_CLAIM = "claim";
     public static final String PAGE_PAY_INVOICE = "/WEB-INF/jsp/client/paymentTransaction.jsp";
     public static final String PAGE_FREE_ROOMS = "/WEB-INF/jsp/client/freeRoomsToBook.jsp";
 

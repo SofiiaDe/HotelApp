@@ -5,7 +5,7 @@ import java.time.LocalDate;
 /**
  * Show all applications in manager account
  */
-public class ApplicationManagerDto {
+public class ClaimManagerDto {
 
     private int id;
     private String bookedByUser;
@@ -15,11 +15,11 @@ public class ApplicationManagerDto {
     private String roomTypeBySeats;
     private String roomClass;
 
-    public ApplicationManagerDto() {
+    public ClaimManagerDto() {
     }
 
-    public ApplicationManagerDto(int id, String bookedByUser, String bookedByUserEmail,
-                                 LocalDate checkinDate, LocalDate checkoutDate, String roomTypeBySeats, String roomClass) {
+    public ClaimManagerDto(int id, String bookedByUser, String bookedByUserEmail,
+                           LocalDate checkinDate, LocalDate checkoutDate, String roomTypeBySeats, String roomClass) {
         this.id = id;
         this.bookedByUser = bookedByUser;
         this.bookedByUserEmail = bookedByUserEmail;

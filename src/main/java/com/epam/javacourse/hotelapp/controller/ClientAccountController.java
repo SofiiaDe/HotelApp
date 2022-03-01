@@ -2,13 +2,14 @@ package com.epam.javacourse.hotelapp.controller;
 
 import com.epam.javacourse.hotelapp.dto.*;
 import com.epam.javacourse.hotelapp.exception.AppException;
-import com.epam.javacourse.hotelapp.model.Application;
-import com.epam.javacourse.hotelapp.model.User;
-import com.epam.javacourse.hotelapp.service.interfaces.IApplicationService;
+import com.epam.javacourse.hotelapp.service.interfaces.IClaimService;
 import com.epam.javacourse.hotelapp.service.interfaces.IBookingService;
 import com.epam.javacourse.hotelapp.service.interfaces.IConfirmationRequest;
 import com.epam.javacourse.hotelapp.service.interfaces.IInvoiceService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.epam.javacourse.hotelapp.utils.mappers.UserMapper;
+import com.epam.javacourse.hotelapp.utils.validation.Validator;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -21,25 +22,27 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
 
-import static com.epam.javacourse.hotelapp.utils.Constants.PAGE_REGISTRATION;
-import static com.epam.javacourse.hotelapp.utils.Constants.PAGE_SUBMIT_APPLICATION;
+import static com.epam.javacourse.hotelapp.utils.Constants.PAGE_SUBMIT_CLAIM;
 
 @Controller
 @RequestMapping(value = "/client")
 public class ClientAccountController {
 
+    private static final Logger logger = LogManager.getLogger(ClientAccountController.class);
 
-    private final IApplicationService applicationService;
+
+    private final IClaimService claimService;
     private final IBookingService bookingService;
     private final IConfirmationRequest confirmRequestService;
     private final IInvoiceService invoiceService;
 
-    public ClientAccountController(IApplicationService applicationService, IBookingService bookingService,
+    public ClientAccountController(IClaimService claimService, IBookingService bookingService,
                                    IConfirmationRequest confirmRequestService, IInvoiceService invoiceService) {
-        this.applicationService = applicationService;
+        this.claimService = claimService;
         this.bookingService = bookingService;
         this.confirmRequestService = confirmRequestService;
         this.invoiceService = invoiceService;
@@ -51,8 +54,8 @@ public class ClientAccountController {
 
         UserDto authorisedUser = (UserDto) session.getAttribute("authorisedUser");
 
-        List<ApplicationClientDto> userApplications = applicationService.getUserDetailedApplications(authorisedUser.getId());
-        userApplications.sort(Comparator.comparing(ApplicationClientDto::getCheckinDate).reversed());
+        List<ClaimClientDto> userClaims = claimService.getUserDetailedClaims(authorisedUser.getId());
+        userClaims.sort(Comparator.comparing(ClaimClientDto::getCheckinDate).reversed());
 
 //        int userBookingsCount = bookingService.getUserBookingsCount(authorisedUser.getId());
 //        int pageCount = (int) Math.ceil((float) userBookingsCount / pageSize);
@@ -73,7 +76,7 @@ public class ClientAccountController {
 
         ModelAndView modelAndView = new ModelAndView("clientAccount");
 
-        modelAndView.addObject("myApplications", userApplications);
+        modelAndView.addObject("myClaims", userClaims);
         modelAndView.addObject("myBookings", userBookings);
         modelAndView.addObject("myConfirmRequests", userConfirmRequests);
         modelAndView.addObject("myInvoices", userInvoices);
@@ -81,49 +84,49 @@ public class ClientAccountController {
         return modelAndView;
     }
 
-    @GetMapping("/application")
-    public String applicationPage(  @ModelAttribute("application") @Valid ApplicationDto applicationDto) {
-        return PAGE_SUBMIT_APPLICATION;
+
+    @GetMapping("/claim")
+    public String claim() {
+        return PAGE_SUBMIT_CLAIM;
     }
 
-    @PostMapping(value = "/application")
-    public ModelAndView submitApplication(HttpServletRequest request,
-                                          @ModelAttribute("application") @Valid ApplicationDto applicationDto,
-                                          BindingResult bindingResult, Model model) {
+    @PostMapping(value = "/claim")
+    public String submitClaim(HttpServletRequest request,
+                                    @ModelAttribute("claim") @Valid ClaimDto claimDto,
+                                    BindingResult bindingResult) throws AppException {
 
-//        HttpSession session = request.getSession();
-//        User authorisedUser = (User) session.getAttribute("authorisedUser");
-//
-//        String roomTypeBySeats = request.getParameter("room_seats");
-//        String roomClass = request.getParameter("room_class");
-//
-//        String address = Path.PAGE_ERROR;
-//
-//        String checkinDate = request.getParameter("checkin_date");
-//        String checkoutDate = request.getParameter("checkout_date");
-//
-//        LocalDate checkin = Validator.dateParameterToLocalDate(checkinDate, request);
-//        LocalDate checkout = Validator.dateParameterToLocalDate(checkoutDate, request);
-//
-//        if (!Validator.isCorrectDate(checkin, checkout, request)) {
-//            return new AddressCommandResult(address);
-//        }
-//
-//        Application newApplication = new Application();
-//        newApplication.setUserId(authorisedUser.getId());
-//        newApplication.setRoomTypeBySeats(roomTypeBySeats);
-//        newApplication.setRoomClass(roomClass);
-//        newApplication.setCheckinDate(checkin);
-//        newApplication.setCheckoutDate(checkout);
-//
-//        applicationService.create(newApplication);
-//
-        return new ModelAndView("clientAccount");
+        if (bindingResult.hasErrors())
+            return PAGE_SUBMIT_CLAIM;
+
+        HttpSession session = request.getSession();
+        UserDto authorisedUser = (UserDto) session.getAttribute("authorisedUser");
+
+        String roomSeats = claimDto.getRoomSeats();
+        String roomClass = claimDto.getRoomClass();
+
+        LocalDate checkinDate = claimDto.getCheckinDate();
+        LocalDate checkoutDate = claimDto.getCheckoutDate();
+
+        if (roomSeats == null || roomClass == null ||
+                checkinDate == null || checkoutDate == null) {
+            return PAGE_SUBMIT_CLAIM;
+        }
+
+        if (!Validator.isCorrectDate(checkinDate, checkoutDate, request)) {
+            throw new AppException("Incorrect dates");
+        }
+
+        claimDto.setUserId(authorisedUser.getId());
+        claimDto.setUser(UserMapper.mapFromDto(authorisedUser));
+
+        claimService.createClaim(claimDto);
+        logger.info("Create claim with id = {}", claimDto.getId());
+
+        return "redirect:/client/account";
     }
 
     @PostMapping(value = "/book")
     public ModelAndView bookRoom(HttpSession session) {
-
 
 
         return new ModelAndView("clientAccount");

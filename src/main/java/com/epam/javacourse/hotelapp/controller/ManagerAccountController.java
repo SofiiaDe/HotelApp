@@ -2,7 +2,7 @@ package com.epam.javacourse.hotelapp.controller;
 
 import com.epam.javacourse.hotelapp.dto.*;
 import com.epam.javacourse.hotelapp.exception.AppException;
-import com.epam.javacourse.hotelapp.service.interfaces.IApplicationService;
+import com.epam.javacourse.hotelapp.service.interfaces.IClaimService;
 import com.epam.javacourse.hotelapp.service.interfaces.IBookingService;
 import com.epam.javacourse.hotelapp.service.interfaces.IConfirmationRequest;
 import com.epam.javacourse.hotelapp.service.interfaces.IInvoiceService;
@@ -21,14 +21,14 @@ import java.util.List;
 public class ManagerAccountController {
 
 
-    private final IApplicationService applicationService;
+    private final IClaimService claimService;
     private final IBookingService bookingService;
     private final IConfirmationRequest confirmRequestService;
     private final IInvoiceService invoiceService;
 
-    public ManagerAccountController(IApplicationService applicationService, IBookingService bookingService,
+    public ManagerAccountController(IClaimService claimService, IBookingService bookingService,
                                     IConfirmationRequest confirmRequestService, IInvoiceService invoiceService) {
-        this.applicationService = applicationService;
+        this.claimService = claimService;
         this.bookingService = bookingService;
         this.confirmRequestService = confirmRequestService;
         this.invoiceService = invoiceService;
@@ -40,7 +40,7 @@ public class ManagerAccountController {
         ModelAndView modelAndView = new ModelAndView("redirect:/manger/account");
         UserDto authorisedUser = (UserDto) session.getAttribute("authorisedUser");
 
-        List<ApplicationManagerDto> allApplications = applicationService.getAllDetailedApplications();
+        List<ClaimManagerDto> allClaims = claimService.getAllDetailedClaims();
 
         BookingStatus bookingStatus = BookingStatus.fromString(request.getParameter("bookingStatus"));
 //        int allBookingsCount = bookingService.getAllBookingsCount(bookingStatus);
@@ -56,7 +56,7 @@ public class ManagerAccountController {
 
         List<ConfirmationRequestManagerDto> allConfirmRequests = confirmRequestService.getAllDetailedConfirmRequests();
 
-        modelAndView.addObject("allApplications", allApplications);
+        modelAndView.addObject("allClaims", allClaims);
         modelAndView.addObject("allBookings", allBookings);
         modelAndView.addObject("allConfirmRequests", allConfirmRequests);
         modelAndView.addObject("allInvoices", allInvoices);

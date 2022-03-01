@@ -19,10 +19,10 @@ Success)))
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" id="application-tab" data-toggle="tab" href="#application" role="tab"
-                   aria-controls="application"
+                <a class="nav-link" id="claim-tab" data-toggle="tab" href="#claim" role="tab"
+                   aria-controls="claim"
                    aria-selected="false"
-                   th:text="#{manager.table.applications}">
+                   th:text="#{manager.table.claims}">
                 </a>
             </li>
             <li class="nav-item">
@@ -138,8 +138,8 @@ Success)))
                 </c:if>
             </div>
 
-            <%-- Application --%>
-            <div class="tab-pane fade" id="application" role="tabpanel" aria-labelledby="application-tab">
+            <%-- claim --%>
+            <div class="tab-pane fade" id="claim" role="tabpanel" aria-labelledby="claim-tab">
                 <table class="table table-hover mt-2">
                     <thead>
                     <tr>
@@ -165,26 +165,26 @@ Success)))
                     </tr>
                     </thead>
                     <tbody>
-                    <th:block th:each="application : ${allApplications}">
+                    <th:block th:each="claim : ${allClaims}">
 
                         <tr>
-                            <td th:text="${application.bookedByUser}"></td>
-                            <td th:text="${application.bookedByUserEmail}"></td>
-                            <td th:text="${application.roomTypeBySeats}"></td>
-                            <td th:text="${application.roomClass}"></td>
+                            <td th:text="${claim.bookedByUser}"></td>
+                            <td th:text="${claim.bookedByUserEmail}"></td>
+                            <td th:text="${claim.roomTypeBySeats}"></td>
+                            <td th:text="${claim.roomClass}"></td>
                                     <!--              <td>-->
-                                    <!--                <c:if test="${application.roomTypeBySeats != null}">-->
+                                    <!--                <c:if test="${claim.roomTypeBySeats != null}">-->
                                     <!--                  <c:choose>-->
-                                    <!--                    <c:when test="${application.roomTypeBySeats == 'single'}">-->
+                                    <!--                    <c:when test="${claim.roomTypeBySeats == 'single'}">-->
                                     <!--                      th:text="#{room.type.single"/>-->
                                     <!--                    </c:when>-->
-                                    <!--                    <c:when test="${application.roomTypeBySeats == 'double'}">-->
+                                    <!--                    <c:when test="${claim.roomTypeBySeats == 'double'}">-->
                                     <!--                      th:text="#{room.type.double"/>-->
                                     <!--                    </c:when>-->
-                                    <!--                    <c:when test="${application.roomTypeBySeats == 'twin'}">-->
+                                    <!--                    <c:when test="${claim.roomTypeBySeats == 'twin'}">-->
                                     <!--                      th:text="#{room.type.twin"/>-->
                                     <!--                    </c:when>-->
-                                    <!--                    <c:when test="${application.roomTypeBySeats == 'triple'}">-->
+                                    <!--                    <c:when test="${claim.roomTypeBySeats == 'triple'}">-->
                                     <!--                      th:text="#{room.type.triple"/>-->
                                     <!--                    </c:when>-->
                                     <!--                    <c:otherwise>-->
@@ -194,15 +194,15 @@ Success)))
                                     <!--                </c:if>-->
                                     <!--              </td>-->
                                     <!--              <td>-->
-                                    <!--                <c:if test="${application.roomClass != null}">-->
+                                    <!--                <c:if test="${claim.roomClass != null}">-->
                                     <!--                  <c:choose>-->
-                                    <!--                    <c:when test="${application.roomClass == 'standard'}"-->
+                                    <!--                    <c:when test="${claim.roomClass == 'standard'}"-->
                                     <!--                      th:text="#{room.class.standard}"/>-->
                                     <!--                    </c:when>-->
-                                    <!--                    <c:when test="${application.roomClass == 'business'}"-->
+                                    <!--                    <c:when test="${claim.roomClass == 'business'}"-->
                                     <!--                      th:text="#{room.class.business}"/>-->
                                     <!--                    </c:when>-->
-                                    <!--                    <c:when test="${application.roomClass == 'lux'}"-->
+                                    <!--                    <c:when test="${claim.roomClass == 'lux'}"-->
                                     <!--                      th:text="#{room.class.lux}"/>-->
                                     <!--                    </c:when>-->
                                     <!--                    <c:otherwise-->
@@ -211,19 +211,19 @@ Success)))
                                     <!--                  </c:choose>-->
                                     <!--                </c:if>-->
                                     <!--              </td>-->
-                            <td th:text="${application.checkinDate}"></td>
-                            <td th:text="${application.checkoutDate}"></td>
+                            <td th:text="${claim.checkinDate}"></td>
+                            <td th:text="${claim.checkoutDate}"></td>
                             <td>
                                 <div class="d-flex justify-content-end">
                                     <div>
                                         <button type="submit" class="btn btn-outline-secondary btn-sm"
                                                 data-toggle="modal"
-                                                data-target="#makeRequestModalCenter${application.id}">
+                                                data-target="#makeRequestModalCenter${claim.id}">
                                             <i class="material-icons" th:text="#{manager.make.request}"/></i>
                                         </button>
                                         <!-- Modal -->
                                         <div class="modal fade bd-example-modal-lg"
-                                             id="makeRequestModalCenter${application.id}"
+                                             id="makeRequestModalCenter${claim.id}"
                                              tabindex="-1"
                                              role="dialog"
                                              aria-labelledby="#makeRequestModalCenterTitle"
@@ -252,7 +252,7 @@ Success)))
                                                                     <div class="col">
                                                                         <input type="text" name="checkin_date"
                                                                                class="form-control"
-                                                                               value="${application.checkinDate}"
+                                                                               value="${claim.checkinDate}"
                                                                                minlength="1"
                                                                                maxlength="40"
                                                                                required>
@@ -260,7 +260,7 @@ Success)))
                                                                     <div class="col">
                                                                         <input type="text" name="checkout_date"
                                                                                class="form-control"
-                                                                               value="${application.checkoutDate}"
+                                                                               value="${claim.checkoutDate}"
                                                                                minlength="1"
                                                                                maxlength="40"
                                                                                required>
@@ -274,13 +274,13 @@ Success)))
                                                                           name="description"
                                                                           rows="3" minlength="10"
                                                                           maxlength="250"
-                                                                          required>${application.roomClass} ${application.roomTypeBySeats}
+                                                                          required>${claim.roomClass} ${claim.roomTypeBySeats}
                                                                 </textarea>
                                                             </div>
 
                                                             <div class="d-flex justify-content-end">
-                                                                <input type="hidden" name="applicationId"
-                                                                       value="${application.id}">
+                                                                <input type="hidden" name="claimId"
+                                                                       value="${claim.id}">
                                                                 <button type="submit"
                                                                         class="btn btn-info btn-outline-primary"
                                                                     th:text="#{make_request.button}">
@@ -293,9 +293,9 @@ Success)))
                                         </div>
                                     </div>
                                     <div class="ml-1">
-                                        <form action="controller?command=removeApplication" method="post">
-                                            <input type="hidden" name="application_id"
-                                                   value="${application.id}">
+                                        <form action="controller?command=removeclaim" method="post">
+                                            <input type="hidden" name="claim_id"
+                                                   value="${claim.id}">
                                             <button type="submit"
                                                     class="btn btn-outline-secondary btn-sm">
                                                 <i class="material-icons">delete_outline</i>
@@ -322,7 +322,7 @@ Success)))
                             th:text="#{table.th.user_email}">
                         </th>
                         <th scope="col"
-                            th:text="#{table.th.application_id}">
+                            th:text="#{table.th.claim_id}">
                         </th>
                         <th scope="col"
                             th:text="#{table.th.room_id}">
@@ -343,7 +343,7 @@ Success)))
                         <tr>
                             <td th:text="${confirmrequest.bookedByUser}"></td>
                             <td th:text="${confirmrequest.bookedByUserEmail}</td>
-                            <td th:text="${confirmrequest.applicationId}</td>
+                            <td th:text="${confirmrequest.claimId}</td>
                             <td th:text="${confirmrequest.roomId}</td>
                             <td th:text="${confirmrequest.confirmRequestDate}</td>
                             <td th:text="${confirmrequest.status}"></td>

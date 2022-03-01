@@ -9,7 +9,7 @@ CREATE TABLE users
     role VARCHAR(13)
 );
 
-CREATE TABLE applications
+CREATE TABLE claims
 (
     id            INT PRIMARY KEY auto_increment,
     user_id INT,

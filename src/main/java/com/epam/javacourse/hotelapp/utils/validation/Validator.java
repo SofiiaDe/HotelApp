@@ -1,5 +1,11 @@
+
 package com.epam.javacourse.hotelapp.utils.validation;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -8,6 +14,9 @@ import static com.epam.javacourse.hotelapp.utils.Constants.PASSWORD_REGEX;
 import static com.fasterxml.jackson.databind.jsonFormatVisitors.JsonValueFormat.EMAIL;
 
 public class Validator {
+
+    private static final Logger logger = LogManager.getLogger(Validator.class);
+
 
     public static boolean isEmailValid(String email, int maxLength) {
 
@@ -29,5 +38,35 @@ public class Validator {
         Matcher matcher = pattern.matcher(password);
 
         return password.length() <= maxLength && password.length() >= minLength && matcher.find();
+    }
+
+    /**
+     *
+     * @param checkin checkinDate selected by user and then parsed to LocalDate type
+     * @param checkout checkoutDate selected by user and then parsed to LocalDate type
+     * @param request HttpServletRequest request
+     * @return true if user selected valid checkin and checkout dates
+     */
+    public static boolean isCorrectDate(LocalDate checkin, LocalDate checkout, HttpServletRequest request) {
+        if (checkin == null || checkout == null) {
+            logger.error("Check-in and/or check-out dates were not selected");
+            request.setAttribute("errorMessage", "Please select check-in and check-out dates.");
+            return false;
+        }
+
+        if(checkin.isAfter(checkout)) {
+            logger.error("Check-in date is after check-out date");
+            request.setAttribute("errorMessage", "Check-out date cannot be later than check-in date.\n " +
+                    "Please enter correct dates.");
+            return false;
+        }
+
+        if(checkin.isBefore(LocalDate.now()) || checkout.isBefore(LocalDate.now())) {
+            logger.error("Check-in date and/or check-out date are before current date");
+            request.setAttribute("errorMessage", "Check-in date and check-out date cannot be earlier than current date.\n " +
+                    "Please enter correct dates.");
+            return false;
+        }
+        return true;
     }
 }

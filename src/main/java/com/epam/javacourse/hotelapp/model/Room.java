@@ -12,7 +12,7 @@ public class Room implements Serializable {
     private static final long serialVersionUID = -1L;
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", insertable = false, updatable = false, nullable = false)
     private int id;
 

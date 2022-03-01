@@ -5,22 +5,22 @@ import java.io.Serializable;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "applications")
-public class Application implements Serializable {
+@Table(name = "claims")
+public class Claim implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", insertable = false, updatable = false, nullable = false)
     private int id;
 
-    @ManyToOne(optional = false, cascade = CascadeType.ALL)
+    @ManyToOne(optional = false, cascade = CascadeType.MERGE)
     @JoinColumn(name = "user_id", nullable = false)
     private User userId;
 
     @Column(name = "room_seats")
-    private String roomTypeBySeats;
+    private String roomSeats;
 
     @Column(name = "room_class")
     private String roomClass;
@@ -48,12 +48,12 @@ public class Application implements Serializable {
         this.userId = userId;
     }
 
-    public String getRoomTypeBySeats() {
-        return roomTypeBySeats;
+    public String getRoomSeats() {
+        return roomSeats;
     }
 
-    public void setRoomTypeBySeats(String roomTypeBySeats) {
-        this.roomTypeBySeats = roomTypeBySeats;
+    public void setRoomSeats(String roomTypeBySeats) {
+        this.roomSeats = roomTypeBySeats;
     }
 
     public String getRoomClass() {

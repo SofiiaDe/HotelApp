@@ -5,7 +5,7 @@
 <html>
 <head>
 
-  <title>Application form for client to book room</title>
+  <title>claim form for client to book room</title>
 </head>
 <style>
   #appForm{
@@ -38,8 +38,8 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item active">
-                <a class="nav-link" href="/application"
-                   th:text="#{client.menu.button.submit.application}"> <span class="sr-only">(current)</span></a>
+                <a class="nav-link" href="/client/claim"
+                   th:text="#{client.menu.button.submit.claim}"> <span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="controller?command=freeRoomsPage" th:text="#{client.menu.button.book}"></a>
@@ -70,34 +70,35 @@
     </div>
 </nav>
 
-<form th:method="POST" th:action="@{/client/application}" id="appForm" th:object="${application}">
+<form th:method="POST" th:action="@{/client/claim}" id="appForm" th:object="${claim}">
 
-  <h2 th:text="#{application.header.choose_type}"></h2>
+  <h2 th:text="#{claim.header.choose_type}"></h2>
   <p>
-    <input type="radio" th:text="#{room.type.single}" value="single" checked name="room_seats"/>
+    <input type="radio" th:text="#{room.type.single}" value="single" checked name="roomSeats"
+           id="roomTypeBySeats"/>
   </p>
   <p>
-    <input type="radio" th:text="#{room.type.double}" value="double" name="room_seats"/>
+    <input type="radio" th:text="#{room.type.double}" value="double" name="roomSeats"/>
   </p>
   <p>
-    <input type="radio" th:text="#{room.type.triple}" value="triple" name="room_seats"/>
+    <input type="radio" th:text="#{room.type.triple}" value="triple" name="roomSeats"/>
   </p>
   <p>
-    <input type="radio" th:text="#{room.type.twin}" value="twin" name="room_seats"/>
-  </p>
-  <br>
-  <h2 th:text="#{application.header.choose_class}"></h2>
-  <p>
-    <input type="radio" th:text="#{room.class.standard}" value="standard" checked name="room_class"/>
-  </p>
-  <p>
-    <input type="radio" th:text="#{room.class.business}" value="business" name="room_class"/>
-  </p>
-  <p>
-    <input type="radio" th:text="#{room.class.lux}" value="lux" name="room_class"/>
+    <input type="radio" th:text="#{room.type.twin}" value="twin" name="roomSeats"/>
   </p>
   <br>
-  <h2 th:text="#{application.header.choose_time}"></h2>
+  <h2 th:text="#{claim.header.choose_class}"></h2>
+  <p>
+    <input type="radio" th:text="#{room.class.standard}" value="standard" checked name="roomClass"/>
+  </p>
+  <p>
+    <input type="radio" th:text="#{room.class.business}" value="business" name="roomClass"/>
+  </p>
+  <p>
+    <input type="radio" th:text="#{room.class.lux}" value="lux" name="roomClass"/>
+  </p>
+  <br>
+  <h2 th:text="#{claim.header.choose_time}"></h2>
 
   <form>
 <!--    <jsp:useBean id="now" class="java.util.Date" />-->
@@ -106,11 +107,11 @@
       <!--    <fmt:formatDate var="currentDate" value="${now}" pattern="yyyy-MM-dd" />-->
     <p>
       <label for="date" th:text="#{checkin.date}">: </label>
-      <input type="date" id="date" name="checkin_date"/>
+      <input type="date" id="date" name="checkinDate"/>
     </p>
     <p>
       <label for="date" th:text="#{checkout.date}">: </label>
-      <input type="date" id="dateout" name="checkout_date"/>
+      <input type="date" id="dateout" name="checkoutDate"/>
     </p>
     <br>
     <p>

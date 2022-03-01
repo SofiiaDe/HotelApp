@@ -11,20 +11,20 @@ public class BookingDto {
     private LocalDate checkinDate;
     private LocalDate checkoutDate;
     private int roomId;
-    private int applicationId;
+    private int claimId;
     private User user;
 
     public BookingDto() {
     }
 
     public BookingDto(int id, int userId, LocalDate checkinDate, LocalDate checkoutDate,
-                      int roomId, int applicationId) {
+                      int roomId, int claimId) {
         this.id = id;
         this.userId = userId;
         this.checkinDate = checkinDate;
         this.checkoutDate = checkoutDate;
         this.roomId = roomId;
-        this.applicationId = applicationId;
+        this.claimId = claimId;
     }
 
     public int getId() {
@@ -67,12 +67,12 @@ public class BookingDto {
         this.roomId = roomId;
     }
 
-    public int getApplicationId() {
-        return applicationId;
+    public int getClaimId() {
+        return claimId;
     }
 
-    public void setApplicationId(int applicationId) {
-        this.applicationId = applicationId;
+    public void setClaimId(int claimId) {
+        this.claimId = claimId;
     }
 
     public User getUser() {

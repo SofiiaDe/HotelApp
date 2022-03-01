@@ -20,8 +20,8 @@ public class ConfirmationRequest implements Serializable {
     private User userId;
 
     @OneToOne
-    @JoinColumn(name = "application_id")
-    private Application applicationId;
+    @JoinColumn(name = "claim_id")
+    private Claim claimId;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "room_id")
@@ -51,12 +51,12 @@ public class ConfirmationRequest implements Serializable {
         this.confirmRequestDueDate = confirmRequestDueDate;
     }
 
-    public Application getApplicationId() {
-        return applicationId;
+    public Claim getClaimId() {
+        return claimId;
     }
 
-    public void setApplicationId(Application applicationId) {
-        this.applicationId = applicationId;
+    public void setClaimId(Claim claimId) {
+        this.claimId = claimId;
     }
 
     public Room getRoomId() {

@@ -5,7 +5,7 @@ import com.epam.javacourse.hotelapp.utils.validation.customannotations.PasswordM
 
 import java.time.LocalDate;
 
-public class ApplicationClientDto {
+public class ClaimClientDto {
 
     private int id;
     private LocalDate checkinDate;
@@ -13,8 +13,8 @@ public class ApplicationClientDto {
     private String roomTypeBySeats;
     private String roomClass;
 
-    public ApplicationClientDto(int id, LocalDate checkinDate, LocalDate checkoutDate,
-                                String roomTypeBySeats, String roomClass) {
+    public ClaimClientDto(int id, LocalDate checkinDate, LocalDate checkoutDate,
+                          String roomTypeBySeats, String roomClass) {
         this.id = id;
         this.checkinDate = checkinDate;
         this.checkoutDate = checkoutDate;
@@ -22,7 +22,7 @@ public class ApplicationClientDto {
         this.roomClass = roomClass;
     }
 
-    public ApplicationClientDto() {
+    public ClaimClientDto() {
 
     }
 

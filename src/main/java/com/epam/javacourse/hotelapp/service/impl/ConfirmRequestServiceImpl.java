@@ -3,14 +3,11 @@ package com.epam.javacourse.hotelapp.service.impl;
 import com.epam.javacourse.hotelapp.dto.*;
 import com.epam.javacourse.hotelapp.exception.AppException;
 import com.epam.javacourse.hotelapp.exception.DBException;
-import com.epam.javacourse.hotelapp.model.Application;
 import com.epam.javacourse.hotelapp.model.ConfirmationRequest;
 import com.epam.javacourse.hotelapp.model.User;
 import com.epam.javacourse.hotelapp.repository.*;
-import com.epam.javacourse.hotelapp.service.interfaces.IApplicationService;
 import com.epam.javacourse.hotelapp.service.interfaces.IConfirmationRequest;
-import com.epam.javacourse.hotelapp.service.interfaces.IUserService;
-import com.epam.javacourse.hotelapp.utils.mappers.ApplicationMapper;
+import com.epam.javacourse.hotelapp.utils.mappers.ClaimMapper;
 import com.epam.javacourse.hotelapp.utils.mappers.ConfirmationRequestMapper;
 import com.epam.javacourse.hotelapp.utils.mappers.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +38,7 @@ public class ConfirmRequestServiceImpl implements IConfirmationRequest {
     UserRepository userRepository;
 
     @Autowired
-    ApplicationRepository applicationRepository;
+    ClaimRepository claimRepository;
 
 
     @Override
@@ -79,7 +76,7 @@ public class ConfirmRequestServiceImpl implements IConfirmationRequest {
                         new ConfirmationRequestManagerDto(confirmRequest.getId(),
                                 bookingUser.getFirstName() + ' ' + bookingUser.getLastName(),
                                 bookingUser.getEmail(),
-                                confirmRequest.getApplicationId().getId(),
+                                confirmRequest.getClaimId().getId(),
                                 confirmRequest.getRoomId().getId(),
                                 confirmRequest.getConfirmRequestDate(),
                                 confirmRequest.getStatus()
@@ -103,27 +100,27 @@ public class ConfirmRequestServiceImpl implements IConfirmationRequest {
                 return Collections.emptyList();
             }
 
-            List<ApplicationDto> userApplications = applicationRepository.findApplicationsByUserId(userID)
+            List<ClaimDto> userClaims = claimRepository.findClaimsByUserId(userID)
                     .stream()
-                    .map(ApplicationMapper::mapToDto)
+                    .map(ClaimMapper::mapToDto)
                     .collect(Collectors.toList());
 
             List<ConfirmationRequestClientDto> result = new ArrayList<>();
 
             for (ConfirmationRequest confirmRequest : allUserConfirmRequests) {
-                var application = userApplications.stream()
-                        .filter(a -> a.getId() == confirmRequest.getApplicationId().getId())
+                var claim = userClaims.stream()
+                        .filter(a -> a.getId() == confirmRequest.getClaimId().getId())
                         .findFirst()
                         .get();
                 result.add(
                         new ConfirmationRequestClientDto(confirmRequest.getId(),
                                 confirmRequest.getConfirmRequestDate(),
                                 getConfirmRequestDueDate(ConfirmationRequestMapper.mapToDto(confirmRequest)),
-                                application.getRoomTypeBySeats(),
-                                application.getRoomClass(),
-                                application.getCheckinDate(),
-                                application.getCheckoutDate(),
-                                confirmRequest.getApplicationId().getId(),
+                                claim.getRoomSeats(),
+                                claim.getRoomClass(),
+                                claim.getCheckinDate(),
+                                claim.getCheckoutDate(),
+                                confirmRequest.getClaimId().getId(),
                                 confirmRequest.getStatus()
                         ));
             }

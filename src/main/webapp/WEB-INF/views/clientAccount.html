@@ -25,10 +25,10 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" id="application-tab" data-toggle="tab" href="#application" role="tab"
-                   aria-controls="application"
+                <a class="nav-link" id="claim-tab" data-toggle="tab" href="#claim" role="tab"
+                   aria-controls="claim"
                    aria-selected="false"
-                   th:text="#{client.table.user_applications}">
+                   th:text="#{client.table.user_claims}">
                 </a>
             </li>
             <li class="nav-item">
@@ -92,8 +92,8 @@
             </div>
 
 
-            <!--            My applications-->
-            <div class="tab-pane fade" id="application" role="tabpanel" aria-labelledby="application-tab">
+            <!--            My claims-->
+            <div class="tab-pane fade" id="claim" role="tabpanel" aria-labelledby="claim-tab">
                 <table class="table table-hover mt-2">
                     <thead>
                     <tr>
@@ -113,12 +113,12 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <th:block th:each="application : ${myApplications}">
+                    <th:block th:each="claim : ${myClaims}">
                         <tr>
-                            <td th:text="${application.roomTypeBySeats}"></td>
-                            <td th:test="${application.roomClass}"></td>
-                            <td th:text="${application.checkinDate}"></td>
-                            <td th:text="${application.checkoutDate}"></td>
+                            <td th:text="${claim.roomTypeBySeats}"></td>
+                            <td th:test="${claim.roomClass}"></td>
+                            <td th:text="${claim.checkinDate}"></td>
+                            <td th:text="${claim.checkoutDate}"></td>
                         </tr>
                     </th:block>
                     </tbody>
@@ -149,7 +149,7 @@
                             th:text="#{checkout.date}">
                         </th>
                         <th scope="col"
-                            th:text="#{table.th.application_id}">
+                            th:text="#{table.th.claim_id}">
                         </th>
                         <th scope="col"
                             th:text="#{table.th.status}">
@@ -167,7 +167,7 @@
                             <td th:text="${confirmrequest.roomClass}"></td>
                             <td th:text="${confirmrequest.checkinDate}"></td>
                             <td th:text="${confirmrequest.checkoutDate}"></td>
-                            <td th:text="${confirmrequest.applicationId}"></td>
+                            <td th:text="${confirmrequest.claimId}"></td>
                             <td th:text="${confirmrequest.status}"></td>
                             <td>
                                 <div class="ml-1">

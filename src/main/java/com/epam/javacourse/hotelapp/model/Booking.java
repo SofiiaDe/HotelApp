@@ -28,8 +28,8 @@ public class Booking implements Serializable {
     @Column(name = "room_id")
     private int roomId;
 
-    @Column(name = "application_id")
-    private int applicationId;
+    @Column(name = "claim_id")
+    private int claimId;
 
     public Booking() {
     }
@@ -58,12 +58,12 @@ public class Booking implements Serializable {
         this.roomId = roomId;
     }
 
-    public int getApplicationId() {
-        return applicationId;
+    public int getClaimId() {
+        return claimId;
     }
 
-    public void setApplicationId(int applicationId) {
-        this.applicationId = applicationId;
+    public void setClaimId(int claimId) {
+        this.claimId = claimId;
     }
 
     public LocalDate getCheckinDate() {

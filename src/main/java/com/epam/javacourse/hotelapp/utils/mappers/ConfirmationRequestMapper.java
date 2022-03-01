@@ -9,7 +9,7 @@ public class ConfirmationRequestMapper {
         ConfirmationRequestDto dto = new ConfirmationRequestDto();
         dto.setId(confirmRequest.getId());
         dto.setUserId(confirmRequest.getUserId().getId());
-        dto.setApplicationId(confirmRequest.getApplicationId().getId());
+        dto.setClaimId(confirmRequest.getClaimId().getId());
         dto.setRoomId(confirmRequest.getRoomId().getId());
         dto.setConfirmRequestDate(confirmRequest.getConfirmRequestDate());
         dto.setStatus(confirmRequest.getStatus());
@@ -22,7 +22,7 @@ public class ConfirmationRequestMapper {
         ConfirmationRequest confirmRequest = new ConfirmationRequest();
         confirmRequest.setId(dto.getId());
         confirmRequest.setUserId(dto.getUser());
-        confirmRequest.setApplicationId(dto.getApplication());
+        confirmRequest.setClaimId(dto.getClaim());
         confirmRequest.setRoomId(dto.getRoom());
         confirmRequest.setConfirmRequestDate(dto.getConfirmRequestDate());
         confirmRequest.setStatus(dto.getStatus());
