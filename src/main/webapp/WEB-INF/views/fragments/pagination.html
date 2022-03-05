@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<head>
+    <title>Pagination</title>
+</head>
+
+<body>
+
+<ul class="pagination" th:fragment="pagination">
+
+    <li class="page-item" th:classappend="${currentPage <= 1 ? 'disabled' : ''}" >
+        <a class="page-link"
+           th:href="${testText}"
+           th:with="testText=${T(com.epam.javacourse.hotelapp.utils.Helpers).buildBookingPageUrl(checkin, checkout, currentPage - 1)}"
+           aria-label="Prev" id="prevPage">
+            <span aria-hidden="true">&laquo;</span>
+            <span class="sr-only">&laquo;</span>
+        </a>
+    </li>
+
+    <th:block th:if="${currentPage - 3 > 1 || (currentPage > 1 && currentPage <= 4)}">
+        <li class="page-item">
+            <a class="page-link"
+               th:href="${testText}"
+               th:with="testText=${T(com.epam.javacourse.hotelapp.utils.Helpers).buildBookingPageUrl(checkin, checkout, 1)}"
+               id="firstPage">1</a></li>
+    </th:block>
+
+    <th:block th:if="${currentPage - 3 > 1}">
+        <li class="page-item disabled">
+            <a class="page-link"
+               th:href="#{}">...</a></li>
+    </th:block>
+
+    <th:block th:if="${currentPage - 2 > 1}">
+        <li class="page-item">
+            <a class="page-link"
+               th:href="${testText}"
+               th:with="testText=${T(com.epam.javacourse.hotelapp.utils.Helpers).buildBookingPageUrl(checkin, checkout, currentPage - 2)}"
+               id="pageMin2" th:text="${currentPage - 2}"></a>
+        </li>
+    </th:block>
+
+    <th:block th:if="${currentPage - 1 > 1}">
+        <li class="page-item">
+            <a class="page-link"
+               th:href="${testText}"
+               th:with="testText=${T(com.epam.javacourse.hotelapp.utils.Helpers).buildBookingPageUrl(checkin, checkout, currentPage - 1)}"
+               id="pageMin1" th:text="${currentPage - 1}"></a>
+        </li>
+    </th:block>
+
+    <li class="page-item active">
+        <a class="page-link"
+           th:href="${testText}"
+           th:with="testText=${T(com.epam.javacourse.hotelapp.utils.Helpers).buildBookingPageUrl(checkin, checkout, currentPage)}"
+           th:text="${currentPage}"></a></li>
+
+    <th:block th:if="${currentPage + 1 <= totalPageCount}">
+        <li class="page-item">
+            <a class="page-link"
+               th:href="${testText}"
+               th:with="testText=${T(com.epam.javacourse.hotelapp.utils.Helpers).buildBookingPageUrl(checkin, checkout, currentPage + 1)}"
+               id="pagePlus1" th:text="${currentPage + 1}"></a>
+        </li>
+    </th:block>
+
+    <th:block th:if="${currentPage + 2 <= totalPageCount}">
+        <li class="page-item">
+            <a class="page-link"
+               th:href="${testText}"
+               th:with="testText=${T(com.epam.javacourse.hotelapp.utils.Helpers).buildBookingPageUrl(checkin, checkout, currentPage + 2)}"
+               id="pagePlus2" th:text="${currentPage + 2}"></a>
+        </li>
+    </th:block>
+
+    <th:block th:if="${currentPage + 4 <= totalPageCount}">
+        <li class="page-item">
+            <a class="page-link"
+               th:href="${testText}"
+               th:with="testText=${T(com.epam.javacourse.hotelapp.utils.Helpers).buildBookingPageUrl(checkin, checkout, currentPage + 4)}"
+            >...</a>
+        </li>
+    </th:block>
+
+    <th:block th:if="${currentPage + 3 <= totalPageCount && totalPageCount >= 4}">
+        <li class="page-item">
+            <a class="page-link"
+               th:href="${testText}"
+               th:with="testText=${T(com.epam.javacourse.hotelapp.utils.Helpers).buildBookingPageUrl(checkin, checkout, currentPage + 3)}"
+               id="lastPage" th:text="${totalPageCount}"></a>
+        </li>
+        </th:block>
+
+        <li class="page-item" th:classappend="${currentPage >= totalPageCount ? 'disabled' : ''}">
+        <a class="page-link"
+           th:href="${testText}"
+           th:with="testText=${T(com.epam.javacourse.hotelapp.utils.Helpers).buildBookingPageUrl(checkin, checkout, currentPage + 1)}"
+           aria-label="Next" id="nextPage">
+            <span aria-hidden="true">&raquo;</span>
+            <span class="sr-only">&raquo;</span>
+        </a>
+        </li>
+
+</ul>
+</body>
+</html>

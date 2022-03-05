@@ -22,11 +22,11 @@ public class LogoutController {
     public RedirectView postLogout(HttpServletRequest request, SessionStatus sessionStatus) {
 
         HttpSession session = request.getSession(false);
-        session.removeAttribute("user");
+        session.removeAttribute("authorisedUser");
         session.removeAttribute("email");
         session.removeAttribute("password");
         session.removeAttribute("role");
-       session.setAttribute("authorisedUser", false);
+        session.setAttribute("authorisedUser", false);
 
         if (session != null) {
             session.invalidate();

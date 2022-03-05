@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+
+    <title>Get all users</title>
+
+    <link rel="stylesheet" href="/static/home.css">
+
+
+</head>
+
+<body>
+<div th:insert="fragments/header"></div>
+<div th:insert="fragments/managerMenu :: managerMenu"></div>
+
+<h1 th:text="#{all.users}"></h1>
+
+<table class="table table-hover mt-2 center">
+    <thead>
+    <tr>
+        <th scope="col"
+            th:text="#{table.th.user.id}">
+        </th>
+        <th scope="col"
+            th:text="#{table.th.user.first_name}">
+        </th>
+        <th scope="col"
+            th:text="#{table.th.user.last_name}">
+        </th>
+        <th scope="col"
+            th:text="#{table.th.user_email}">
+        </th>
+        <th scope="col"
+            th:text="#{table.th.user.country}">
+        </th>
+        <th scope="col"
+            th:text="#{table.th.user.role}">
+        </th>
+
+    </tr>
+    </thead>
+    <tbody>
+
+    <th:block th:each="user : ${usersList}">
+
+        <tr>
+            <td th:text="${user.id}"></td>
+            <td th:text="${user.firstName}"></td>
+            <td th:text="${user.lastName}"></td>
+            <td th:text="${user.email}"></td>
+            <td>
+<!--                <c:if test="${user.country != null}">-->
+<!--                    <c:choose>-->
+<!--                        <c:when test="${user.country == 'Italy'}">-->
+<!--                            th:text="#{country.italy"/>-->
+<!--                        </c:when>-->
+<!--                        <c:when test="${user.country == 'UK'}">-->
+<!--                            th:text="#{country.uk"/>-->
+<!--                        </c:when>-->
+<!--                        <c:when test="${user.country == 'Ukraine'}">-->
+<!--                            th:text="#{country.ukraine"/>-->
+<!--                        </c:when>-->
+<!--                        <c:when test="${user.country == 'Poland'}">-->
+<!--                            th:text="#{country.poland"/>-->
+<!--                        </c:when>-->
+<!--                        <c:when test="${user.country == 'Germany'}">-->
+<!--                            th:text="#{country.germany"/>-->
+<!--                        </c:when>-->
+<!--                        <c:otherwise>-->
+<!--                            th:text="#{country"/>-->
+<!--                        </c:otherwise>-->
+<!--                    </c:choose>-->
+<!--                </c:if>-->
+<!--                <c:if test="${user.country == null}">th:text="#{country"/></c:if>-->
+            </td>
+            <td>
+                <c:if test="${user.role != null}">
+                    <c:choose>
+                        <c:when test="${user.role == 'client'}">
+                            th:text="#{role.client"/>
+                        </c:when>
+                        <c:when test="${user.role == 'manager'}">
+                            th:text="#{role.manager"/>
+                        </c:when>
+                        <c:otherwise>
+                            th:text="#{role"/>
+                        </c:otherwise>
+                    </c:choose>
+                </c:if>
+                <c:if test="${user.role == null}">th:text="#{role"/></c:if>
+            </td>
+
+        </tr>
+    </th:block>
+    </tbody>
+</table>
+
+
+<div th:insert="fragments/scripts.html"></div>
+
+
+</body>
+</html>

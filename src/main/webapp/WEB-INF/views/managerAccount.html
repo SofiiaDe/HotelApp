@@ -1,12 +1,18 @@
 <!doctype html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+
+    <title>Manager account</title>
+
+    <link rel="stylesheet" href="/static/home.css">
 
 
-<html>
+</head>
 
 <body>
-Success)))
-<th:include page="/WEB-INF/components/managerMenu.jsp"/>
+<div th:insert="fragments/header"></div>
+<div th:insert="fragments/managerMenu :: managerMenu"></div>
+
 <div class="container">
     <div class="tab-pane fade show active" id="v-pills-services" role="tabpanel"
          aria-labelledby="v-pills-services-tab">
@@ -14,8 +20,8 @@ Success)))
             <li class="nav-item">
                 <a class="nav-link active" id="booking-tab" data-toggle="tab" href="#booking"
                    role="tab"
-                   aria-controls="booking" aria-selected="true">
-                    th:text="#{manager.table.bookings"/>
+                   aria-controls="booking" aria-selected="true"
+                    th:text="#{manager.table.bookings}">
                 </a>
             </li>
             <li class="nav-item">
@@ -49,7 +55,7 @@ Success)))
         </ul>
 
         <div class="tab-content" id="myTabContent">
-            <%-- Booking --%>
+<!--            Booking-->
             <div class="dropdown dropDownPadding">
                 <button class="btn btn-info dropdown-toggle" type="button" data-toggle="dropdown"
                         aria-haspopup="true" aria-expanded="false"
@@ -128,17 +134,17 @@ Success)))
                     </tbody>
                 </table>
 
-                <c:if test="${requestScope != null && requestScope.page != null && requestScope.pageCount != null}">
-                    <form action="controller">
-                        <input type="hidden" name="command" value="managerAccount"/>
-                        <nav aria-label="Manager's lift of booking navigation">
-                            <th:include page="/WEB-INF/components/pagination.jsp"/>
-                        </nav>
-                    </form>
-                </c:if>
+<!--                <c:if test="${requestScope != null && requestScope.page != null && requestScope.pageCount != null}">-->
+<!--                    <form action="controller">-->
+<!--                        <input type="hidden" name="command" value="managerAccount"/>-->
+<!--                        <nav aria-label="Manager's lift of booking navigation">-->
+<!--                            <th:include page="/WEB-INF/components/pagination.jsp"/>-->
+<!--                        </nav>-->
+<!--                    </form>-->
+<!--                </c:if>-->
             </div>
 
-            <%-- claim --%>
+<!--            Claim-->
             <div class="tab-pane fade" id="claim" role="tabpanel" aria-labelledby="claim-tab">
                 <table class="table table-hover mt-2">
                     <thead>
@@ -172,45 +178,6 @@ Success)))
                             <td th:text="${claim.bookedByUserEmail}"></td>
                             <td th:text="${claim.roomTypeBySeats}"></td>
                             <td th:text="${claim.roomClass}"></td>
-                                    <!--              <td>-->
-                                    <!--                <c:if test="${claim.roomTypeBySeats != null}">-->
-                                    <!--                  <c:choose>-->
-                                    <!--                    <c:when test="${claim.roomTypeBySeats == 'single'}">-->
-                                    <!--                      th:text="#{room.type.single"/>-->
-                                    <!--                    </c:when>-->
-                                    <!--                    <c:when test="${claim.roomTypeBySeats == 'double'}">-->
-                                    <!--                      th:text="#{room.type.double"/>-->
-                                    <!--                    </c:when>-->
-                                    <!--                    <c:when test="${claim.roomTypeBySeats == 'twin'}">-->
-                                    <!--                      th:text="#{room.type.twin"/>-->
-                                    <!--                    </c:when>-->
-                                    <!--                    <c:when test="${claim.roomTypeBySeats == 'triple'}">-->
-                                    <!--                      th:text="#{room.type.triple"/>-->
-                                    <!--                    </c:when>-->
-                                    <!--                    <c:otherwise>-->
-                                    <!--                      th:text="#{sort.seats.unknown"/>-->
-                                    <!--                    </c:otherwise>-->
-                                    <!--                  </c:choose>-->
-                                    <!--                </c:if>-->
-                                    <!--              </td>-->
-                                    <!--              <td>-->
-                                    <!--                <c:if test="${claim.roomClass != null}">-->
-                                    <!--                  <c:choose>-->
-                                    <!--                    <c:when test="${claim.roomClass == 'standard'}"-->
-                                    <!--                      th:text="#{room.class.standard}"/>-->
-                                    <!--                    </c:when>-->
-                                    <!--                    <c:when test="${claim.roomClass == 'business'}"-->
-                                    <!--                      th:text="#{room.class.business}"/>-->
-                                    <!--                    </c:when>-->
-                                    <!--                    <c:when test="${claim.roomClass == 'lux'}"-->
-                                    <!--                      th:text="#{room.class.lux}"/>-->
-                                    <!--                    </c:when>-->
-                                    <!--                    <c:otherwise-->
-                                    <!--                      th:text="#{sort.seats.unknown}"/>-->
-                                    <!--                    </c:otherwise>-->
-                                    <!--                  </c:choose>-->
-                                    <!--                </c:if>-->
-                                    <!--              </td>-->
                             <td th:text="${claim.checkinDate}"></td>
                             <td th:text="${claim.checkoutDate}"></td>
                             <td>
@@ -219,7 +186,7 @@ Success)))
                                         <button type="submit" class="btn btn-outline-secondary btn-sm"
                                                 data-toggle="modal"
                                                 data-target="#makeRequestModalCenter${claim.id}">
-                                            <i class="material-icons" th:text="#{manager.make.request}"/></i>
+                                            <i class="material-icons" th:text="#{manager.make.request}"></i>
                                         </button>
                                         <!-- Modal -->
                                         <div class="modal fade bd-example-modal-lg"
@@ -305,12 +272,12 @@ Success)))
                                 </div>
                             </td>
                         </tr>
-                    </c:forEach>
+                    </th:block>
                     </tbody>
                 </table>
             </div>
 
-            <%-- Confirmation Request --%>
+<!--            Confirmation Request-->
             <div class="tab-pane fade" id="confirmrequest" role="tabpanel" aria-labelledby="confirmrequest-tab">
                 <table class="table table-hover mt-2">
                     <thead>
@@ -342,19 +309,19 @@ Success)))
 
                         <tr>
                             <td th:text="${confirmrequest.bookedByUser}"></td>
-                            <td th:text="${confirmrequest.bookedByUserEmail}</td>
-                            <td th:text="${confirmrequest.claimId}</td>
-                            <td th:text="${confirmrequest.roomId}</td>
-                            <td th:text="${confirmrequest.confirmRequestDate}</td>
+                            <td th:text="${confirmrequest.bookedByUserEmail}"></td>
+                            <td th:text="${confirmrequest.claimId}"></td>
+                            <td th:text="${confirmrequest.roomId}"></td>
+                            <td th:text="${confirmrequest.confirmRequestDate}"></td>
                             <td th:text="${confirmrequest.status}"></td>
 
                         </tr>
-                    </c:forEach>
+                    </th:block>
                     </tbody>
                 </table>
             </div>
 
-            <%-- Invoice --%>
+<!--            Invoice-->
             <div class="tab-pane fade active" id="invoice" role="tabpanel" aria-labelledby="invoice-tab">
                 <table class="table table-hover mt-2">
                     <thead>
@@ -397,7 +364,7 @@ Success)))
                 </table>
             </div>
 
-            <%--Add a room --%>
+<!--            Add a room-->
             <div class="tab-pane fade" id="new-room" role="tabpanel"
                  aria-labelledby="new-room-tab">
                 <form class="mt-2" method="post" action="controller?command=addRoom">
@@ -454,7 +421,7 @@ Success)))
     </div>
 </div>
 
-<th:include page="/WEB-INF/components/scripts.jsp"/>
+<div th:insert="fragments/scripts.html"></div>
 
 <script>
     (function () {

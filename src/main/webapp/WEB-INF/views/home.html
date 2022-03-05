@@ -214,7 +214,9 @@
 <nav class="navbar background">
     <ul class="nav-list">
         <div class="logo">
-            <img src="pictures/logo-hotel.jpg" alt="logo">
+            <img th:src="@{/pictures/logo-hotel.jpg}" alt="logo">
+
+
         </div>
         <li><a href="/rooms" class="navLink" th:text="#{home.menu.button.rooms}">Rooms</a></li>
         <li><a href="/login" class="navLink" th:text="#{home.menu.button.login}">Login</a></li>
@@ -224,21 +226,10 @@
     <div class="dropdown">
         <button class="btn btn-outline-secondary btn-sm" type="button" id="dropdownMenuButton"
                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <i class="material-icons">
-                language
-            </i>
+            <i class="material-icons">language</i>
         </button>
         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-            <!--            <div class="search_icon" th:if="${#locale.toString() == 'ru_RU'}">-->
-            <!--                <a th:href="@{${#httpServletRequest.requestURI}(lang='en_US')}">-->
-            <!--                    <i>EN</i>-->
-            <!--                </a>-->
-            <!--            </div>-->
-            <!--            <div class="search_icon" th:if="${#locale.toString() == 'en_US'}">-->
-            <!--                <a th:href="@{${#httpServletRequest.requestURI}(lang='ru_RU')}">-->
-            <!--                    <i>RU</i>-->
-            <!--                </a>-->
-            <!--            </div>-->
+
             <!--            <form class="form-inline" method="get" action="/language">-->
             <!--                <button type="submit" name="en" onclick="changeFieldElement('langField', 'en')"-->
             <!--                        class="dropdown-item" th:text="#{main.menu.button.english}"></button>-->
@@ -246,19 +237,30 @@
             <!--                        class="dropdown-item" th:text="#{main.menu.button.ukrainian}"></button>-->
             <!--                <input name="langField" type="hidden" value="en">-->
             <!--            </form>-->
-            <form class="form-inline" method="get" action="/language">
+            <form class="form-inline" method="POST" th:action="@{/language}">
                 <button type="submit" name="en" th:if="${#locale.toString() == 'uk'}">
-                    <a th:href="@{${#httpServletRequest.requestURI}(lang='en')}"
-                         class="dropdown-item" th:text="#{main.menu.button.english}">
-                    </a>
+                                        <a th:href="@{${#httpServletRequest.requestURI}(lang='en')}"
+                                             class="dropdown-item" th:text="#{main.menu.button.english}">
+                                        </a>
 
-                </button>
-                <button type="submit" name="uk" th:if="${#locale.toString() == 'en'}">
-                    <a th:href="@{${#httpServletRequest.requestURI}(lang='uk')}"
-                        class="dropdown-item" th:text="#{main.menu.button.ukrainian}">
-                    </a>
-                </button>
-                <input name="lang" type="hidden" value="en">
+                                    </button>
+                                    <button type="submit" name="uk" th:if="${#locale.toString() == 'en'}">
+                                        <a th:href="@{${#httpServletRequest.requestURI}(lang='uk')}"
+                                            class="dropdown-item" th:text="#{main.menu.button.ukrainian}">
+                                        </a>
+                    </button>
+<!--                                    <button type="submit" name="en" th:if="${#locale.toString() == 'uk'}">-->
+<!--                    <a th:href="@{${#httpServletRequest.requestURI}(lang='en')}"-->
+<!--                         class="dropdown-item" th:text="#{main.menu.button.english}">-->
+<!--                    </a>-->
+
+<!--                </button>-->
+<!--                <button type="submit" name="uk" th:if="${#locale.toString() == 'en'}">-->
+<!--                    <a th:href="@{${#httpServletRequest.requestURI}(lang='uk')}"-->
+<!--                        class="dropdown-item" th:text="#{main.menu.button.ukrainian}">-->
+<!--                    </a>-->
+<!--                </button>-->
+<!--                <input name="lang" type="hidden" value="en">-->
             </form>
         </div>
     </div>
@@ -292,13 +294,10 @@
         <h1 class="sectionTag text-big" th:text="#{home.hotel.location}"></h1>
 
         <p class="sectionSubTag text-small"
-           th:text="#{home.hotel.location.address}">
-            <!--      <br>-->
-            th:text="#{home.hotel.location.city}"
-            <br>
-            th:text="#{home.hotel.location.phone}"
-            <br>
-            th:text="#{home.hotel.location.email}"
+           th:text="#{home.hotel.location.address}"><br
+            th:text="#{home.hotel.location.city}"><br
+            th:text="#{home.hotel.location.phone}"><br
+            th:text="#{home.hotel.location.email}">
         </p>
 
     </div>

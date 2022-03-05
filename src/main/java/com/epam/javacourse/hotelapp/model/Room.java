@@ -24,7 +24,7 @@ public class Room implements Serializable {
 
     @Column(name = "room_seats")
 //    @Enumerated(EnumType.ORDINAL)
-    private String roomTypeBySeats;
+    private String roomSeats;
 
     @Column(name = "room_class")
 //    @Enumerated(EnumType.ORDINAL)
@@ -33,6 +33,11 @@ public class Room implements Serializable {
     @Column(name = "room_status")
 //    @Enumerated(EnumType.ORDINAL)
     private String roomStatus;
+
+    public Room() {
+    }
+
+
 
     public int getId() {
         return id;
@@ -58,12 +63,12 @@ public class Room implements Serializable {
         this.roomNumber = roomNumber;
     }
 
-    public String getRoomTypeBySeats() {
-        return roomTypeBySeats;
+    public String getRoomSeats() {
+        return roomSeats;
     }
 
-    public void setRoomTypeBySeats(String roomTypeBySeats) {
-        this.roomTypeBySeats = roomTypeBySeats;
+    public void setRoomSeats(String roomSeats) {
+        this.roomSeats = roomSeats;
     }
 
     public String getRoomClass() {

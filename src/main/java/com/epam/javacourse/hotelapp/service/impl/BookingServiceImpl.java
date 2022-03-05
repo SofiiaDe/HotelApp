@@ -12,21 +12,17 @@ import com.epam.javacourse.hotelapp.repository.InvoiceRepository;
 import com.epam.javacourse.hotelapp.repository.RoomRepository;
 import com.epam.javacourse.hotelapp.repository.UserRepository;
 import com.epam.javacourse.hotelapp.service.interfaces.IBookingService;
-import com.epam.javacourse.hotelapp.service.interfaces.IInvoiceService;
-import com.epam.javacourse.hotelapp.service.interfaces.IRoomService;
-import com.epam.javacourse.hotelapp.service.interfaces.IUserService;
 import com.epam.javacourse.hotelapp.utils.enums.BookingStatus;
 import com.epam.javacourse.hotelapp.utils.mappers.BookingMapper;
+import com.epam.javacourse.hotelapp.utils.mappers.ClaimMapper;
 import com.epam.javacourse.hotelapp.utils.mappers.InvoiceMapper;
 import com.epam.javacourse.hotelapp.utils.mappers.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -51,6 +47,13 @@ public class BookingServiceImpl implements IBookingService {
         List<BookingDto> result = new ArrayList<>();
         bookings.forEach(x -> result.add(BookingMapper.mapToDto(x)));
         return result;
+    }
+
+    @Override
+    @Transactional
+    public void createBooking(BookingDto bookingDto) {
+
+        bookingRepository.save(BookingMapper.mapFromDto(bookingDto));
     }
 
 
@@ -81,7 +84,7 @@ public class BookingServiceImpl implements IBookingService {
                     new BookingClientDto(booking.getId(),
                             booking.getCheckinDate(),
                             booking.getCheckoutDate(),
-                            room.getRoomTypeBySeats(),
+                            room.getRoomSeats(),
                             room.getRoomClass(),
                             false
                     ));

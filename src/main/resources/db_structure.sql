@@ -64,3 +64,21 @@ CREATE TABLE rooms
     room_status ENUM ('available', 'unavailable')
 
 );
+
+INSERT INTO rooms (id, price, room_number, room_seats, room_class, room_status)
+VALUES (DEFAULT, 200, 31, 'single', 'business', 'available'),
+       (DEFAULT, 150, 32, 'double', 'standard', 'available'),
+       (DEFAULT, 250, 33, 'twin', 'business', 'unavailable'),
+       (DEFAULT, 250, 34, 'triple', 'standard', 'available'),
+       (DEFAULT, 350, 35, 'double', 'lux', 'available'),
+       (DEFAULT, 200, 36, 'single', 'business', 'available'),
+       (DEFAULT, 150, 37, 'double', 'standard', 'available'),
+       (DEFAULT, 250, 38, 'double', 'business', 'available'),
+       (DEFAULT, 300, 39, 'triple', 'business', 'unavailable'),
+       (DEFAULT, 350, 40, 'twin', 'lux', 'available'),
+       (DEFAULT, 300, 41, 'single', 'lux', 'available'),
+       (DEFAULT, 150, 42, 'double', 'standard', 'available'),
+       (DEFAULT, 250, 43, 'double', 'business', 'available'),
+       (DEFAULT, 300, 44, 'triple', 'business', 'available'),
+       (DEFAULT, 200, 45, 'twin', 'standard', 'available'),
+       (DEFAULT, 150, 46, 'single', 'standard', 'available');

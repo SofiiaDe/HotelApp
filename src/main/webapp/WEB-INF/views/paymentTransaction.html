@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+
+  <title>Client account</title>
+
+  <link rel="stylesheet" href="/static/home.css">
+
+
+</head>
+
+<body>
+<div th:insert="fragments/header"></div>
+<div th:insert="fragments/clientMenu :: clientMenu"></div>
+
+<h2 th:text="#{payment.header.confirm_payment}"></h2>
+
+<div class="ml-1">
+  <form th:method="POST" th:action="@{/client/payInvoice}" th:object="${invoice}">
+
+    <input type="hidden" name="pay_invoice"
+           value="${requestScope.invoiceId}">
+
+    <button class="ui-button" type="submit" th:text="#{button.confirm.payment.button}"></button>
+
+  </form>
+</div>
+
+<div th:insert="fragments/scripts.html"></div>
+</body>
+</html>

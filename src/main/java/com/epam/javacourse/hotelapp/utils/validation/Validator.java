@@ -6,6 +6,8 @@ import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -38,6 +40,30 @@ public class Validator {
         Matcher matcher = pattern.matcher(password);
 
         return password.length() <= maxLength && password.length() >= minLength && matcher.find();
+    }
+
+    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+    /**
+     * validates parsing date parameter to LocalDate type
+     * @param date parameter of date selected by user
+//     * @param request HttpServletRequest request
+     * @return LocalDate type of parsed date
+     */
+    public static LocalDate dateParameterToLocalDate(String date) {
+
+        if (date == null || date.isEmpty()) {
+            logger.error("Check-in and/or check-out dates were not selected");
+//            request.setAttribute("errorMessage", "Please select check-in and check-out dates.");
+
+        }
+        LocalDate parsedDate = null;
+        try {
+            parsedDate = LocalDate.parse(date, formatter);
+        } catch (DateTimeParseException e) {
+            logger.error("Cannot get date type", e);
+        }
+        return parsedDate;
     }
 
     /**

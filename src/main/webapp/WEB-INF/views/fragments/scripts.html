@@ -1,3 +1,7 @@
+<!doctype>
+
+<head>
+
 <!-- JavaScript -->
 <!-- jQuery -->
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
@@ -43,3 +47,18 @@
         setUrls("lastPage", buildUrl(${ requestScope.pageCount }));
     })();
 </script>
+
+<script>
+    (function () {
+        const url = new URL(window.location.href);
+        if(url.searchParams.get("successReg")){
+            showSnackbar("succRegSnackbar");
+        }
+        function showSnackbar(tagId) {
+            const x = document.getElementById(tagId);
+            x.className = "show";
+            setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+        }
+    })();
+</script>
+</head>

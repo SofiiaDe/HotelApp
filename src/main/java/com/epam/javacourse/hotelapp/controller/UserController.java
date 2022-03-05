@@ -25,7 +25,6 @@ public class UserController {
     @GetMapping(value = "/user")
     public ModelAndView redirectUserToAccount(HttpSession session) throws AppException {
 
-//        User user = null;
         UserDto user = null;
         String role = null;
         try {
@@ -49,6 +48,6 @@ public class UserController {
         session.setAttribute("userRole", role);
 
         return ("client".equalsIgnoreCase(role)) ? new ModelAndView("redirect:/client/account") :
-                new ModelAndView("redirect:/manager/account");
+                new ModelAndView("redirect:/manager1/account");
     }
 }

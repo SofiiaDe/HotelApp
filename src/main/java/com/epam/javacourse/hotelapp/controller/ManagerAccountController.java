@@ -16,8 +16,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
+import static com.epam.javacourse.hotelapp.utils.Constants.PAGE_MANAGER_ACCOUNT;
+
 @Controller
-@RequestMapping(value = "/manager")
+@RequestMapping(value = "/manager1")
 public class ManagerAccountController {
 
 
@@ -35,9 +37,8 @@ public class ManagerAccountController {
     }
 
     @GetMapping(value = "/account")
-    public ModelAndView getClientAccount(HttpSession session, HttpServletRequest request) throws AppException {
+    public ModelAndView getManagerAccount(HttpSession session, HttpServletRequest request) throws AppException {
 
-        ModelAndView modelAndView = new ModelAndView("redirect:/manger/account");
         UserDto authorisedUser = (UserDto) session.getAttribute("authorisedUser");
 
         List<ClaimManagerDto> allClaims = claimService.getAllDetailedClaims();
@@ -55,6 +56,8 @@ public class ManagerAccountController {
         List<InvoiceManagerDto> allInvoices = invoiceService.getAllDetailedInvoices();
 
         List<ConfirmationRequestManagerDto> allConfirmRequests = confirmRequestService.getAllDetailedConfirmRequests();
+
+        ModelAndView modelAndView = new ModelAndView(PAGE_MANAGER_ACCOUNT);
 
         modelAndView.addObject("allClaims", allClaims);
         modelAndView.addObject("allBookings", allBookings);

@@ -2,10 +2,8 @@ package com.epam.javacourse.hotelapp.controller;
 
 import com.epam.javacourse.hotelapp.dto.*;
 import com.epam.javacourse.hotelapp.exception.AppException;
-import com.epam.javacourse.hotelapp.service.interfaces.IClaimService;
-import com.epam.javacourse.hotelapp.service.interfaces.IBookingService;
-import com.epam.javacourse.hotelapp.service.interfaces.IConfirmationRequest;
-import com.epam.javacourse.hotelapp.service.interfaces.IInvoiceService;
+import com.epam.javacourse.hotelapp.model.Room;
+import com.epam.javacourse.hotelapp.service.interfaces.*;
 import com.epam.javacourse.hotelapp.utils.mappers.UserMapper;
 import com.epam.javacourse.hotelapp.utils.validation.Validator;
 import org.apache.logging.log4j.LogManager;
@@ -13,20 +11,18 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import static com.epam.javacourse.hotelapp.utils.Constants.PAGE_SUBMIT_CLAIM;
+import static com.epam.javacourse.hotelapp.utils.Constants.*;
 
 @Controller
 @RequestMapping(value = "/client")
@@ -39,13 +35,18 @@ public class ClientAccountController {
     private final IBookingService bookingService;
     private final IConfirmationRequest confirmRequestService;
     private final IInvoiceService invoiceService;
+    private final IRoomService roomService;
+    private final IBookingInvoiceService bookingInvoiceService;
 
     public ClientAccountController(IClaimService claimService, IBookingService bookingService,
-                                   IConfirmationRequest confirmRequestService, IInvoiceService invoiceService) {
+                                   IConfirmationRequest confirmRequestService, IInvoiceService invoiceService,
+                                   IRoomService roomService, IBookingInvoiceService bookingInvoiceService) {
         this.claimService = claimService;
         this.bookingService = bookingService;
         this.confirmRequestService = confirmRequestService;
         this.invoiceService = invoiceService;
+        this.roomService = roomService;
+        this.bookingInvoiceService = bookingInvoiceService;
     }
 
     @GetMapping(value = "/account")
@@ -74,7 +75,8 @@ public class ClientAccountController {
         List<InvoiceClientDto> userInvoices = invoiceService.getUserDetailedInvoices(authorisedUser.getId());
         userInvoices.sort(Comparator.comparing(InvoiceClientDto::getInvoiceDate));
 
-        ModelAndView modelAndView = new ModelAndView("clientAccount");
+//        ModelAndView modelAndView = new ModelAndView("clientAccount");
+        ModelAndView modelAndView = new ModelAndView(PAGE_CLIENT_ACCOUNT);
 
         modelAndView.addObject("myClaims", userClaims);
         modelAndView.addObject("myBookings", userBookings);
@@ -92,8 +94,8 @@ public class ClientAccountController {
 
     @PostMapping(value = "/claim")
     public String submitClaim(HttpServletRequest request,
-                                    @ModelAttribute("claim") @Valid ClaimDto claimDto,
-                                    BindingResult bindingResult) throws AppException {
+                              @ModelAttribute("claim") @Valid ClaimDto claimDto,
+                              BindingResult bindingResult) throws AppException {
 
         if (bindingResult.hasErrors())
             return PAGE_SUBMIT_CLAIM;
@@ -122,17 +124,174 @@ public class ClientAccountController {
         claimService.createClaim(claimDto);
         logger.info("Create claim with id = {}", claimDto.getId());
 
-        return "redirect:/client/account";
+        return REDIRECT_CLIENT_ACCOUNT;
     }
+
+//    @GetMapping("/book")
+//    public String viewFreeRooms(Model model) {
+//        return findPaginated(1, "roomClass", "desc", model);
+//    }
+
+    @GetMapping("/showNewRoomForm")
+    public String showNewRoomForm(Model model) {
+        // create model attribute to bind form data
+        Room room = new Room();
+        model.addAttribute("room", room);
+        return "new_room";
+    }
+
+    @PostMapping("/saveRoom")
+    public String saveEmployee(@ModelAttribute("room") Room room) {
+        // save room to database
+        roomService.saveRoom(room);
+        return "redirect:/";
+    }
+
+    @GetMapping("/showFormForUpdate/{id}")
+    public String showFormForUpdate(@PathVariable(value = "id") int id, Model model) throws AppException {
+
+        // get room from the service
+        Room room = roomService.getRoomById(id);
+
+        // set room as a model attribute to pre-populate the form
+        model.addAttribute("room", room);
+        return "update_room";
+    }
+
+    @GetMapping("/deleteRoom/{id}")
+    public String deleteEmployee(@PathVariable(value = "id") int id) {
+
+        // call delete room method
+        this.roomService.deleteRoomById(id);
+        return "redirect:/";
+    }
+
+
+    @GetMapping("/book")
+    public String findPaginated(//@PathVariable(value = "pageNo")
+                                @RequestParam(value = "page", required = false)
+                                        Integer page,
+                                @RequestParam(value = "sortBy", required = false)
+                                        String sortBy,
+                                @RequestParam(value = "sortType", required = false)
+                                        String sortType,
+                                @RequestParam(value = "status", required = false)
+                                        String roomStatus,
+                                @RequestParam(value = "seats", required = false)
+                                        String roomSeats,
+                                @RequestParam(value = "checkin", required = false)
+                                        String checkinDate,
+                                @RequestParam(value = "checkout", required = false)
+                                            String checkoutDate,
+                                Model model) throws AppException {
+        int pageSize = 5;
+
+        if (page == null || page <= 0) {
+            page = 1;
+        }
+
+//        List<Room> freeRooms = page.getContent();
+        List<Room> freeRooms;
+        int totalFreeRooms;
+        int totalPageCount = 0;
+
+        if(checkinDate == null || checkoutDate == null) {
+            freeRooms = Collections.emptyList();
+        } else {
+            LocalDate checkin = Validator.dateParameterToLocalDate(checkinDate);
+            LocalDate checkout = Validator.dateParameterToLocalDate(checkoutDate);
+
+//            freeRooms = roomService.getAvailableRoomsForPeriod(checkin, checkout);
+            freeRooms = roomService.getAvailablePageableRoomsForPeriod(checkin, checkout, pageSize, page);
+            totalFreeRooms = roomService.getRoomsNumberForPeriod(checkin, checkout);
+            totalPageCount = (int) Math.ceil((float)totalFreeRooms / pageSize);
+
+        }
+//        List<Room> page = roomService.findPaginated(pageNo, pageSize, sortBy, sortType, roomStatus, roomSeats);
+
+
+
+        // pagination parameters
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPageCount", totalPageCount);
+
+//        model.addAttribute("totalPages", page.getTotalPages());
+//        model.addAttribute("totalItems", page.getTotalElements());
+
+        // sorting parameters
+//        model.addAttribute("sortBy", sortBy);
+//        model.addAttribute("sortType", sortType);
+//        model.addAttribute("status", roomStatus);
+//        model.addAttribute("seats", roomSeats);
+        model.addAttribute("checkin", checkinDate);
+        model.addAttribute("checkout", checkoutDate);
+
+        // free rooms
+        model.addAttribute("freeRooms", freeRooms);
+        return FREE_ROOMS_TO_BOOK;
+    }
+
+
 
     @PostMapping(value = "/book")
-    public ModelAndView bookRoom(HttpSession session) {
+    public String bookRoom(HttpServletRequest request,
+                                 @ModelAttribute("booking") @Valid BookingDto bookingDto,
+                                 BindingResult bindingResult) throws AppException {
+
+        if (bindingResult.hasErrors()) {
+            return FREE_ROOMS_TO_BOOK;
+        }
+
+        HttpSession session = request.getSession();
+        UserDto authorisedUser = (UserDto) session.getAttribute("authorisedUser");
+
+        LocalDate checkinDate = bookingDto.getCheckinDate();
+        LocalDate checkoutDate = bookingDto.getCheckoutDate();
+
+        if (checkinDate == null || checkoutDate == null) {
+            return FREE_ROOMS_TO_BOOK;
+        }
+
+        if (!Validator.isCorrectDate(checkinDate, checkoutDate, request)) {
+            throw new AppException("Incorrect dates");
+        }
+
+        int roomId = bookingDto.getRoomId();
+//        int roomId = Integer.parseInt(request.getParameter("room_id"));
+
+        bookingDto.setUserId(authorisedUser.getId());
+        bookingDto.setUser(UserMapper.mapFromDto(authorisedUser));
+        bookingDto.setClaimId(0);
+
+//        bookingService.createBooking(bookingDto);
+//        logger.info("Create booking with id = {}", bookingDto.getId());
 
 
-        return new ModelAndView("clientAccount");
+
+        InvoiceDto newInvoice = new InvoiceDto();
+        newInvoice.setUserId(bookingDto.getUserId());
+        newInvoice.setAmount(bookingInvoiceService.getInvoiceAmount(bookingDto));
+        newInvoice.setBookingId(bookingDto.getId());
+        newInvoice.setInvoiceDate(LocalDate.now());
+        newInvoice.setStatus("new");
+
+        bookingInvoiceService.createBookingAndInvoice(bookingDto, newInvoice);
+
+        // "Thank you! The room was successfully booked.
+        // Please check the invoice in your personal account."
+
+
+        return REDIRECT_CLIENT_ACCOUNT;
     }
 
+    @PostMapping(value = "/payInvoice")
+    public String payInvoice(HttpServletRequest request,
+                              @ModelAttribute("invoice") @Valid InvoiceDto invoiceDto,
+                              BindingResult bindingResult) throws AppException {
 
+        return REDIRECT_CLIENT_ACCOUNT;
+
+    }
 }
 
 
