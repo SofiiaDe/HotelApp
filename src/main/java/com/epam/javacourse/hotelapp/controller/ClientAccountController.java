@@ -178,13 +178,13 @@ public class ClientAccountController {
                                 @RequestParam(value = "sortType", required = false)
                                         String sortTypeParam,
                                 @RequestParam(value = "status", required = false)
-                                        String roomStatus,
+                                        String roomStatusParam,
                                 @RequestParam(value = "seats", required = false)
-                                        String roomSeats,
+                                        String roomSeatsParam,
                                 @RequestParam(value = "checkin", required = false)
                                         String checkinDate,
                                 @RequestParam(value = "checkout", required = false)
-                                            String checkoutDate,
+                                        String checkoutDate,
                                 Model model) throws AppException {
         int pageSize = 5;
 
@@ -198,109 +198,117 @@ public class ClientAccountController {
         int totalPageCount = 0;
         Sort sortBy;
         Sort sortType;
+        Sort sortRoomStatus;
+//        Sort sortSeats = null;
 
-        if(checkinDate == null || checkoutDate == null) {
+        if (checkinDate == null || checkoutDate == null) {
             freeRooms = Collections.emptyList();
+
         } else {
             LocalDate checkin = Validator.dateParameterToLocalDate(checkinDate);
             LocalDate checkout = Validator.dateParameterToLocalDate(checkoutDate);
 
-            if(sortByParam == null) {
+            if (sortByParam == null) {
                 sortBy = Sort.unsorted();
             } else {
                 sortBy = Objects.equals(sortByParam, "class") ? Sort.by("roomClass") : Sort.by("price");
             }
-            if(sortTypeParam == null) {
+
+            if (sortTypeParam == null) {
                 sortType = Sort.unsorted();
             } else {
                 sortType = Objects.equals(sortTypeParam, "asc") ? sortBy.ascending() : sortBy.descending();
             }
 
-            freeRooms = roomService.getAvailablePageableRoomsForPeriod(checkin, checkout, pageSize, page, sortType);
-            totalFreeRooms = roomService.getRoomsNumberForPeriod(checkin, checkout);
-            totalPageCount = (int) Math.ceil((float)totalFreeRooms / pageSize);
+//            if (roomSeatsParam == null) {
+//                sortSeats = Sort.unsorted();
+//            } else {
+//                sortSeats = Sort.by
+//            }
 
-        }
+
+                freeRooms = roomService.getAvailablePageableRoomsForPeriod(checkin, checkout, pageSize, page, sortType, roomSeatsParam);
+                totalFreeRooms = roomService.getRoomsNumberForPeriod(checkin, checkout);
+                totalPageCount = (int) Math.ceil((float) totalFreeRooms / pageSize);
+
+            }
 //        List<Room> page = roomService.findPaginated(pageNo, pageSize, sortBy, sortType, roomStatus, roomSeats);
 
-        // pagination parameters
-        model.addAttribute("currentPage", page);
-        model.addAttribute("totalPageCount", totalPageCount);
+            // pagination parameters
+            model.addAttribute("currentPage", page);
+            model.addAttribute("totalPageCount", totalPageCount);
 
-        // sorting parameters
+            // sorting parameters
 //        model.addAttribute("sortBy", sortBy);
 //        model.addAttribute("sortType", sortType);
 //        model.addAttribute("status", roomStatus);
-//        model.addAttribute("seats", roomSeats);
-        model.addAttribute("checkin", checkinDate);
-        model.addAttribute("checkout", checkoutDate);
+        model.addAttribute("seats", roomSeatsParam);
+            model.addAttribute("checkin", checkinDate);
+            model.addAttribute("checkout", checkoutDate);
 
-        // free rooms
-        model.addAttribute("freeRooms", freeRooms);
-        return FREE_ROOMS_TO_BOOK;
-    }
-
-
-
-    @PostMapping(value = "/book")
-    public String bookRoom(HttpServletRequest request,
-                                 @ModelAttribute("booking") @Valid BookingDto bookingDto,
-                                 BindingResult bindingResult) throws AppException {
-
-        if (bindingResult.hasErrors()) {
+            // free rooms
+            model.addAttribute("freeRooms", freeRooms);
             return FREE_ROOMS_TO_BOOK;
         }
 
-        HttpSession session = request.getSession();
-        UserDto authorisedUser = (UserDto) session.getAttribute("authorisedUser");
+        @PostMapping(value = "/book")
+        public String bookRoom (HttpServletRequest request,
+                @ModelAttribute("booking") @Valid BookingDto bookingDto,
+                BindingResult bindingResult) throws AppException {
 
-        LocalDate checkinDate = bookingDto.getCheckinDate();
-        LocalDate checkoutDate = bookingDto.getCheckoutDate();
+            if (bindingResult.hasErrors()) {
+                return FREE_ROOMS_TO_BOOK;
+            }
 
-        if (checkinDate == null || checkoutDate == null) {
-            return FREE_ROOMS_TO_BOOK;
-        }
+            HttpSession session = request.getSession();
+            UserDto authorisedUser = (UserDto) session.getAttribute("authorisedUser");
 
-        if (!Validator.isCorrectDate(checkinDate, checkoutDate, request)) {
-            throw new AppException("Incorrect dates");
-        }
+            LocalDate checkinDate = bookingDto.getCheckinDate();
+            LocalDate checkoutDate = bookingDto.getCheckoutDate();
 
-        int roomId = bookingDto.getRoomId();
+            if (checkinDate == null || checkoutDate == null) {
+                return FREE_ROOMS_TO_BOOK;
+            }
+
+            if (!Validator.isCorrectDate(checkinDate, checkoutDate, request)) {
+                throw new AppException("Incorrect dates");
+            }
+
+            int roomId = bookingDto.getRoomId();
 //        int roomId = Integer.parseInt(request.getParameter("room_id"));
 
-        bookingDto.setUserId(authorisedUser.getId());
-        bookingDto.setUser(UserMapper.mapFromDto(authorisedUser));
-        bookingDto.setClaimId(0);
+            bookingDto.setUserId(authorisedUser.getId());
+            bookingDto.setUser(UserMapper.mapFromDto(authorisedUser));
+            bookingDto.setClaimId(0);
 
 //        bookingService.createBooking(bookingDto);
 //        logger.info("Create booking with id = {}", bookingDto.getId());
 
 
+            InvoiceDto newInvoice = new InvoiceDto();
+            newInvoice.setUserId(bookingDto.getUserId());
+            newInvoice.setAmount(bookingInvoiceService.getInvoiceAmount(bookingDto));
+            newInvoice.setBookingId(bookingDto.getId());
+            newInvoice.setInvoiceDate(LocalDate.now());
+            newInvoice.setStatus("new");
 
-        InvoiceDto newInvoice = new InvoiceDto();
-        newInvoice.setUserId(bookingDto.getUserId());
-        newInvoice.setAmount(bookingInvoiceService.getInvoiceAmount(bookingDto));
-        newInvoice.setBookingId(bookingDto.getId());
-        newInvoice.setInvoiceDate(LocalDate.now());
-        newInvoice.setStatus("new");
+            bookingInvoiceService.createBookingAndInvoice(bookingDto, newInvoice);
 
-        bookingInvoiceService.createBookingAndInvoice(bookingDto, newInvoice);
-
-        // "Thank you! The room was successfully booked.
-        // Please check the invoice in your personal account."
+            // "Thank you! The room was successfully booked.
+            // Please check the invoice in your personal account."
 
 
-        return REDIRECT_CLIENT_ACCOUNT;
+            return REDIRECT_CLIENT_ACCOUNT;
+        }
+
+        @PostMapping(value = "/payInvoice")
+        public String payInvoice (HttpServletRequest request,
+                @ModelAttribute("invoice") @Valid InvoiceDto invoiceDto,
+                BindingResult bindingResult) throws AppException {
+
+            return REDIRECT_CLIENT_ACCOUNT;
+
+        }
     }
-
-    @PostMapping(value = "/payInvoice")
-    public String payInvoice(HttpServletRequest request,
-                              @ModelAttribute("invoice") @Valid InvoiceDto invoiceDto,
-                              BindingResult bindingResult) throws AppException {
-
-        return REDIRECT_CLIENT_ACCOUNT;
-
-    }
-}
 
 

@@ -144,19 +144,19 @@
                 </button>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                     <a class="dropdown-item"
-                       th:href="@{/client/book(page=${currentPage},seats=${'single'})}"
+                       th:href="@{/client/book(page=${currentPage},checkin=${checkin},checkout=${checkout},seats=${'single'})}"
                        id="seatsSingle" th:text="#{sort.seats.single}">
                     </a>
                     <a class="dropdown-item"
-                       th:href="@{/client/book(page=${currentPage},seats=${'double'})}"
+                       th:href="@{/client/book(page=${currentPage},checkin=${checkin},checkout=${checkout},seats=${'double'})}"
                        id="seatsDouble" th:text="#{sort.seats.double}">
                     </a>
                     <a class="dropdown-item"
-                       th:href="@{/client/book(page=${currentPage},seats=${'twin'})}"
+                       th:href="@{/client/book(page=${currentPage},checkin=${checkin},checkout=${checkout},seats=${'twin'})}"
                        id="seatsTwin" th:text="#{sort.seats.twin}">
                     </a>
                     <a class="dropdown-item"
-                       th:href="@{/client/book(page=${currentPage},seats=${'triple'})}"
+                       th:href="@{/client/book(page=${currentPage},checkin=${checkin},checkout=${checkout},seats=${'triple'})}"
                        id="seatsTriple" th:text="#{sort.seats.triple}">
                     </a>
                 </div>
@@ -231,7 +231,7 @@
         </form>
     </c:if>
 </div>
-<div th:insert="fragments/scripts.html"></div>
+<div th:insert="fragments/scripts"></div>
 <script>
     function setInputValue(tagId, value) {
         document.getElementById(tagId).value = value;

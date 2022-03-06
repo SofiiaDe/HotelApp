@@ -65,9 +65,14 @@ public class CustomizedRoomRepositoryImpl implements CustomizedRoomRepository {
     }
 
     @Override
-    public List<Room> findAvailablePageableRooms(LocalDate checkin, LocalDate checkout, int pageSize, int page, Sort sortType) {
+    public List<Room> findAvailablePageableRooms(LocalDate checkin, LocalDate checkout, int pageSize, int page, Sort sortType, String sortSeats) {
 
         String availableRoomsHql = "SELECT r FROM Room r WHERE r.roomStatus = 'available'";
+
+        if (sortSeats != null && !sortSeats.isEmpty()) {
+            availableRoomsHql += " AND room_seats = '" + sortSeats.toLowerCase() + "'";
+        }
+
 
         if (sortType.isSorted()) {
 
@@ -84,6 +89,7 @@ public class CustomizedRoomRepositoryImpl implements CustomizedRoomRepository {
                 }
             }
         }
+
 
         TypedQuery<Room> query = entityManager.createQuery(availableRoomsHql, Room.class);
         List<Room> availableRooms = query.getResultList();
