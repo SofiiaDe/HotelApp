@@ -8,6 +8,7 @@ import com.epam.javacourse.hotelapp.utils.mappers.UserMapper;
 import com.epam.javacourse.hotelapp.utils.validation.Validator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -21,6 +22,7 @@ import java.time.LocalDate;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 
 import static com.epam.javacourse.hotelapp.utils.Constants.*;
 
@@ -172,9 +174,9 @@ public class ClientAccountController {
                                 @RequestParam(value = "page", required = false)
                                         Integer page,
                                 @RequestParam(value = "sortBy", required = false)
-                                        String sortBy,
+                                        String sortByParam,
                                 @RequestParam(value = "sortType", required = false)
-                                        String sortType,
+                                        String sortTypeParam,
                                 @RequestParam(value = "status", required = false)
                                         String roomStatus,
                                 @RequestParam(value = "seats", required = false)
@@ -194,6 +196,8 @@ public class ClientAccountController {
         List<Room> freeRooms;
         int totalFreeRooms;
         int totalPageCount = 0;
+        Sort sortBy;
+        Sort sortType;
 
         if(checkinDate == null || checkoutDate == null) {
             freeRooms = Collections.emptyList();
@@ -201,22 +205,27 @@ public class ClientAccountController {
             LocalDate checkin = Validator.dateParameterToLocalDate(checkinDate);
             LocalDate checkout = Validator.dateParameterToLocalDate(checkoutDate);
 
-//            freeRooms = roomService.getAvailableRoomsForPeriod(checkin, checkout);
-            freeRooms = roomService.getAvailablePageableRoomsForPeriod(checkin, checkout, pageSize, page);
+            if(sortByParam == null) {
+                sortBy = Sort.unsorted();
+            } else {
+                sortBy = Objects.equals(sortByParam, "class") ? Sort.by("roomClass") : Sort.by("price");
+            }
+            if(sortTypeParam == null) {
+                sortType = Sort.unsorted();
+            } else {
+                sortType = Objects.equals(sortTypeParam, "asc") ? sortBy.ascending() : sortBy.descending();
+            }
+
+            freeRooms = roomService.getAvailablePageableRoomsForPeriod(checkin, checkout, pageSize, page, sortType);
             totalFreeRooms = roomService.getRoomsNumberForPeriod(checkin, checkout);
             totalPageCount = (int) Math.ceil((float)totalFreeRooms / pageSize);
 
         }
 //        List<Room> page = roomService.findPaginated(pageNo, pageSize, sortBy, sortType, roomStatus, roomSeats);
 
-
-
         // pagination parameters
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPageCount", totalPageCount);
-
-//        model.addAttribute("totalPages", page.getTotalPages());
-//        model.addAttribute("totalItems", page.getTotalElements());
 
         // sorting parameters
 //        model.addAttribute("sortBy", sortBy);

@@ -39,7 +39,6 @@
     <!--        <fmt:formatDate var="currentDate" value="${now}" pattern="yyyy-MM-dd"/>-->
     <form th:method="GET" th:action="@{/client/book}">
         <input type="hidden" value="freeRoomsToBook"/>
-        <!--    <input type="hidden" name="command" value="freeRoomsPage"/>-->
         <div class="booking-wrap d-flex justify-content-between align-items-center">
             <div class="single-select-box mb-30">
                 <!-- select check-in date -->
@@ -89,24 +88,22 @@
                 </button>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                     <a class="dropdown-item"
+                       th:href="@{/client/book(page=${currentPage},checkin=${checkin},checkout=${checkout},sortBy=${'price'},sortType=${'asc'})}"
                        id="priceAsc"
                        th:text="#{sorting.price.asc}">
                     </a>
                     <a class="dropdown-item"
-                       th:href="@{/client/book(page=${currentPage},sortBy=${'price'},sortType=${'desc'})}"
+                       th:href="@{/client/book(page=${currentPage},checkin=${checkin},checkout=${checkout},sortBy=${'price'},sortType=${'desc'})}"
                        id="priceDesc"
                        th:text="#{sorting.price.desc}">
                     </a>
                     <a class="dropdown-item"
-                       th:href="@{/client/book(page=${currentPage},sortBy=${'class'},sortType=${'asc'})}"
+                       th:href="@{/client/book(page=${currentPage},checkin=${checkin},checkout=${checkout},sortBy=${'class'},sortType=${'asc'})}"
                        id="classAsc"
                        th:text="#{sorting.class.asc}">
                     </a>
                     <a class="dropdown-item"
-                       th:href="@{/client/book(page=${currentPage},sortBy=${'class'},sortType
-
-
-                       =${'desc'})}"
+                       th:href="@{/client/book(page=${currentPage},checkin=${checkin},checkout=${checkout},sortBy=${'class'},sortType=${'desc'})}"
                        id="classDesc"
                        th:text="#{sorting.class.desc}">
                     </a>

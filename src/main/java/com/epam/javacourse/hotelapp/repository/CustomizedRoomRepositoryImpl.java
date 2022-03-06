@@ -2,15 +2,21 @@ package com.epam.javacourse.hotelapp.repository;
 
 import com.epam.javacourse.hotelapp.model.Booking;
 import com.epam.javacourse.hotelapp.model.Room;
+import org.hibernate.annotations.SortType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import javax.persistence.criteria.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Component
@@ -54,15 +60,31 @@ public class CustomizedRoomRepositoryImpl implements CustomizedRoomRepository {
 
         List<Integer> test = getOccupiedRoomsIds(checkin, checkout);
 
-        var result = availableRooms.stream()
+        return availableRooms.stream()
                 .filter(room -> !test.contains(room.getId())).collect(Collectors.toList());
-        return result;
     }
 
     @Override
-    public List<Room> findAvailablePageableRooms(LocalDate checkin, LocalDate checkout, int pageSize, int page) {
+    public List<Room> findAvailablePageableRooms(LocalDate checkin, LocalDate checkout, int pageSize, int page, Sort sortType) {
 
         String availableRoomsHql = "SELECT r FROM Room r WHERE r.roomStatus = 'available'";
+
+        if (sortType.isSorted()) {
+
+            if (!sortType.isEmpty()) {
+                availableRoomsHql += " ORDER BY ";
+            }
+
+            var sortParameters = sortType.toList();
+            var lastElement = sortParameters.get(sortParameters.size() - 1);
+            for (var s : sortParameters) {
+                availableRoomsHql += s.getProperty() + ' ' + s.getDirection();
+                if (s != lastElement) {
+                    availableRoomsHql += ",";
+                }
+            }
+        }
+
         TypedQuery<Room> query = entityManager.createQuery(availableRoomsHql, Room.class);
         List<Room> availableRooms = query.getResultList();
 
@@ -74,6 +96,8 @@ public class CustomizedRoomRepositoryImpl implements CustomizedRoomRepository {
         return result;
 
     }
+
+
 }
 
 

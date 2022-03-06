@@ -85,8 +85,8 @@ public class RoomServiceImpl implements IRoomService {
     }
 
     @Override
-    public List<Room> getAvailablePageableRoomsForPeriod(LocalDate checkin, LocalDate checkout, int pageSize, int page) {
-        return customizedRoomRepository.findAvailablePageableRooms(checkin, checkout, pageSize, page);
+    public List<Room> getAvailablePageableRoomsForPeriod(LocalDate checkin, LocalDate checkout, int pageSize, int page, Sort sortType) {
+        return customizedRoomRepository.findAvailablePageableRooms(checkin, checkout, pageSize, page, sortType);
     }
 
     /**
