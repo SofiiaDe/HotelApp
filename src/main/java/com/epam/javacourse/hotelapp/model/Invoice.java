@@ -12,23 +12,25 @@ public class Invoice implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", insertable = false, updatable = false, nullable = false)
     private int id;
 
-    @ManyToOne(optional = false, cascade = CascadeType.ALL)
+    @ManyToOne(optional = false, cascade = CascadeType.MERGE)
     @JoinColumn(name = "user_id", nullable = false)
     private User userId;
 
     @Column(name = "amount")
     private BigDecimal amount;
 
-    @OneToOne(optional = false, cascade = CascadeType.ALL)
+    @OneToOne(optional = false, cascade = CascadeType.MERGE)
     @JoinColumn(name = "booking_id")
     private Booking bookingId;
 
     @Column(name = "invoice_date")
     private LocalDate invoiceDate;
+
+    @Column(name = "status")
     private String invoiceStatus;
 
     private LocalDate dueDate;
@@ -83,6 +85,10 @@ public class Invoice implements Serializable {
 
     public LocalDate getDueDate() {
         return dueDate;
+    }
+
+    public void setDueDate(LocalDate dueDate) {
+        this.dueDate = dueDate;
     }
 }
 

@@ -8,9 +8,6 @@ import com.epam.javacourse.hotelapp.service.interfaces.IRoomService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
 import org.springframework.stereotype.Service;
@@ -85,9 +82,12 @@ public class RoomServiceImpl implements IRoomService {
     }
 
     @Override
-    public List<Room> getAvailablePageableRoomsForPeriod(LocalDate checkin, LocalDate checkout, int pageSize, int page, Sort sortType, String sortSeats) {
-        return customizedRoomRepository.findAvailablePageableRooms(checkin, checkout, pageSize, page, sortType, sortSeats);
+    public List<Room> getAvailablePageableRoomsForPeriod(LocalDate checkin, LocalDate checkout, int pageSize, int page, Sort sortType, String sortSeats, String status) {
+//        return customizedRoomRepository.findPageableRooms(checkin, checkout, pageSize, page, sortType, sortSeats, status);
+        return customizedRoomRepository.findPageableRoomsSortedByStatus(checkin, checkout, pageSize, page, sortType, sortSeats, status);
+
     }
+
 
     /**
      * validates if checkin date is not after checkout date or checkout date is equal to checkin date

@@ -38,192 +38,181 @@
     <!--        <jsp:useBean id="now" class="java.util.Date"/>-->
     <!--        <fmt:formatDate var="currentDate" value="${now}" pattern="yyyy-MM-dd"/>-->
     <form th:method="GET" th:action="@{/client/book}">
-        <input type="hidden" value="freeRoomsToBook"/>
+        <input type="hidden" value="freeRoomsToBook" />
         <div class="booking-wrap d-flex justify-content-between align-items-center">
             <div class="single-select-box mb-30">
                 <!-- select check-in date -->
                 <div class="booking-tittle">
-                    <span
-                            th:text="#{checkin.date}">:
-                    </span>
+                        <span th:text="#{checkin.date}">:
+                        </span>
                 </div>
                 <div class="booking-datepicker">
-                    <input type="date" id="{checkin}" name="checkin" placeholder="${currentDate}" min="${currentDate}"
-                           required
-                           th:value="*{checkin}"/>
+                    <input type="date" id="checkin" name="checkin" placeholder="${currentDate}" min="${currentDate}"
+                           required />
+                    <!--                           th:value="*{checkin}-->
+
                 </div>
             </div>
 
             <div class="single-select-box mb-30">
                 <!-- select check-out date -->
                 <div class="booking-tittle">
-                    <span
-                            th:text="#{checkout.date}">:
-                    </span>
+                        <span th:text="#{checkout.date}">:
+                        </span>
                 </div>
                 <div class="booking-datepicker">
-                    <input type="date" name="checkout" placeholder="${currentDate}" min="${currentDate}"
-                           th:value="*{checkout}" required/>
+                    <input type="date" name="checkout" placeholder="${currentDate}" min="${currentDate}" required />
+                    <!--                    th:value="*{checkout}"-->
+                    <!--                    th:value="${checkout}"-->
                 </div>
             </div>
 
-            <button type="submit" class="btn btn-info"
-                    th:text="#{find.button}">
+            <button type="submit" class="btn btn-info" th:text="#{find.button}">
             </button>
         </div>
     </form>
 
 
     <span th:if="${freeRooms != null && freeRooms.size() > 0}">
-
-        <form th:method="POST" th:action="@{/client/book}" th:object="${booking}">
-        <input type="hidden" id="room_id" name="room_id">
-        <input type="hidden" name="checkin_date" value="${requestScope.checkin}">
-        <input type="hidden" name="checkout_date" value="${requestScope.checkout}">
-        <div id="sortingSection">
-            <div class="dropdown dropDownPadding">
-                <button class="btn btn-info dropdown-toggle" type="button" data-toggle="dropdown"
-                        aria-haspopup="true" aria-expanded="false"
-                        th:text="#{sorting}">
-                </button>
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <a class="dropdown-item"
-                       th:href="@{/client/book(page=${currentPage},checkin=${checkin},checkout=${checkout},sortBy=${'price'},sortType=${'asc'})}"
-                       id="priceAsc"
-                       th:text="#{sorting.price.asc}">
-                    </a>
-                    <a class="dropdown-item"
-                       th:href="@{/client/book(page=${currentPage},checkin=${checkin},checkout=${checkout},sortBy=${'price'},sortType=${'desc'})}"
-                       id="priceDesc"
-                       th:text="#{sorting.price.desc}">
-                    </a>
-                    <a class="dropdown-item"
-                       th:href="@{/client/book(page=${currentPage},checkin=${checkin},checkout=${checkout},sortBy=${'class'},sortType=${'asc'})}"
-                       id="classAsc"
-                       th:text="#{sorting.class.asc}">
-                    </a>
-                    <a class="dropdown-item"
-                       th:href="@{/client/book(page=${currentPage},checkin=${checkin},checkout=${checkout},sortBy=${'class'},sortType=${'desc'})}"
-                       id="classDesc"
-                       th:text="#{sorting.class.desc}">
-                    </a>
-                </div>
-            </div>
-
-            <div class="dropdown dropDownPadding">
-                <button class="btn btn-info dropdown-toggle" type="button" data-toggle="dropdown"
-                        aria-haspopup="true" aria-expanded="false" th:text="#{status}">
-                </button>
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <a class="dropdown-item"
-                       th:href="@{/client/book(page=${currentPage},status=${'available'})}"
-                       id="roomAvailable"
-                       th:text="#{sort.status.available}">
-                    </a>
-                    <a class="dropdown-item"
-                       th:href="@{/client/book(page=${currentPage},status=${'reserved'})}"
-                       id="roomReserved"
-                       th:text="#{sort.status.reserved}">
-                    </a>
-                    <a class="dropdown-item"
-                       th:href="@{/client/book(page=${currentPage},status=${'booked'})}"
-                       id="roomBooked"
-                       th:text="#{sort.status.booked}">
-                    </a>
-                    <a class="dropdown-item"
-                       th:href="@{/client/book(page=${currentPage},status=${'unavailable'})}"
-                       id="roomUnavailable"
-                       th:text="#{sort.status.unavailable}">
-                    </a>
-                </div>
-            </div>
-
-            <div class="dropdown">
-                <button class="btn btn-info dropdown-toggle" type="button" data-toggle="dropdown"
-                        aria-haspopup="true" aria-expanded="false" th:text="#{sort.seats}">
-                </button>
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <a class="dropdown-item"
-                       th:href="@{/client/book(page=${currentPage},checkin=${checkin},checkout=${checkout},seats=${'single'})}"
-                       id="seatsSingle" th:text="#{sort.seats.single}">
-                    </a>
-                    <a class="dropdown-item"
-                       th:href="@{/client/book(page=${currentPage},checkin=${checkin},checkout=${checkout},seats=${'double'})}"
-                       id="seatsDouble" th:text="#{sort.seats.double}">
-                    </a>
-                    <a class="dropdown-item"
-                       th:href="@{/client/book(page=${currentPage},checkin=${checkin},checkout=${checkout},seats=${'twin'})}"
-                       id="seatsTwin" th:text="#{sort.seats.twin}">
-                    </a>
-                    <a class="dropdown-item"
-                       th:href="@{/client/book(page=${currentPage},checkin=${checkin},checkout=${checkout},seats=${'triple'})}"
-                       id="seatsTriple" th:text="#{sort.seats.triple}">
-                    </a>
-                </div>
-            </div>
-        </div>
-
-        <h1
-                th:text="#{client.book.choose_room}">
-        </h1>
-        <br>
-        <th:block th:each="room : ${freeRooms}">
-
-            <input type="hidden" name="room_id" value="${room.id}"/>
-            <div class="bookingSection">
-
-                <a class="list-group-item list-group-item-action flex-column align-items-start active"
-                   style="background-color: #17a2b8">
-                    <div class="d-flex w-100 justify-content-between">
-                        <h5 class="mb-1"
-                            th:text="#{client.book.type}">
-                            :
-                        </h5>
-                        <p th:text="${room.roomSeats}"></p>
-
-                        <small>No. <small th:text="${room.roomNumber}"></small></small>
-
+            <!-- Dropdowns -->
+            <div id="sortingSection">
+                <div class="dropdown dropDownPadding">
+                    <button class="btn btn-info dropdown-toggle" type="button" data-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false" th:text="#{sorting}">
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item"
+                           th:href="@{/client/book(page=${currentPage},checkin=${checkin},checkout=${checkout},sortBy=${'price'},sortType=${'asc'})}"
+                           id="priceAsc" th:text="#{sorting.price.asc}">
+                        </a>
+                        <a class="dropdown-item"
+                           th:href="@{/client/book(page=${currentPage},checkin=${checkin},checkout=${checkout},sortBy=${'price'},sortType=${'desc'})}"
+                           id="priceDesc" th:text="#{sorting.price.desc}">
+                        </a>
+                        <a class="dropdown-item"
+                           th:href="@{/client/book(page=${currentPage},checkin=${checkin},checkout=${checkout},sortBy=${'class'},sortType=${'asc'})}"
+                           id="classAsc" th:text="#{sorting.class.asc}">
+                        </a>
+                        <a class="dropdown-item"
+                           th:href="@{/client/book(page=${currentPage},checkin=${checkin},checkout=${checkout},sortBy=${'class'},sortType=${'desc'})}"
+                           id="classDesc" th:text="#{sorting.class.desc}">
+                        </a>
                     </div>
-                    <div class="d-flex w-100 justify-content-between">
-                        <h5 class="mb-1"
-                            th:text="#{client.book.class}">
-                            :
-                            </h5>
-                        <p th:text="${room.roomClass}"></p>
+                </div>
 
+                <div class="dropdown dropDownPadding">
+                    <button class="btn btn-info dropdown-toggle" type="button" data-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false" th:text="#{status}">
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item"
+                           th:href="@{/client/book(page=${currentPage},checkin=${checkin},checkout=${checkout},status=${'available'})}"
+                           id="roomAvailable" th:text="#{sort.status.available}">
+                        </a>
+                        <a class="dropdown-item"
+                           th:href="@{/client/book(page=${currentPage},checkin=${checkin},checkout=${checkout},status=${'reserved'})}"
+                           id="roomReserved" th:text="#{sort.status.reserved}">
+                        </a>
+                        <a class="dropdown-item"
+                           th:href="@{/client/book(page=${currentPage},checkin=${checkin},checkout=${checkout},status=${'booked'})}"
+                           id="roomBooked" th:text="#{sort.status.booked}">
+                        </a>
+                        <a class="dropdown-item"
+                           th:href="@{/client/book(page=${currentPage},checkin=${checkin},checkout=${checkout},status=${'unavailable'})}"
+                           id="roomUnavailable" th:text="#{sort.status.unavailable}">
+                        </a>
                     </div>
-                    <small>$ <small th:text="${room.price}"></small></small>
+                </div>
 
-                    <th:if test="${roomStatus == null || requestScope.roomStatus == 'available'}">
-                        <div id="bookBtn">
-                            <button class="btn btn-light" type="submit"
-                                    onclick="setInputValue('room_id', ${room.id})"
-                                    th:text="#{book.button}">
-                            </button>
-                        </div>
-                    </th:if>
-                    <br>
-                    <br>
-                </a>
+                <div class="dropdown">
+                    <button class="btn btn-info dropdown-toggle" type="button" data-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false" th:text="#{sort.seats}">
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item"
+                           th:href="@{/client/book(page=${currentPage},checkin=${checkin},checkout=${checkout},seats=${'single'})}"
+                           id="seatsSingle" th:text="#{sort.seats.single}">
+                        </a>
+                        <a class="dropdown-item"
+                           th:href="@{/client/book(page=${currentPage},checkin=${checkin},checkout=${checkout},seats=${'double'})}"
+                           id="seatsDouble" th:text="#{sort.seats.double}">
+                        </a>
+                        <a class="dropdown-item"
+                           th:href="@{/client/book(page=${currentPage},checkin=${checkin},checkout=${checkout},seats=${'twin'})}"
+                           id="seatsTwin" th:text="#{sort.seats.twin}">
+                        </a>
+                        <a class="dropdown-item"
+                           th:href="@{/client/book(page=${currentPage},checkin=${checkin},checkout=${checkout},seats=${'triple'})}"
+                           id="seatsTriple" th:text="#{sort.seats.triple}">
+                        </a>
+                    </div>
+                </div>
             </div>
+        <!-- Dropdowns END -->
 
-        </th:block>
+            <h1 th:text="#{client.book.choose_room}">
+            </h1>
+            <br>
+
+            <th:block th:each="room : ${freeRooms}">
+
+
+                <form th:method="POST" th:action="@{/client/book}" th:object="${booking}">
+
+                    <input type="hidden" name="roomId" th:value="${room.getId()}">
+                    <input type="hidden" name="checkin" th:value="${checkin}">
+                    <input type="hidden" name="checkout" th:value="${checkout}">
+
+                    <div class="bookingSection">
+
+                        <a class="list-group-item list-group-item-action flex-column align-items-start active"
+                           style="background-color: #17a2b8">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h5 class="mb-1" th:text="#{client.book.type}">
+                                    :
+                                </h5>
+                                <p th:text="${room.roomSeats}"></p>
+
+                                <small>No. <small th:text="${room.roomNumber}"></small></small>
+
+                            </div>
+                            <div class="d-flex w-100 justify-content-between">
+                                <h5 class="mb-1" th:text="#{client.book.class}">
+                                    :
+                                </h5>
+                                <p th:text="${room.roomClass}"></p>
+
+                            </div>
+                            <small>$ <small th:text="${room.price}"></small></small>
+
+                            <th:block th:if="${roomStatus == null || roomStatus == 'available'}">
+                                <div id="bookBtn">
+                                    <button class="btn btn-light" type="submit" th:text="#{book.button}">
+                                        <!--                                    onclick="setInputValue('room_id', roomId)"-->
+                                    </button>
+                                </div>
+                            </th:block>
+                            <br>
+                            <br>
+                        </a>
+                    </div>
+
+
+                </form>
+
+            </th:block>
 
             <div th:insert="fragments/pagination"></div>
 
 
-
-    </form>
-
-
-    </span>
+        </span>
 
 
     <c:if test="${requestScope != null && requestScope.page != null && requestScope.pageCount != null}">
         <form action="controller">
-            <input type="hidden" name="command" value="freeRoomsPage"/>
-            <input type="hidden" name="checkin" value="${requestScope.checkin}"/>
-            <input type="hidden" name="checkout" value="${requestScope.checkout}"/>
+            <input type="hidden" name="command" value="freeRoomsPage" />
+            <input type="hidden" name="checkin" value="${requestScope.checkin}" />
+            <input type="hidden" name="checkout" value="${requestScope.checkout}" />
 
             <!--            <nav aria-label="Free rooms navigation">-->
             <!--                <div th:insert="fragments/pagination.html"></div>-->
@@ -243,39 +232,6 @@
         }
     }
 
-    (function () {
-        setUrls("prevPage", buildUrl(${ requestScope.page } -1));
-        setUrls("nextPage", buildUrl(${ requestScope.page } +1));
-        setUrls("pageMin1", buildUrl(${ requestScope.page } -1));
-        setUrls("pageMin2", buildUrl(${ requestScope.page } -2));
-        setUrls("pagePlus1", buildUrl(${ requestScope.page } +1));
-        setUrls("pagePlus2", buildUrl(${ requestScope.page } +2));
-        setUrls("pagePlus2", buildUrl(${ requestScope.page } +2));
-        setUrls("firstPage", buildUrl(1));
-        setUrls("lastPage", buildUrl(${ requestScope.pageCount }));
-        setUrls("priceAsc", buildUrl(1, "price", "asc"));
-        setUrls("priceDesc", buildUrl(1, "price", "desc"));
-        setUrls("classAsc", buildUrl(1, "class", "asc"));
-        setUrls("classDesc", buildUrl(1, "class", "desc"));
-        setUrls("roomAvailable", buildUrl(1, undefined, undefined, "available"));
-        setUrls("roomReserved", buildUrl(1, undefined, undefined, "reserved"));
-        setUrls("roomBooked", buildUrl(1, undefined, undefined, "booked"));
-        setUrls("roomUnavailable", buildUrl(1, undefined, undefined, "unavailable"));
-        setUrls("seatsSingle", buildUrl(1, undefined, undefined, undefined, "single"));
-        setUrls("seatsDouble", buildUrl(1, undefined, undefined, undefined, "double"));
-        setUrls("seatsTwin", buildUrl(1, undefined, undefined, undefined, "twin"));
-        setUrls("seatsTriple", buildUrl(1, undefined, undefined, undefined, "triple"));
-    })();
-
-    function buildUrl(page, sortBy, sortType, roomStatus, roomSeats) {
-        const result = new URL(window.location.href);
-        result.searchParams.set("page", page);
-        setOptionalSearchParam(result.searchParams, "sortBy", sortBy);
-        setOptionalSearchParam(result.searchParams, "sortType", sortType);
-        setOptionalSearchParam(result.searchParams, "roomStatus", roomStatus);
-        setOptionalSearchParam(result.searchParams, "roomSeats", roomSeats);
-        return result;
-    }
 
     function setOptionalSearchParam(searchParams, paramName, value) {
         const data = value ?? searchParams.get(paramName);
@@ -285,4 +241,5 @@
     }
 </script>
 </body>
+
 </html>

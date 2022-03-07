@@ -7,9 +7,8 @@ import java.time.LocalDate;
 
 public class Helpers {
 
-    //    public static String buildUrl(LocalDate checkinDate, LocalDate checkoutDate, int currentPage, int pageSize, String sortBy, String sortType, String roomStatus, String roomSeats) {
     public static String buildBookingPageUrl(String checkinDate, String checkoutDate, int page, String sortBy,
-                                             String sortType, String seats) {
+                                             String sortType, String status, String seats) {
 
         String url = "/client/book?";
         if (page <= 0) {
@@ -31,6 +30,10 @@ public class Helpers {
 
         if(sortType != null) {
             url = url + "&sortType=" + sortType;
+        }
+
+        if(status != null) {
+            url = url + "&status=" + status;
         }
 
         if(seats != null) {

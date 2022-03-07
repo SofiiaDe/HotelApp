@@ -20,6 +20,6 @@ public interface IRoomService {
     List<Room> findPaginated(int pageNo, int pageSize, String sortBy, String sortType, String roomStatus, String roomSeats);
     List<Room> getAvailableRoomsForPeriod(LocalDate checkin, LocalDate checkout);
     int getRoomsNumberForPeriod(LocalDate checkinDate, LocalDate checkoutDate) throws AppException;
-    List<Room> getAvailablePageableRoomsForPeriod(LocalDate checkin, LocalDate checkout, int pageSize, int page, Sort sortType, String sortSeats);
+    List<Room> getAvailablePageableRoomsForPeriod(LocalDate checkin, LocalDate checkout, int pageSize, int page, Sort sortType, String sortSeats, String status);
 //    Page<Room> findPaginated(int pageNo, int pageSize, String sortBy, String sortType, String roomStatus, String roomSeats);
 }

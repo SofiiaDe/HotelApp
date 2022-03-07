@@ -17,7 +17,10 @@ import com.epam.javacourse.hotelapp.utils.mappers.BookingMapper;
 import com.epam.javacourse.hotelapp.utils.mappers.ClaimMapper;
 import com.epam.javacourse.hotelapp.utils.mappers.InvoiceMapper;
 import com.epam.javacourse.hotelapp.utils.mappers.UserMapper;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,6 +30,8 @@ import java.util.stream.Collectors;
 
 @Service
 public class BookingServiceImpl implements IBookingService {
+
+    private static final Logger logger = LogManager.getLogger(BookingServiceImpl.class);
 
     @Autowired
     BookingRepository bookingRepository;
@@ -155,6 +160,32 @@ public class BookingServiceImpl implements IBookingService {
             throw new AppException("Can't retrieve list of all bookings to show in the manager's account", exception);
         }
         return result;
+    }
+
+    /**
+     * Execute at 12 pm every day.
+     * @throws AppException
+     */
+    @Scheduled(cron = "0 0 12 * * ?")
+    @Override
+    public void cancelUnpaidBookings() throws AppException {
+
+        try {
+
+            List<Invoice> unpaidInvoices = invoiceRepository.findInvoicesByStatus("cancelled");
+            List<InvoiceDto> unpaidInvoicesDto = new ArrayList<>();
+            unpaidInvoices.forEach(x -> unpaidInvoicesDto.add(InvoiceMapper.mapToDto(x)));
+
+
+            for (InvoiceDto invoice : unpaidInvoicesDto) {
+                bookingRepository.deleteById(invoice.getBookingId());
+            }
+        } catch (DBException exception) {
+            throw new AppException("Scheduler can't cancel unpaid booking", exception);
+        }
+
+        logger.info("Daily booking updates were completed by scheduler");
+
     }
 
 }

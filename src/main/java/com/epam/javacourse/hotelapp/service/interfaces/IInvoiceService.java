@@ -25,11 +25,11 @@ public interface IInvoiceService {
 
     List<InvoiceDto> getInvoicesByBookingsIds(List<Integer> bookingsIds) throws AppException;
 
-//    /**
-//     * Updates invoice's status to 'cancelled' in case of not paying the invoice by the due date.
-//     * @throws AppException
-//     */
-//    void updateInvoiceStatusToCancelled() throws AppException;
+    /**
+     * Updates invoice's status to 'cancelled' in case of not paying the invoice by the due date.
+     * @throws AppException
+     */
+    void updateInvoiceStatusToCancelled() throws AppException;
 //
 //    List<Invoice> getInvoicesByStatus(String status) throws AppException;
 //

@@ -3,14 +3,12 @@ package com.epam.javacourse.hotelapp.service.impl;
 import com.epam.javacourse.hotelapp.dto.BookingDto;
 import com.epam.javacourse.hotelapp.dto.InvoiceDto;
 import com.epam.javacourse.hotelapp.exception.AppException;
-import com.epam.javacourse.hotelapp.exception.DBException;
 import com.epam.javacourse.hotelapp.model.Booking;
 import com.epam.javacourse.hotelapp.model.Invoice;
 import com.epam.javacourse.hotelapp.model.Room;
 import com.epam.javacourse.hotelapp.repository.BookingRepository;
 import com.epam.javacourse.hotelapp.repository.InvoiceRepository;
 import com.epam.javacourse.hotelapp.repository.RoomRepository;
-import com.epam.javacourse.hotelapp.repository.UserRepository;
 import com.epam.javacourse.hotelapp.service.interfaces.IBookingInvoiceService;
 import com.epam.javacourse.hotelapp.utils.mappers.BookingMapper;
 import com.epam.javacourse.hotelapp.utils.mappers.InvoiceMapper;
@@ -51,7 +49,9 @@ public class BookingInvoiceServiceImpl implements IBookingInvoiceService {
 
             Booking newBooking = BookingMapper.mapFromDto(booking);
             Invoice newInvoice = InvoiceMapper.mapFromDto(invoice);
-            newInvoice.setBookingId(newBooking); // ???
+            bookingRepository.save(newBooking);
+            newInvoice.setBookingId(newBooking);// ???
+
             invoiceRepository.save(newInvoice);
 
     }
@@ -60,8 +60,8 @@ public class BookingInvoiceServiceImpl implements IBookingInvoiceService {
     public BigDecimal getInvoiceAmount(BookingDto booking) throws AppException {
 
 
-            LocalDate checkinDate = booking.getCheckinDate();
-            LocalDate checkoutDate = booking.getCheckoutDate();
+            LocalDate checkinDate = booking.getCheckin();
+            LocalDate checkoutDate = booking.getCheckout();
             Period period = Period.between(checkinDate, checkoutDate);
             Room room = roomRepository.getById(booking.getRoomId());
 

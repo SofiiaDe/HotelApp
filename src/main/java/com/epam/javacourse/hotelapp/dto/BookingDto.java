@@ -1,15 +1,28 @@
 package com.epam.javacourse.hotelapp.dto;
 
 import com.epam.javacourse.hotelapp.model.User;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.validation.constraints.Future;
 import java.time.LocalDate;
 
 public class BookingDto {
 
     private int id;
     private int userId;
-    private LocalDate checkinDate;
-    private LocalDate checkoutDate;
+
+    @Future(message = "Check-in date can't be earlier than current date. " +
+            "Please enter correct dates.")
+//    @NotNull(message = "Check-in date can't be empty")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate checkin;
+
+    @Future(message = "Check-out date can't be earlier than current date. " +
+            "Please enter correct dates.")
+//    @NotNull(message = "Check-out date can't be empty")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate checkout;
+
     private int roomId;
     private int claimId;
     private User user;
@@ -17,12 +30,12 @@ public class BookingDto {
     public BookingDto() {
     }
 
-    public BookingDto(int id, int userId, LocalDate checkinDate, LocalDate checkoutDate,
+    public BookingDto(int id, int userId, LocalDate checkin, LocalDate checkout,
                       int roomId, int claimId) {
         this.id = id;
         this.userId = userId;
-        this.checkinDate = checkinDate;
-        this.checkoutDate = checkoutDate;
+        this.checkin = checkin;
+        this.checkout = checkout;
         this.roomId = roomId;
         this.claimId = claimId;
     }
@@ -43,20 +56,20 @@ public class BookingDto {
         this.userId = userId;
     }
 
-    public LocalDate getCheckinDate() {
-        return checkinDate;
+    public LocalDate getCheckin() {
+        return checkin;
     }
 
-    public void setCheckinDate(LocalDate checkinDate) {
-        this.checkinDate = checkinDate;
+    public void setCheckin(LocalDate checkin) {
+        this.checkin = checkin;
     }
 
-    public LocalDate getCheckoutDate() {
-        return checkoutDate;
+    public LocalDate getCheckout() {
+        return checkout;
     }
 
-    public void setCheckoutDate(LocalDate checkoutDate) {
-        this.checkoutDate = checkoutDate;
+    public void setCheckout(LocalDate checkout) {
+        this.checkout = checkout;
     }
 
     public int getRoomId() {

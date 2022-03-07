@@ -10,8 +10,8 @@ public class BookingMapper {
         BookingDto dto = new BookingDto();
         dto.setId(booking.getId());
         dto.setUserId(booking.getUserId().getId());
-        dto.setCheckinDate(booking.getCheckinDate());
-        dto.setCheckoutDate(booking.getCheckoutDate());
+        dto.setCheckin(booking.getCheckinDate());
+        dto.setCheckout(booking.getCheckoutDate());
         dto.setRoomId(booking.getRoomId());
         dto.setClaimId(booking.getClaimId());
         return dto;
@@ -22,8 +22,8 @@ public class BookingMapper {
         Booking booking = new Booking();
         booking.setId(dto.getId());
         booking.setUserId(dto.getUser());
-        booking.setCheckinDate(dto.getCheckinDate());
-        booking.setCheckoutDate(dto.getCheckoutDate());
+        booking.setCheckinDate(dto.getCheckin());
+        booking.setCheckoutDate(dto.getCheckout());
         booking.setRoomId(dto.getRoomId());
         booking.setClaimId(dto.getClaimId());
         return booking;

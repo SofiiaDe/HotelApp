@@ -10,26 +10,26 @@ import com.epam.javacourse.hotelapp.repository.BookingRepository;
 import com.epam.javacourse.hotelapp.repository.InvoiceRepository;
 import com.epam.javacourse.hotelapp.repository.RoomRepository;
 import com.epam.javacourse.hotelapp.repository.UserRepository;
-import com.epam.javacourse.hotelapp.service.interfaces.IBookingService;
 import com.epam.javacourse.hotelapp.service.interfaces.IInvoiceService;
-import com.epam.javacourse.hotelapp.service.interfaces.IRoomService;
-import com.epam.javacourse.hotelapp.service.interfaces.IUserService;
 import com.epam.javacourse.hotelapp.utils.mappers.BookingMapper;
 import com.epam.javacourse.hotelapp.utils.mappers.InvoiceMapper;
 import com.epam.javacourse.hotelapp.utils.mappers.UserMapper;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.crossstore.ChangeSetPersister;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 public class InvoiceServiceImpl implements IInvoiceService {
+
+    private static final Logger logger = LogManager.getLogger(InvoiceServiceImpl.class);
 
     @Autowired
     InvoiceRepository invoiceRepository;
@@ -134,8 +134,8 @@ public class InvoiceServiceImpl implements IInvoiceService {
                                 invoice.getAmount(),
                                 invoice.getBookingId().getId(),
                                 room.getPrice(),
-                                booking.getCheckinDate(),
-                                booking.getCheckoutDate(),
+                                booking.getCheckin(),
+                                booking.getCheckout(),
                                 invoice.getInvoiceStatus()
                         ));
             }
@@ -144,5 +144,38 @@ public class InvoiceServiceImpl implements IInvoiceService {
             throw new AppException("Can't retrieve client's invoices to show in the client's account", exception);
         }
     }
+
+    /**
+     * Execute at 12 pm every day.
+     * @throws AppException
+     */
+    @Scheduled(cron = "0 0 12 * * ?")
+    //@Scheduled(cron = "@daily"
+    @Override
+    public void updateInvoiceStatusToCancelled() throws AppException {
+        try {
+            List<Invoice> allInvoices = invoiceRepository.findAll();
+            List<InvoiceDto> invoicesDto = new ArrayList<>();
+            allInvoices.forEach(x -> invoicesDto.add(InvoiceMapper.mapToDto(x)));
+
+            for (InvoiceDto invoice : invoicesDto) {
+                if (invoice.getStatus().equals("new") &&
+                        getInvoiceDueDate(invoice).isBefore(LocalDate.now())) {
+                    invoice.setStatus("cancelled");
+                    invoiceRepository.updateInvoiceStatus("cancelled", invoice.getId());
+                }
+            }
+        } catch (DBException exception) {
+            throw new AppException("Scheduler can't cancel unpaid invoice", exception);
+        }
+
+        logger.info("Daily invoice updates were completed by scheduler");
+
+    }
+
+
+
+
+
 
 }

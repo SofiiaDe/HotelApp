@@ -16,14 +16,10 @@ public interface IBookingService {
     void createBooking(BookingDto bookingDto);
 
     List<BookingDto> getBookingsByUserId(int userId) throws AppException;
-//
-//    List<Booking> getAllBookings() throws AppException;
-//
-//    Booking getBookingById(int id) throws AppException;
+
+    void cancelUnpaidBookings() throws AppException;
 
     List<BookingManagerDto> getAllDetailedBookings(BookingStatus bookingStatus) throws AppException;
-
-//    void deleteBookingById(int id) throws AppException;
 
     List<BookingClientDto> getUserDetailedBookings(int userID) throws AppException;
 

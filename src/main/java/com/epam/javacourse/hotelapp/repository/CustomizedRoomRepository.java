@@ -9,5 +9,9 @@ import java.util.List;
 public interface CustomizedRoomRepository {
 
     List<Room> findAvailableRooms(LocalDate checkin, LocalDate checkout);
-    List<Room> findAvailablePageableRooms(LocalDate checkin, LocalDate checkout, int pageSize, int page, Sort sortType, String sortSeats);
+
+    List<Room> findPageableRooms(LocalDate checkin, LocalDate checkout, int pageSize, int page, Sort sortType, String sortSeats, String sortStatus);
+
+    List<Room> findPageableRoomsSortedByStatus(LocalDate checkin, LocalDate checkout, int pageSize, int page, Sort sortType, String sortSeats, String sortStatus);
+
 }
