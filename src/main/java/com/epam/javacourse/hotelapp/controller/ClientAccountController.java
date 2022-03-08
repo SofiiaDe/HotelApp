@@ -130,11 +130,6 @@ public class ClientAccountController {
         return REDIRECT_CLIENT_ACCOUNT;
     }
 
-//    @GetMapping("/book")
-//    public String viewFreeRooms(Model model) {
-//        return findPaginated(1, "roomClass", "desc", model);
-//    }
-
     @GetMapping("/showNewRoomForm")
     public String showNewRoomForm(Model model) {
         // create model attribute to bind form data
@@ -285,8 +280,6 @@ public class ClientAccountController {
 
         bookingInvoiceService.createBookingAndInvoice(bookingDto, newInvoice);
 
-        logger.info("Create booking with id = {}", bookingDto.getId());
-
         // "Thank you! The room was successfully booked.
         // Please check the invoice in your personal account."
 
@@ -294,13 +287,25 @@ public class ClientAccountController {
         return REDIRECT_CLIENT_ACCOUNT;
     }
 
+    @GetMapping("/paymentPage")
+    public String payment(@RequestParam(value = "invoiceId") Integer invoiceId,
+                          Model model) {
+
+        model.addAttribute("invoiceId", invoiceId);
+
+        return PAGE_PAY_INVOICE;
+    }
+
+    /**
+     * Provide invoice payment
+     * @throws AppException
+     */
     @PostMapping(value = "/payInvoice")
-    public String payInvoice(HttpServletRequest request,
-                             @ModelAttribute("invoice") @Valid InvoiceDto invoiceDto,
-                             BindingResult bindingResult) throws AppException {
+    public String payInvoice(@RequestParam(value = "invoiceId") Integer invoiceId) throws AppException {
+
+        invoiceService.payInvoice(invoiceId);
 
         return REDIRECT_CLIENT_ACCOUNT;
-
     }
 }
 

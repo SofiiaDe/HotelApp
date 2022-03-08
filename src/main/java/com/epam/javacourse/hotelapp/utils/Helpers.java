@@ -1,5 +1,6 @@
 package com.epam.javacourse.hotelapp.utils;
 
+import com.epam.javacourse.hotelapp.dto.InvoiceDto;
 import com.epam.javacourse.hotelapp.utils.enums.BookingStatus;
 import org.springframework.data.domain.Sort;
 
@@ -64,4 +65,11 @@ public class Helpers {
         return BookingStatus.NONE;
 
     }
+
+    public static LocalDate getInvoiceDueDate(InvoiceDto invoice) {
+        LocalDate invoiceDate = invoice.getInvoiceDate();
+        return invoiceDate.plusDays(2);
+
+    }
+
 }

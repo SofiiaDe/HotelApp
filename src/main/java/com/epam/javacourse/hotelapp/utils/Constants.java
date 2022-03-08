@@ -16,7 +16,7 @@ public class Constants {
     public static final String REDIRECT_MANAGER_ACCOUNT = "redirect:/manager1/account";
 
     public static final String PAGE_SUBMIT_CLAIM = "claim";
-    public static final String PAGE_PAY_INVOICE = "/WEB-INF/jsp/client/paymentTransaction.jsp";
+    public static final String PAGE_PAY_INVOICE = "paymentTransaction";
     public static final String FREE_ROOMS_TO_BOOK = "freeRoomsToBook";
 
     public static final String PARAM_PAGES = "pages";

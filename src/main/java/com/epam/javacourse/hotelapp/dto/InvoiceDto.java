@@ -2,17 +2,25 @@ package com.epam.javacourse.hotelapp.dto;
 
 import com.epam.javacourse.hotelapp.model.Booking;
 import com.epam.javacourse.hotelapp.model.User;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.validation.constraints.Future;
+import javax.validation.constraints.NotBlank;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public class InvoiceDto {
 
+    @NotBlank
     private int id;
     private int userId;
     private BigDecimal amount;
     private int bookingId;
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate invoiceDate;
+
+
     private String status;
     private User user;
     private Booking booking;
@@ -29,6 +37,7 @@ public class InvoiceDto {
         this.invoiceDate = invoiceDate;
         this.status = status;
     }
+
 
     public int getId() {
         return id;

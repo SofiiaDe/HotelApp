@@ -11,19 +11,23 @@ import com.epam.javacourse.hotelapp.repository.InvoiceRepository;
 import com.epam.javacourse.hotelapp.repository.RoomRepository;
 import com.epam.javacourse.hotelapp.repository.UserRepository;
 import com.epam.javacourse.hotelapp.service.interfaces.IInvoiceService;
+import com.epam.javacourse.hotelapp.utils.Helpers;
 import com.epam.javacourse.hotelapp.utils.mappers.BookingMapper;
 import com.epam.javacourse.hotelapp.utils.mappers.InvoiceMapper;
 import com.epam.javacourse.hotelapp.utils.mappers.UserMapper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -52,12 +56,6 @@ public class InvoiceServiceImpl implements IInvoiceService {
         return result;
     }
 
-    @Override
-    public LocalDate getInvoiceDueDate(InvoiceDto invoice) {
-        LocalDate invoiceDate = invoice.getInvoiceDate();
-        return invoiceDate.plusDays(2);
-
-    }
 
     @Override
     public List<InvoiceManagerDto> getAllDetailedInvoices() throws AppException {
@@ -130,7 +128,7 @@ public class InvoiceServiceImpl implements IInvoiceService {
                 result.add(
                         new InvoiceClientDto(invoice.getId(),
                                 invoice.getInvoiceDate(),
-                                getInvoiceDueDate(InvoiceMapper.mapToDto(invoice)),
+                                Helpers.getInvoiceDueDate(InvoiceMapper.mapToDto(invoice)),
                                 invoice.getAmount(),
                                 invoice.getBookingId().getId(),
                                 room.getPrice(),
@@ -147,6 +145,7 @@ public class InvoiceServiceImpl implements IInvoiceService {
 
     /**
      * Execute at 12 pm every day.
+     *
      * @throws AppException
      */
     @Scheduled(cron = "0 0 12 * * ?")
@@ -160,7 +159,7 @@ public class InvoiceServiceImpl implements IInvoiceService {
 
             for (InvoiceDto invoice : invoicesDto) {
                 if (invoice.getStatus().equals("new") &&
-                        getInvoiceDueDate(invoice).isBefore(LocalDate.now())) {
+                        Helpers.getInvoiceDueDate(invoice).isBefore(LocalDate.now())) {
                     invoice.setStatus("cancelled");
                     invoiceRepository.updateInvoiceStatus("cancelled", invoice.getId());
                 }
@@ -170,11 +169,25 @@ public class InvoiceServiceImpl implements IInvoiceService {
         }
 
         logger.info("Daily invoice updates were completed by scheduler");
-
     }
 
+    @Transactional
+    @Override
+    public void payInvoice(int invoiceId) throws AppException {
+        try {
+            Optional<Invoice> optionalInvoice = invoiceRepository.findById(invoiceId);
 
+            if (optionalInvoice.isEmpty()) {
+                throw new ChangeSetPersister.NotFoundException();
+            }
+            Invoice invoiceToBePaid = optionalInvoice.get();
+            invoiceToBePaid.setInvoiceStatus("paid");
+            invoiceRepository.updateInvoiceStatus("paid", invoiceToBePaid.getId());
 
+        } catch (DBException | ChangeSetPersister.NotFoundException exception) {
+            throw new AppException("Can't pay invoice", exception);
+        }
+    }
 
 
 

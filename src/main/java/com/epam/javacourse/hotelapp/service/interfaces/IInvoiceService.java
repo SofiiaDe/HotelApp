@@ -11,17 +11,11 @@ import java.util.List;
 
 public interface IInvoiceService {
 
-//    void createInvoice(Invoice invoice) throws AppException;
-//
-//    List<Invoice> getAllInvoices() throws AppException;
-
     List<InvoiceManagerDto> getAllDetailedInvoices() throws AppException;
 
 //    List<Invoice> getInvoicesByUserId(int userId) throws AppException;
 
     List<InvoiceClientDto> getUserDetailedInvoices(int userID) throws AppException;
-
-    LocalDate getInvoiceDueDate(InvoiceDto invoice);
 
     List<InvoiceDto> getInvoicesByBookingsIds(List<Integer> bookingsIds) throws AppException;
 
@@ -33,12 +27,12 @@ public interface IInvoiceService {
 //
 //    List<Invoice> getInvoicesByStatus(String status) throws AppException;
 //
-//    /**
-//     * Updates invoice's status to 'paid' in case of successful payment transaction.
-//     * @param invoiceId
-//     * @throws AppException
-//     */
-//    void payInvoice(int invoiceId) throws AppException;
+    /**
+     * Updates invoice's status to 'paid' in case of successful payment transaction.
+     * @param invoiceId
+     * @throws AppException
+     */
+    void payInvoice(int invoiceId) throws AppException;
 //
 //    Invoice getInvoiceById(int invoiceId) throws AppException;
 }

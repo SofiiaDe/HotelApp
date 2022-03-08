@@ -233,16 +233,15 @@
                             <td th:text="${invoice.status}"></td>
 
                             <td>
-                                <!--                                <c:if test="${invoice.status == null || invoice.status == 'new'}">-->
+                                <th:block th:if="${invoice.status == null || invoice.status == 'new'}">
 
-                                <div class="ml-1">
-                                    <a class="nav-link"
-                                       href="controller?command=paymentPage&invoiceId=${invoice.id}">
-
-                                        <button class="ui-button" type="submit" th:text="#{pay.button}"></button>
-                                    </a>
-                                </div>
-
+                                    <div class="ml-1">
+                                        <!--                                           th:href="controller?command=paymentPage&invoiceId=${invoice.id}">-->
+                                        <a class="nav-link" th:href="@{/client/paymentPage(invoiceId=${invoice.id})}">
+                                            <button class="ui-button" type="submit"  th:text="#{pay.button}"></button>
+                                        </a>
+                                    </div>
+                                </th:block>
                             </td>
                         </tr>
                     </th:block>

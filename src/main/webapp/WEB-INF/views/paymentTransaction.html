@@ -3,7 +3,7 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
 
-  <title>Client account</title>
+  <title>Payment transaction</title>
 
   <link rel="stylesheet" href="/static/home.css">
 
@@ -17,10 +17,10 @@
 <h2 th:text="#{payment.header.confirm_payment}"></h2>
 
 <div class="ml-1">
-  <form th:method="POST" th:action="@{/client/payInvoice}" th:object="${invoice}">
+  <form th:method="POST"  th:action="@{/client/payInvoice}">
 
-    <input type="hidden" name="pay_invoice"
-           value="${requestScope.invoiceId}">
+    <input type="hidden" name="invoiceId"
+           th:value="${invoiceId}">
 
     <button class="ui-button" type="submit" th:text="#{button.confirm.payment.button}"></button>
 

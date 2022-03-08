@@ -21,7 +21,7 @@ public interface InvoiceRepository extends JpaRepository<Invoice, Integer> {
 
     @Modifying
     @Query("UPDATE Invoice i SET i.invoiceStatus = :status where i.id = :id")
-    boolean updateInvoiceStatus(@Param("status") String status, @Param("id") Integer invoiceId) throws DBException;
+    void updateInvoiceStatus(@Param("status") String status, @Param("id") Integer invoiceId) throws DBException;
 
     @Query("SELECT i FROM Invoice i WHERE i.invoiceStatus = :status")
     List<Invoice> findInvoicesByStatus(@Param("status") String status) throws DBException;
