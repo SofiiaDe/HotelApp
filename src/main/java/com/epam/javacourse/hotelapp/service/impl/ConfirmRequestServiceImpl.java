@@ -10,6 +10,8 @@ import com.epam.javacourse.hotelapp.service.interfaces.IConfirmationRequest;
 import com.epam.javacourse.hotelapp.utils.mappers.ClaimMapper;
 import com.epam.javacourse.hotelapp.utils.mappers.ConfirmationRequestMapper;
 import com.epam.javacourse.hotelapp.utils.mappers.UserMapper;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,10 +20,13 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 public class ConfirmRequestServiceImpl implements IConfirmationRequest {
+
+    private static final Logger logger = LogManager.getLogger(ConfirmRequestServiceImpl.class);
 
     @Autowired
     ConfirmRequestRepository confirmRequestRepository;
@@ -52,7 +57,43 @@ public class ConfirmRequestServiceImpl implements IConfirmationRequest {
     public LocalDate getConfirmRequestDueDate(ConfirmationRequestDto confirmRequest) {
         LocalDate confirmRequestDate = confirmRequest.getConfirmRequestDate();
         return confirmRequestDate.plusDays(2);
+    }
 
+    @Override
+    public ConfirmationRequestDto getConfirmRequestById(int confirmRequestId) throws AppException {
+        try {
+            Optional<ConfirmationRequest> optionalConfirmRequest = confirmRequestRepository.findById(confirmRequestId);
+
+            ConfirmationRequest confirmRequest = null;
+            if (optionalConfirmRequest.isPresent()) {
+                confirmRequest = optionalConfirmRequest.get();
+            } else {
+                logger.error("Can't get claim with id = {}", confirmRequestId);
+            }
+
+            return ConfirmationRequestMapper.mapToDto(confirmRequest);
+        } catch (Exception exception) {
+            throw new AppException();
+        }
+    }
+
+    @Transactional
+    @Override
+    public void confirmRequestByClient(int confirmRequestId) throws AppException {
+
+        Optional<ConfirmationRequest> optionalConfirmRequest = confirmRequestRepository.findById(confirmRequestId);
+        ConfirmationRequest confirmRequest = null;
+        if (optionalConfirmRequest.isPresent()) {
+            confirmRequest = optionalConfirmRequest.get();
+        } else {
+            logger.error("Can't get claim with id = {}", confirmRequestId);
+        }
+        try {
+            ConfirmationRequestDto requestToBeConfirmed = ConfirmationRequestMapper.mapToDto(confirmRequest);
+            requestToBeConfirmed.setStatus("confirmed");
+            confirmRequestRepository.updateConfirmRequestStatus("confirmed", requestToBeConfirmed.getId());
+        } catch (Exception exception) {
+            throw new AppException("Can't update confirmation request's status to 'confirmed'", exception);        }
     }
 
     @Override

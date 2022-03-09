@@ -48,47 +48,8 @@
             <td th:text="${user.firstName}"></td>
             <td th:text="${user.lastName}"></td>
             <td th:text="${user.email}"></td>
-            <td>
-<!--                <c:if test="${user.country != null}">-->
-<!--                    <c:choose>-->
-<!--                        <c:when test="${user.country == 'Italy'}">-->
-<!--                            th:text="#{country.italy"/>-->
-<!--                        </c:when>-->
-<!--                        <c:when test="${user.country == 'UK'}">-->
-<!--                            th:text="#{country.uk"/>-->
-<!--                        </c:when>-->
-<!--                        <c:when test="${user.country == 'Ukraine'}">-->
-<!--                            th:text="#{country.ukraine"/>-->
-<!--                        </c:when>-->
-<!--                        <c:when test="${user.country == 'Poland'}">-->
-<!--                            th:text="#{country.poland"/>-->
-<!--                        </c:when>-->
-<!--                        <c:when test="${user.country == 'Germany'}">-->
-<!--                            th:text="#{country.germany"/>-->
-<!--                        </c:when>-->
-<!--                        <c:otherwise>-->
-<!--                            th:text="#{country"/>-->
-<!--                        </c:otherwise>-->
-<!--                    </c:choose>-->
-<!--                </c:if>-->
-<!--                <c:if test="${user.country == null}">th:text="#{country"/></c:if>-->
-            </td>
-            <td>
-                <c:if test="${user.role != null}">
-                    <c:choose>
-                        <c:when test="${user.role == 'client'}">
-                            th:text="#{role.client"/>
-                        </c:when>
-                        <c:when test="${user.role == 'manager'}">
-                            th:text="#{role.manager"/>
-                        </c:when>
-                        <c:otherwise>
-                            th:text="#{role"/>
-                        </c:otherwise>
-                    </c:choose>
-                </c:if>
-                <c:if test="${user.role == null}">th:text="#{role"/></c:if>
-            </td>
+            <td th:text="${user.country}"></td>
+            <td th:text="${user.role}"></td>
 
         </tr>
     </th:block>

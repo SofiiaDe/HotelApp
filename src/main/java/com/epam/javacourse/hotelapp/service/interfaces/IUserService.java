@@ -21,4 +21,7 @@ public interface IUserService {
 
     @Transactional(readOnly = true)
     UserDto getUserById(int id) throws AppException;
+
+    @Transactional(readOnly = true)
+    List<UserDto> getAllUsers() throws AppException;
 }

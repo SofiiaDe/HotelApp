@@ -64,4 +64,12 @@ public class UserServiceImpl implements IUserService {
         return result;
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public List<UserDto> getAllUsers() throws AppException {
+        List<User> users = userRepository.findAll();
+        List<UserDto> result = new ArrayList<>();
+        users.forEach(x -> result.add(UserMapper.mapToDto(x)));
+        return result;
+    }
 }

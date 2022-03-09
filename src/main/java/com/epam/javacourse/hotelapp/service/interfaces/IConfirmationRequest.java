@@ -11,9 +11,9 @@ import java.util.List;
 public interface IConfirmationRequest {
 
     void createConfirmRequest(ConfirmationRequestDto confirmRequestDto);
-    //
-//    ConfirmationRequest getConfirmRequestById(int confirmRequestId) throws AppException;
-//
+
+    ConfirmationRequestDto getConfirmRequestById(int confirmRequestId) throws AppException;
+
 //    List<ConfirmationRequest> getConfirmRequestsByUserId(int userId) throws AppException;
 //
 //    List<ConfirmationRequest> getAllConfirmRequests() throws AppException;
@@ -31,5 +31,5 @@ public interface IConfirmationRequest {
      */
     LocalDate getConfirmRequestDueDate(ConfirmationRequestDto confirmRequest);
 
-//    void confirmRequestByClient(int confirmRequestId) throws AppException;
+    void confirmRequestByClient(int confirmRequestId) throws AppException;
 }

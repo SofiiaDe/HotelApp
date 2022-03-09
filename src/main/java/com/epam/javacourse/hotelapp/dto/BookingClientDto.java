@@ -10,16 +10,16 @@ public class BookingClientDto {
     private int id;
     private LocalDate checkinDate;
     private LocalDate checkoutDate;
-    private String roomTypeBySeats;
+    private String roomSeats;
     private String roomClass;
     private boolean isPaid;
 
     public BookingClientDto(int id, LocalDate checkinDate, LocalDate checkoutDate,
-                            String roomTypeBySeats, String roomClass, boolean isPaid) {
+                            String roomSeats, String roomClass, boolean isPaid) {
         this.id = id;
         this.checkinDate = checkinDate;
         this.checkoutDate = checkoutDate;
-        this.roomTypeBySeats = roomTypeBySeats;
+        this.roomSeats = roomSeats;
         this.roomClass = roomClass;
         this.isPaid = isPaid;
     }
@@ -39,8 +39,8 @@ public class BookingClientDto {
         this.checkoutDate = checkoutDate;
     }
 
-    public void setRoomTypeBySeats(String roomTypeBySeats) {
-        this.roomTypeBySeats = roomTypeBySeats;
+    public void setRoomSeats(String roomSeats) {
+        this.roomSeats = roomSeats;
     }
 
     public void setRoomClass(String roomClass) {
@@ -67,8 +67,8 @@ public class BookingClientDto {
         return checkoutDate;
     }
 
-    public String getRoomTypeBySeats() {
-        return roomTypeBySeats;
+    public String getRoomSeats() {
+        return roomSeats;
     }
 
     public String getRoomClass() {

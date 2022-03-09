@@ -156,4 +156,14 @@ public class ManagerAccountController {
         return REDIRECT_MANAGER_ACCOUNT;
     }
 
+    @GetMapping(value = "/allUsersList")
+    public ModelAndView getAllUsersList() throws AppException {
+
+        List<UserDto> usersList = userService.getAllUsers();
+        ModelAndView modelAndView = new ModelAndView(PAGE_GET_USERS);
+
+        modelAndView.addObject("usersList", usersList);
+
+        return modelAndView;
+    }
 }

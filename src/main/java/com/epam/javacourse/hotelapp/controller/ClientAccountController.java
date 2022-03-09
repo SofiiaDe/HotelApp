@@ -2,6 +2,9 @@ package com.epam.javacourse.hotelapp.controller;
 
 import com.epam.javacourse.hotelapp.dto.*;
 import com.epam.javacourse.hotelapp.exception.AppException;
+import com.epam.javacourse.hotelapp.model.Booking;
+import com.epam.javacourse.hotelapp.model.Claim;
+import com.epam.javacourse.hotelapp.model.ConfirmationRequest;
 import com.epam.javacourse.hotelapp.model.Room;
 import com.epam.javacourse.hotelapp.service.interfaces.*;
 import com.epam.javacourse.hotelapp.utils.mappers.BookingMapper;
@@ -307,6 +310,40 @@ public class ClientAccountController {
 
         return REDIRECT_CLIENT_ACCOUNT;
     }
+
+    @PostMapping(value = "/confirmRequest")
+    public String confirmRequest(HttpServletRequest request,
+                                 @RequestParam("confirmRequestId") Integer confirmRequestId) throws AppException {
+
+
+        HttpSession session = request.getSession();
+        UserDto authorisedUser = (UserDto) session.getAttribute("authorisedUser");
+
+        confirmRequestService.confirmRequestByClient(confirmRequestId);
+
+        ConfirmationRequestDto confirmRequestToBook = confirmRequestService.getConfirmRequestById(confirmRequestId);
+        ClaimDto claimOfConfirmRequest = claimService.getClaimById(confirmRequestToBook.getClaimId());
+
+        // add new booking and new invoice to DB
+        BookingDto newBooking = new BookingDto();
+        newBooking.setUserId(authorisedUser.getId());
+        newBooking.setCheckin(claimOfConfirmRequest.getCheckinDate());
+        newBooking.setCheckout(claimOfConfirmRequest.getCheckoutDate());
+        newBooking.setRoomId(confirmRequestToBook.getRoomId());
+        newBooking.setClaimId(confirmRequestToBook.getClaimId());
+
+        InvoiceDto newInvoice = new InvoiceDto();
+        newInvoice.setUserId(newBooking.getUserId());
+        newInvoice.setAmount(bookingInvoiceService.getInvoiceAmount(newBooking));
+        newInvoice.setBookingId(newBooking.getId());
+        newInvoice.setInvoiceDate(LocalDate.now());
+        newInvoice.setStatus("new");
+
+        bookingInvoiceService.createBookingAndInvoice(newBooking, newInvoice);
+
+        return REDIRECT_CLIENT_ACCOUNT;
+    }
+
 }
 
 

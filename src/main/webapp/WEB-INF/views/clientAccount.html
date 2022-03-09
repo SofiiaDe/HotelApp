@@ -79,7 +79,7 @@
                         <tr>
                             <td th:text="${booking.checkinDate}"></td>
                             <td th:text="${booking.checkoutDate}"></td>
-                            <td th:text="${booking.roomTypeBySeats}"></td>
+                            <td th:text="${booking.roomSeats}"></td>
                             <td th:text="${booking.roomClass}"></td>
                             <td th:text="${booking.bookingStatus}"></td>
 
@@ -115,7 +115,7 @@
                     <tbody>
                     <th:block th:each="claim : ${myClaims}">
                         <tr>
-                            <td th:text="${claim.roomTypeBySeats}"></td>
+                            <td th:text="${claim.roomSeats}"></td>
                             <td th:test="${claim.roomClass}"></td>
                             <td th:text="${claim.checkinDate}"></td>
                             <td th:text="${claim.checkoutDate}"></td>
@@ -163,7 +163,7 @@
                         <tr>
                             <td th:text="${confirmrequest.confirmRequestDate}"></td>
                             <td th:text="${confirmrequest.confirmRequestDueDate}"></td>
-                            <td th:test="${confirmrequest.roomTypeBySeats}"></td>
+                            <td th:test="${confirmrequest.roomSeats}"></td>
                             <td th:text="${confirmrequest.roomClass}"></td>
                             <td th:text="${confirmrequest.checkinDate}"></td>
                             <td th:text="${confirmrequest.checkoutDate}"></td>
@@ -171,16 +171,15 @@
                             <td th:text="${confirmrequest.status}"></td>
                             <td>
                                 <div class="ml-1">
-                                    <form th:method="POST" th:object="${confirmRequest}"
-                                          th:action="@{/client/confirmRequest}">
-                                        <input type="hidden" name="confirmRequest_id"
-                                               value="${confirmrequest.id}">
+                                    <form th:method="POST" th:action="@{/client/confirmRequest}">
+                                        <input type="hidden" name="confirmRequestId"
+                                               th:value="${confirmrequest.id}">
                                         <button class="ui-button" type="submit"
                                                 th:text="#{confirm.button}"></button>
                                     </form>
                                 </div>
                             </td>
-                        </tr>
+                    </tr>
                     </th:block>
                     </tbody>
                 </table>
@@ -237,7 +236,6 @@
                                 <th:block th:if="${invoice.status == null || invoice.status == 'new'}">
 
                                     <div class="ml-1">
-                                        <!--                                           th:href="controller?command=paymentPage&invoiceId=${invoice.id}">-->
                                         <a class="nav-link" th:href="@{/client/paymentPage(invoiceId=${invoice.id})}">
                                             <button class="ui-button" type="submit"  th:text="#{pay.button}"></button>
                                         </a>

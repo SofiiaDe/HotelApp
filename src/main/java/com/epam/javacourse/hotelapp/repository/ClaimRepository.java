@@ -12,7 +12,6 @@ import java.util.List;
 @Repository
 public interface ClaimRepository extends JpaRepository<Claim, Integer> {
 
-
     @Query("SELECT a FROM Claim a WHERE a.userId.id = :id")
     List<Claim> findClaimsByUserId(@Param("id") int userId) throws DBException;
 

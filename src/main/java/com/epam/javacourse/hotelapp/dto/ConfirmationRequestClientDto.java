@@ -7,7 +7,7 @@ public class ConfirmationRequestClientDto {
     private int id;
     private LocalDate confirmRequestDate;
     private LocalDate confirmRequestDueDate;
-    private String roomTypeBySeats;
+    private String roomSeats;
     private String roomClass;
     private LocalDate checkinDate;
     private LocalDate checkoutDate;
@@ -16,13 +16,13 @@ public class ConfirmationRequestClientDto {
 
     public ConfirmationRequestClientDto(int id, LocalDate confirmRequestDate,
                                         LocalDate confirmRequestDueDate,
-                                        String roomTypeBySeats, String roomClass,
+                                        String roomSeats, String roomClass,
                                         LocalDate checkinDate, LocalDate checkoutDate,
                                         int claimId, String status) {
         this.id = id;
         this.confirmRequestDate = confirmRequestDate;
         this.confirmRequestDueDate = confirmRequestDueDate;
-        this.roomTypeBySeats = roomTypeBySeats;
+        this.roomSeats = roomSeats;
         this.roomClass = roomClass;
         this.checkinDate = checkinDate;
         this.checkoutDate = checkoutDate;
@@ -42,8 +42,8 @@ public class ConfirmationRequestClientDto {
         return confirmRequestDueDate;
     }
 
-    public String getRoomTypeBySeats() {
-        return roomTypeBySeats;
+    public String getRoomSeats() {
+        return roomSeats;
     }
 
     public String getRoomClass() {

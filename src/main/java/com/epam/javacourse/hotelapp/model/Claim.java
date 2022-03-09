@@ -52,8 +52,8 @@ public class Claim implements Serializable {
         return roomSeats;
     }
 
-    public void setRoomSeats(String roomTypeBySeats) {
-        this.roomSeats = roomTypeBySeats;
+    public void setRoomSeats(String roomSeats) {
+        this.roomSeats = roomSeats;
     }
 
     public String getRoomClass() {

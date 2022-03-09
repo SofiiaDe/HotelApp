@@ -5,7 +5,7 @@ public class Constants {
     private Constants() {
     }
 
-    public static final String PAGE_GET_USERS = "/WEB-INF/jsp/manager/getAllUsers.jsp";
+    public static final String PAGE_GET_USERS = "getAllUsers";
     public static final String PAGE_ERROR = "errorPage";
     public static final String PAGE_LOGIN = "login";
     public static final String PAGE_HOME = "home";
