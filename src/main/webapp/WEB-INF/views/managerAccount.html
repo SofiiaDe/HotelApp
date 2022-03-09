@@ -21,7 +21,7 @@
                 <a class="nav-link active" id="booking-tab" data-toggle="tab" href="#booking"
                    role="tab"
                    aria-controls="booking" aria-selected="true"
-                    th:text="#{manager.table.bookings}">
+                   th:text="#{manager.table.bookings}">
                 </a>
             </li>
             <li class="nav-item">
@@ -42,24 +42,24 @@
                 <a class="nav-link" id="invoice-tab" data-toggle="tab" href="#invoice" role="tab"
                    aria-controls="invoice"
                    aria-selected="false"
-                    th:text="#{manager.table.invoices}">
+                   th:text="#{manager.table.invoices}">
                 </a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" id="new-room-tab" data-toggle="tab" href="#new-room"
                    role="tab"
                    aria-controls="new-room" aria-selected="false"
-                    th:text="#{manager.form.new_room}">
+                   th:text="#{manager.form.new_room}">
                 </a>
             </li>
         </ul>
 
         <div class="tab-content" id="myTabContent">
-<!--            Booking-->
+            <!--            Booking-->
             <div class="dropdown dropDownPadding">
                 <button class="btn btn-info dropdown-toggle" type="button" data-toggle="dropdown"
                         aria-haspopup="true" aria-expanded="false"
-                    th:text="#{status}">
+                        th:text="#{status}">
                 </button>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                     <a class="dropdown-item" href="#" id="statusPaid" th:text="#{status.paid}"></a>
@@ -104,47 +104,23 @@
                             <td th:text="${booking.checkoutDate}"></td>
                             <td th:text="${booking.roomNumber}"></td>
                             <td th:text="${booking.bookingStatus}"></td>
-<!--                            <td>-->
-<!--                            <c:if test="${booking.bookingStatus.text != null}">-->
-<!--                                    <c:choose>-->
-<!--                                        <c:when test="${booking.bookingStatus.text == 'new'}">-->
-<!--                                            th:text="#{status.new"/>-->
-<!--                                        </c:when>-->
-<!--                                        <c:when test="${booking.bookingStatus.text == 'cancelled'}">-->
-<!--                                            th:text="#{status.cancelled"/>-->
-<!--                                        </c:when>-->
-<!--                                        <c:when test="${booking.bookingStatus.text == 'paid'}">-->
-<!--                                            th:text="#{status.paid"/>-->
-<!--                                        </c:when>-->
-<!--                                        <c:when test="${booking.bookingStatus.text == 'finished'}">-->
-<!--                                            th:text="#{status.finished"/>-->
-<!--                                        </c:when>-->
-<!--                                        <c:when test="${booking.bookingStatus.text == 'ongoing'}">-->
-<!--                                            th:text="#{status.ongoing"/>-->
-<!--                                        </c:when>-->
-<!--                                        <c:otherwise>-->
-<!--                                            !-->
-<!--                                        </c:otherwise>-->
-<!--                                    </c:choose>-->
-<!--                                </c:if>-->
-<!--                                <c:if test="${booking.bookingStatus.text == null}">th:text="#{status"/></c:if>-->
-<!--                            </td>-->
+
                         </tr>
                     </th:block>
                     </tbody>
                 </table>
 
-<!--                <c:if test="${requestScope != null && requestScope.page != null && requestScope.pageCount != null}">-->
-<!--                    <form action="controller">-->
-<!--                        <input type="hidden" name="command" value="managerAccount"/>-->
-<!--                        <nav aria-label="Manager's lift of booking navigation">-->
-<!--                            <th:include page="/WEB-INF/components/pagination.jsp"/>-->
-<!--                        </nav>-->
-<!--                    </form>-->
-<!--                </c:if>-->
+                <!--                <c:if test="${requestScope != null && requestScope.page != null && requestScope.pageCount != null}">-->
+                <!--                    <form action="controller">-->
+                <!--                        <input type="hidden" name="command" value="managerAccount"/>-->
+                <!--                        <nav aria-label="Manager's lift of booking navigation">-->
+                <!--                            <th:include page="/WEB-INF/components/pagination.jsp"/>-->
+                <!--                        </nav>-->
+                <!--                    </form>-->
+                <!--                </c:if>-->
             </div>
 
-<!--            Claim-->
+            <!--            Claim-->
             <div class="tab-pane fade" id="claim" role="tabpanel" aria-labelledby="claim-tab">
                 <table class="table table-hover mt-2">
                     <thead>
@@ -176,7 +152,7 @@
                         <tr>
                             <td th:text="${claim.bookedByUser}"></td>
                             <td th:text="${claim.bookedByUserEmail}"></td>
-                            <td th:text="${claim.roomTypeBySeats}"></td>
+                            <td th:text="${claim.roomSeats}"></td>
                             <td th:text="${claim.roomClass}"></td>
                             <td th:text="${claim.checkinDate}"></td>
                             <td th:text="${claim.checkoutDate}"></td>
@@ -185,12 +161,12 @@
                                     <div>
                                         <button type="submit" class="btn btn-outline-secondary btn-sm"
                                                 data-toggle="modal"
-                                                data-target="#makeRequestModalCenter${claim.id}">
+                                                data-target="#makeRequestModalCenter" th:value="${claim.id}">
                                             <i class="material-icons" th:text="#{manager.make.request}"></i>
                                         </button>
                                         <!-- Modal -->
                                         <div class="modal fade bd-example-modal-lg"
-                                             id="makeRequestModalCenter${claim.id}"
+                                             id="makeRequestModalCenter" th:value="${claim.id}"
                                              tabindex="-1"
                                              role="dialog"
                                              aria-labelledby="#makeRequestModalCenterTitle"
@@ -211,46 +187,61 @@
                                                     </div>
 
                                                     <div class="modal-body">
-                                                        <form method="post"
-                                                              action="controller?command=makeConfirmRequest">
+                                                        <form th:method="POST" th:object="${claim}"
+                                                              th:action="@{/manager1/makeConfirmRequest}">
 
                                                             <div class="form-group">
                                                                 <div class="row">
                                                                     <div class="col">
-                                                                        <input type="text" name="checkin_date"
+                                                                        <input type="text" name="checkinDate"
                                                                                class="form-control"
-                                                                               value="${claim.checkinDate}"
+                                                                               th:value="${claim.checkinDate}"
                                                                                minlength="1"
                                                                                maxlength="40"
                                                                                required>
                                                                     </div>
                                                                     <div class="col">
-                                                                        <input type="text" name="checkout_date"
+                                                                        <input type="text" name="checkoutDate"
                                                                                class="form-control"
-                                                                               value="${claim.checkoutDate}"
+                                                                               th:value="${claim.checkoutDate}"
                                                                                minlength="1"
                                                                                maxlength="40"
                                                                                required>
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                            <div class="form-group"
-                                                                th:text="manager.request.specify_room">
 
-                                                                <textarea class="form-control"
-                                                                          name="description"
-                                                                          rows="3" minlength="10"
-                                                                          maxlength="250"
-                                                                          required>${claim.roomClass} ${claim.roomTypeBySeats}
-                                                                </textarea>
+                                                            <div class="form-group"
+                                                                 th:text="#{manager.request.specify_room}">
+                                                            </div>
+
+                                                            <div class="form-group">
+                                                                <div class="row">
+                                                                    <div class="col">
+                                                                        <input type="text" name="roomClass"
+                                                                               class="form-control"
+                                                                               th:value="${claim.roomClass}"
+                                                                               minlength="1"
+                                                                               maxlength="40"
+                                                                               required/>
+                                                                    </div>
+                                                                    <div class="col">
+                                                                        <input type="text" name="roomSeats"
+                                                                               class="form-control"
+                                                                               th:value="${claim.roomSeats}"
+                                                                               minlength="1"
+                                                                               maxlength="40"
+                                                                               required/>
+                                                                    </div>
+                                                                </div>
                                                             </div>
 
                                                             <div class="d-flex justify-content-end">
-                                                                <input type="hidden" name="claimId"
-                                                                       value="${claim.id}">
+                                                                <input type="hidden" name="id"
+                                                                       th:value="${claim.id}">
                                                                 <button type="submit"
                                                                         class="btn btn-info btn-outline-primary"
-                                                                    th:text="#{make_request.button}">
+                                                                        th:text="#{make_request.button}">
                                                                 </button>
                                                             </div>
                                                         </form>
@@ -277,7 +268,7 @@
                 </table>
             </div>
 
-<!--            Confirmation Request-->
+            <!--            Confirmation Request-->
             <div class="tab-pane fade" id="confirmrequest" role="tabpanel" aria-labelledby="confirmrequest-tab">
                 <table class="table table-hover mt-2">
                     <thead>
@@ -321,7 +312,7 @@
                 </table>
             </div>
 
-<!--            Invoice-->
+            <!--            Invoice-->
             <div class="tab-pane fade active" id="invoice" role="tabpanel" aria-labelledby="invoice-tab">
                 <table class="table table-hover mt-2">
                     <thead>
@@ -364,7 +355,7 @@
                 </table>
             </div>
 
-<!--            Add a room-->
+            <!--            Add a room-->
             <div class="tab-pane fade" id="new-room" role="tabpanel"
                  aria-labelledby="new-room-tab">
                 <form class="mt-2" method="post" action="controller?command=addRoom">
@@ -389,16 +380,16 @@
                             <div class="col">
                                 <input type="text" name="roomNumber" class="form-control"
                                        th:placeholder="#{manager.modal.placeholder.number}"
-                                minlength="1"
-                                maxlength="40"
-                                required>
+                                       minlength="1"
+                                       maxlength="40"
+                                       required>
                             </div>
                             <div class="col">
                                 <input type="number" name="price" class="form-control"
                                        step="0.01"
                                        th:placeholder="#{manager.modal.placeholder.price}"
-                                min="0" minlength="1"
-                                required>
+                                       min="0" minlength="1"
+                                       required>
                             </div>
                             <div class="col">
                                 <select class="custom-select" name="roomStatus">
@@ -412,7 +403,7 @@
                     <br>
                     <br>
                     <button type="submit" class="btn btn-info"
-                        th:text="#{manager.modal.button.save}">
+                            th:text="#{manager.modal.button.save}">
                     </button>
 
                 </form>

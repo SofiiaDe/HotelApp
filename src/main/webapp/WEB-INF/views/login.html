@@ -32,6 +32,9 @@
         body {
             background-color: floralwhite;
         }
+        #title{
+            margin-bottom: 20px;
+        }
         #headr{
             position: absolute;
             width: 100%;
@@ -45,6 +48,13 @@
             color: #fff;
             background-color: #138496;
             border-color: #117a8b;
+        }
+        .form-signin{
+            width: 300px;
+            display: inline-block;
+        }
+        .defaultMarginBottom{
+            margin-bottom: 10px;
         }
     </style>
 </head>
@@ -83,15 +93,15 @@
     </div>
 
     <img class="mb-4" src="pictures/logo-hotel.jpg" alt="logo" width="80" height="80">
-    <h1 class="h3 mb-3 font-weight-normal" th:text="#{login.title.signin}"></h1>
+    <h1 class="h3 mb-3 font-weight-normal" id="title" th:text="#{login.title.signin}" ></h1>
     <label for="login" class="sr-only" th:text="#{login.label.email}"></label>
-    <input type="text" id="login" name="email" class="form-control" th:placeholder="#{login.placeholder.email}"
+    <input type="text" id="login" name="email" class="form-control defaultMarginBottom" th:placeholder="#{login.placeholder.email}"
            required autofocus>
 
     <label for="password" class="sr-only" th:text="#{login.label.password}"></label>
-    <input type="password" id="password" name="password" class="form-control"
+    <input type="password" id="password" name="password" class="form-control defaultMarginBottom"
            th:placeholder="#{login.placeholder.password}" required>
-    <div class="checkbox mb-3">
+    <div class="checkbox">
         <label>
             <input type="checkbox" value="remember-me" th:text="#{login.checkbox.remember}">
         </label>

@@ -1,5 +1,7 @@
 package com.epam.javacourse.hotelapp.service.impl;
 
+import com.epam.javacourse.hotelapp.dto.ClaimDto;
+import com.epam.javacourse.hotelapp.dto.RoomDto;
 import com.epam.javacourse.hotelapp.exception.AppException;
 import com.epam.javacourse.hotelapp.model.Room;
 import com.epam.javacourse.hotelapp.repository.CustomizedRoomRepository;
@@ -70,7 +72,33 @@ public class RoomServiceImpl implements IRoomService {
 //    int totalPages = page.getTotalPages();
 
     @Override
-    public List<Room> getAvailableRoomsForPeriod(LocalDate checkin, LocalDate checkout) {
+    public RoomDto chooseSuitableRoomForRequest(ClaimDto claimDto, List<RoomDto> freeRooms) {
+
+        RoomDto suitableRoom = null;
+
+        try {
+            for (RoomDto freeRoom : freeRooms) {
+                if ((claimDto.getRoomSeats().equals(freeRoom.getRoomSeats()))
+                        && (claimDto.getRoomClass().equals(freeRoom.getRoomClass()))) {
+                    return freeRoom;
+                } else if (claimDto.getRoomSeats().equals(freeRoom.getRoomSeats())) {
+                    return freeRoom;
+                } else if (claimDto.getRoomClass().equals(freeRoom.getRoomClass())) {
+                    return freeRoom;
+                } else {
+                    suitableRoom = freeRoom;
+                }
+            }
+        } catch (Exception exception) {
+            String errorMessage = "Can't select suitable room to make confirmation request for application with id=" + claimDto.getId();
+            logger.error(errorMessage, exception);
+        }
+        return suitableRoom;
+    }
+
+
+    @Override
+    public List<Room> getFreeRoomsForPeriod(LocalDate checkin, LocalDate checkout) throws AppException {
         return customizedRoomRepository.findAvailableRooms(checkin, checkout);
     }
 
@@ -143,7 +171,6 @@ public class RoomServiceImpl implements IRoomService {
 //        }
         return null;
     }
-
 
 
 //    public long getTotalRooms() {

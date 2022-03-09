@@ -17,19 +17,12 @@ public class Constants {
 
     public static final String PAGE_SUBMIT_CLAIM = "claim";
     public static final String PAGE_PAY_INVOICE = "paymentTransaction";
-    public static final String FREE_ROOMS_TO_BOOK = "freeRoomsToBook";
+    public static final String PAGE_FREE_ROOMS = "freeRoomsToBook";
 
     public static final String PARAM_PAGES = "pages";
-    public static final String PARAM_GENDER = "gender";
-    public static final String PARAM_ACTIVITY = "activity";
-    public static final String PARAM_NUTRITION_GOAL = "nutr_goal";
-    public static final String PARAM_PUBLIC = "public";
     public static final String PARAM_EMAIL = "email";
     public static final String PARAM_PASSWORD = "password";
     public static final String PARAM_USER = "user";
-    public static final String PARAM_WEEK_INFO = "weekInfo";
-    public static final String PARAM_FOOD = "food";
-    public static final String PARAM_EAT_PERIOD = "eat_period";
 
     public static final String PASSWORD_REGEX = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#&()–\\[{}\\]:;',?\\*~$^+=<>]).{8,20}$";
     public static final String EMAIL_REGEX = "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$";

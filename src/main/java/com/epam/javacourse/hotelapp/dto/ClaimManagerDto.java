@@ -12,20 +12,20 @@ public class ClaimManagerDto {
     private String bookedByUserEmail;
     private LocalDate checkinDate;
     private LocalDate checkoutDate;
-    private String roomTypeBySeats;
+    private String roomSeats;
     private String roomClass;
 
     public ClaimManagerDto() {
     }
 
     public ClaimManagerDto(int id, String bookedByUser, String bookedByUserEmail,
-                           LocalDate checkinDate, LocalDate checkoutDate, String roomTypeBySeats, String roomClass) {
+                           LocalDate checkinDate, LocalDate checkoutDate, String roomSeats, String roomClass) {
         this.id = id;
         this.bookedByUser = bookedByUser;
         this.bookedByUserEmail = bookedByUserEmail;
         this.checkinDate = checkinDate;
         this.checkoutDate = checkoutDate;
-        this.roomTypeBySeats = roomTypeBySeats;
+        this.roomSeats = roomSeats;
         this.roomClass = roomClass;
     }
 
@@ -69,12 +69,12 @@ public class ClaimManagerDto {
         this.checkoutDate = checkoutDate;
     }
 
-    public String getRoomTypeBySeats() {
-        return roomTypeBySeats;
+    public String getRoomSeats() {
+        return roomSeats;
     }
 
-    public void setRoomTypeBySeats(String roomTypeBySeats) {
-        this.roomTypeBySeats = roomTypeBySeats;
+    public void setRoomSeats(String roomSeats) {
+        this.roomSeats = roomSeats;
     }
 
     public String getRoomClass() {

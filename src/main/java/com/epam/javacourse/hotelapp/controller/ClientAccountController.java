@@ -238,7 +238,7 @@ public class ClientAccountController {
 
         // free rooms
         model.addAttribute("freeRooms", freeRooms);
-        return FREE_ROOMS_TO_BOOK;
+        return PAGE_FREE_ROOMS;
     }
 
     @PostMapping(value = "/book")
@@ -247,7 +247,7 @@ public class ClientAccountController {
                            BindingResult bindingResult) throws AppException {
 
         if (bindingResult.hasErrors()) {
-            return FREE_ROOMS_TO_BOOK;
+            return PAGE_FREE_ROOMS;
         }
 
         HttpSession session = request.getSession();
@@ -257,7 +257,7 @@ public class ClientAccountController {
         LocalDate checkoutDate = bookingDto.getCheckout();
 
         if (checkinDate == null || checkoutDate == null) {
-            return FREE_ROOMS_TO_BOOK;
+            return PAGE_FREE_ROOMS;
         }
 
         if (!Validator.isCorrectDate(checkinDate, checkoutDate, request)) {

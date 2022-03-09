@@ -171,7 +171,8 @@
                             <td th:text="${confirmrequest.status}"></td>
                             <td>
                                 <div class="ml-1">
-                                    <form action="controller?command=confirmRequest" method="post">
+                                    <form th:method="POST" th:object="${confirmRequest}"
+                                          th:action="@{/client/confirmRequest}">
                                         <input type="hidden" name="confirmRequest_id"
                                                value="${confirmrequest.id}">
                                         <button class="ui-button" type="submit"

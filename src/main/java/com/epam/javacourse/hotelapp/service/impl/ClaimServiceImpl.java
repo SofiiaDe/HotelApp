@@ -1,5 +1,6 @@
 package com.epam.javacourse.hotelapp.service.impl;
 
+import com.epam.javacourse.hotelapp.controller.ManagerAccountController;
 import com.epam.javacourse.hotelapp.dto.ClaimClientDto;
 import com.epam.javacourse.hotelapp.dto.ClaimDto;
 import com.epam.javacourse.hotelapp.dto.ClaimManagerDto;
@@ -10,19 +11,20 @@ import com.epam.javacourse.hotelapp.model.User;
 import com.epam.javacourse.hotelapp.repository.*;
 import com.epam.javacourse.hotelapp.service.interfaces.IClaimService;
 import com.epam.javacourse.hotelapp.utils.mappers.ClaimMapper;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
 public class ClaimServiceImpl implements IClaimService {
+
+    private static final Logger logger = LogManager.getLogger(ClaimServiceImpl.class);
 
     @Autowired
     ClaimRepository claimRepository;
@@ -43,6 +45,19 @@ public class ClaimServiceImpl implements IClaimService {
     @Transactional
     public void createClaim(ClaimDto claimDto) {
         claimRepository.save(ClaimMapper.mapFromDto(claimDto));
+    }
+
+    @Override
+    public ClaimDto getClaimById(int claimId) throws AppException {
+        Optional<Claim> optionalClaim = claimRepository.findById(claimId);
+        Claim claim = null;
+        if (optionalClaim.isPresent()) {
+            claim = optionalClaim.get();
+        } else {
+            logger.error("Can't get claim with id = {}", claimId);
+        }
+
+        return ClaimMapper.mapToDto(claim);
     }
 
 

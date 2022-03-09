@@ -18,4 +18,7 @@ public interface IUserService {
 
     @Transactional(readOnly = true)
     List<UserDto> getUsersByIds(List<Integer> ids) throws AppException;
+
+    @Transactional(readOnly = true)
+    UserDto getUserById(int id) throws AppException;
 }

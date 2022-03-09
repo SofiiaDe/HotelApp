@@ -3,7 +3,9 @@ package com.epam.javacourse.hotelapp.dto;
 import com.epam.javacourse.hotelapp.model.Claim;
 import com.epam.javacourse.hotelapp.model.Room;
 import com.epam.javacourse.hotelapp.model.User;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.validation.constraints.Future;
 import java.time.LocalDate;
 
 public class ConfirmationRequestDto {
@@ -12,8 +14,12 @@ public class ConfirmationRequestDto {
     private int userId;
     private int claimId;
     private int roomId;
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate confirmRequestDate;
+
     private String status;
+
     private LocalDate confirmRequestDueDate;
     private User user;
     private Claim claim;
@@ -23,15 +29,13 @@ public class ConfirmationRequestDto {
     }
 
     public ConfirmationRequestDto(int id, int userId, int claimId, int roomId,
-                                  LocalDate confirmRequestDate, String status,
-                                  LocalDate confirmRequestDueDate) {
+                                  LocalDate confirmRequestDate, String status) {
         this.id = id;
         this.userId = userId;
-        this.claimId = this.claimId;
+        this.claimId = claimId;
         this.roomId = roomId;
         this.confirmRequestDate = confirmRequestDate;
         this.status = status;
-        this.confirmRequestDueDate = confirmRequestDueDate;
     }
 
     public int getId() {

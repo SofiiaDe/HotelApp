@@ -10,8 +10,8 @@ import java.util.List;
 
 public interface IConfirmationRequest {
 
-//    void create(ConfirmationRequest confirmRequest) throws AppException;
-//
+    void createConfirmRequest(ConfirmationRequestDto confirmRequestDto);
+    //
 //    ConfirmationRequest getConfirmRequestById(int confirmRequestId) throws AppException;
 //
 //    List<ConfirmationRequest> getConfirmRequestsByUserId(int userId) throws AppException;

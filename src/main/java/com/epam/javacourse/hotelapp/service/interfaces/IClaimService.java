@@ -4,6 +4,7 @@ import com.epam.javacourse.hotelapp.dto.ClaimClientDto;
 import com.epam.javacourse.hotelapp.dto.ClaimDto;
 import com.epam.javacourse.hotelapp.dto.ClaimManagerDto;
 import com.epam.javacourse.hotelapp.exception.AppException;
+import com.epam.javacourse.hotelapp.model.Claim;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -23,9 +24,9 @@ public interface IClaimService {
 //    boolean updateClaim(Claim claim) throws AppException;
 //
 //    void removeClaim(int id) throws AppException;
-//
-//    Claim getClaimById(int claimId) throws AppException;
-//
+
+    ClaimDto getClaimById(int claimId) throws AppException;
+
 
     List<ClaimClientDto> getUserDetailedClaims(int userID) throws AppException;
 

@@ -11,11 +11,11 @@ public class ConfirmationRequest implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", insertable = false, updatable = false, nullable = false)
     private int id;
 
-    @ManyToOne(optional = false, cascade = CascadeType.ALL)
+    @ManyToOne(optional = false, cascade = CascadeType.MERGE)
     @JoinColumn(name = "user_id")
     private User userId;
 
@@ -30,7 +30,7 @@ public class ConfirmationRequest implements Serializable {
     @Column(name = "confirm_request_date")
     private LocalDate confirmRequestDate;
 
-    private LocalDate confirmRequestDueDate;
+//    private LocalDate confirmRequestDueDate;
 
     @Column(name = "status")
     private String status;
@@ -43,13 +43,13 @@ public class ConfirmationRequest implements Serializable {
         this.userId = userId;
     }
 
-    public LocalDate getConfirmRequestDueDate() {
-        return confirmRequestDueDate;
-    }
-
-    public void setConfirmRequestDueDate(LocalDate confirmRequestDueDate) {
-        this.confirmRequestDueDate = confirmRequestDueDate;
-    }
+//    public LocalDate getConfirmRequestDueDate() {
+//        return confirmRequestDueDate;
+//    }
+//
+//    public void setConfirmRequestDueDate(LocalDate confirmRequestDueDate) {
+//        this.confirmRequestDueDate = confirmRequestDueDate;
+//    }
 
     public Claim getClaimId() {
         return claimId;

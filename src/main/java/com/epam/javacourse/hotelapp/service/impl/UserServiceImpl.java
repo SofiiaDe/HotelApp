@@ -51,6 +51,12 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     @Transactional(readOnly = true)
+    public UserDto getUserById(int id) throws AppException {
+        return UserMapper.mapToDto(userRepository.getById(id));
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public List<UserDto> getUsersByIds(List<Integer> ids) throws AppException {
         List<User> users = userRepository.findUsersByIds(ids);
         List<UserDto> result = new ArrayList<>();

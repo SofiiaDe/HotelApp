@@ -12,6 +12,7 @@ import com.epam.javacourse.hotelapp.utils.mappers.ConfirmationRequestMapper;
 import com.epam.javacourse.hotelapp.utils.mappers.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -39,6 +40,12 @@ public class ConfirmRequestServiceImpl implements IConfirmationRequest {
 
     @Autowired
     ClaimRepository claimRepository;
+
+    @Override
+    @Transactional
+    public void createConfirmRequest(ConfirmationRequestDto confirmRequestDto) {
+        confirmRequestRepository.save(ConfirmationRequestMapper.mapFromDto(confirmRequestDto));
+    }
 
 
     @Override
