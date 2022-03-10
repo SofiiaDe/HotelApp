@@ -1,6 +1,5 @@
 package com.epam.javacourse.hotelapp;
 
-import com.epam.javacourse.hotelapp.controller.ClientAccountController;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.boot.SpringApplication;

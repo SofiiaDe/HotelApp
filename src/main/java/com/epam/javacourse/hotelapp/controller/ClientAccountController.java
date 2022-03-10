@@ -331,6 +331,7 @@ public class ClientAccountController {
         newBooking.setCheckout(claimOfConfirmRequest.getCheckoutDate());
         newBooking.setRoomId(confirmRequestToBook.getRoomId());
         newBooking.setClaimId(confirmRequestToBook.getClaimId());
+        newBooking.setUser(UserMapper.mapFromDto(authorisedUser));
 
         InvoiceDto newInvoice = new InvoiceDto();
         newInvoice.setUserId(newBooking.getUserId());
@@ -338,6 +339,8 @@ public class ClientAccountController {
         newInvoice.setBookingId(newBooking.getId());
         newInvoice.setInvoiceDate(LocalDate.now());
         newInvoice.setStatus("new");
+        newInvoice.setUser(UserMapper.mapFromDto(authorisedUser));
+
 
         bookingInvoiceService.createBookingAndInvoice(newBooking, newInvoice);
 

@@ -39,34 +39,21 @@
                 <i class="material-icons">language </i>
             </button>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <form class="form-inline" method="post" action="/language">
+                <form class="form-inline" th:action="@{/language}">
                     <button type="submit" name="en"
-                            class="dropdown-item" >
-                        <a th:href="@{${#httpServletRequest.requestURI}(lang='en')}"
-                           th:text="#{main.menu.button.english}"></a>
+                            class="dropdown-item" onclick="changeFieldElement('lang', 'en')">
+                        <p th:text="#{main.menu.button.english}"></p>
                     </button>
-                    <!-- th:if="${#locale.toString() == 'en'}" -->
                     <button type="submit" name="uk"
-                            class="dropdown-item" >
-                        <a th:href="@{${#httpServletRequest.requestURI}(lang='uk')}"
-                           th:text="#{main.menu.button.ukrainian}"></a>
+                            class="dropdown-item" onclick="changeFieldElement('lang', 'uk')">
+                        <p th:text="#{main.menu.button.ukrainian}"></p>
                     </button>
-                    <input name="langField" type="hidden" value="en">
+                    <input name="lang" type="hidden" value="en"/>
                 </form>
             </div>
         </div>
-
-
-        <!--            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">-->
-        <!--                <form class="form-inline" method="post" action="controller?command=i18n">-->
-        <!--                    <button type="submit" name="en" onclick="changeFieldElement('langField', 'en')"-->
-        <!--                            class="dropdown-item" th:text="#{main.menu.button.english}"></button>-->
-        <!--                    <button type="submit" name="uk" onclick="changeFieldElement('langField', 'uk')"-->
-        <!--                            class="dropdown-item" th:text="#{main.menu.button.ukrainian}"></button>-->
-        <!--                    <input name="langField" type="hidden" value="en">-->
-        <!--                </form>-->
-        <!--            </div>-->
     </div>
+
     <form class="form-inline my-2 my-lg-0" method="post" th:action="@{/logout}">
         <button class="btn btn-outline-success my-2 my-sm-0" type="submit"
                 th:text="#{main.menu.button.logout}"></button>

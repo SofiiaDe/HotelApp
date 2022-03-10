@@ -93,8 +93,3 @@ public class ConfirmationRequest implements Serializable {
     }
 }
 
-enum ConfirmRequestStatus{
-    NEW,
-    CONFIRMED,
-    CANCELLED,
-}
