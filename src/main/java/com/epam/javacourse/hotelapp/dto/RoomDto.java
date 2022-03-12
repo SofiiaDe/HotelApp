@@ -1,9 +1,8 @@
 package com.epam.javacourse.hotelapp.dto;
 
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import org.hibernate.validator.constraints.UniqueElements;
+
+import javax.validation.constraints.*;
 import java.math.BigDecimal;
 
 public class RoomDto {
@@ -11,8 +10,14 @@ public class RoomDto {
 
     private int id;
 
+    @DecimalMin(value = "100.00", message = "Room price should correspond to the company's pricing policy.")
+    @DecimalMax(value = "999.00", message = "Room price should correspond to the company's pricing policy.")
+    @Digits(integer=3, fraction=2)
     private BigDecimal price;
 
+//    @NotBlank(message = "Room number can't be empty")
+    @Min(value = 1, message = "Room number can't be assigned a negative value")
+//    @UniqueElements(message = "Room with such number already exists")
     private int roomNumber;
 
     private String roomSeats;

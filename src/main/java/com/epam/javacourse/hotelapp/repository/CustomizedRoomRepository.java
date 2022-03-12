@@ -10,7 +10,7 @@ public interface CustomizedRoomRepository {
 
     List<Room> findAvailableRooms(LocalDate checkin, LocalDate checkout);
 
-    List<Room> findPageableRooms(LocalDate checkin, LocalDate checkout, int pageSize, int page, Sort sortType, String sortSeats, String sortStatus);
+    List<Room> findPageableRooms(LocalDate checkin, LocalDate checkout, int pageSize, int page, Sort sortType, String sortSeats);
 
     List<Room> findPageableRoomsSortedByStatus(LocalDate checkin, LocalDate checkout, int pageSize, int page, Sort sortType, String sortSeats, String sortStatus);
 

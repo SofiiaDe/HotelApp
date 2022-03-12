@@ -1,3 +1,4 @@
+
 package com.epam.javacourse.hotelapp.dto;
 
 import com.epam.javacourse.hotelapp.utils.validation.customannotations.PasswordMatches;

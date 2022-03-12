@@ -1,5 +1,7 @@
 <!doctype html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<!--<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://thymeleaf.org" lang="en">-->
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="en">
+
 <head>
 
     <title>Manager account</title>
@@ -152,8 +154,35 @@
                         <tr>
                             <td th:text="${claim.bookedByUser}"></td>
                             <td th:text="${claim.bookedByUserEmail}"></td>
-                            <td th:text="${claim.roomSeats}"></td>
-                            <td th:text="${claim.roomClass}"></td>
+                            <td>
+                                <th:block th:if="${claim.roomSeats != null}" th:switch="${claim.roomSeats}">
+                                    <div th:case="'single'"
+                                         th:text="#{room.type.single}">
+                                    </div>
+                                    <div th:case="'double'"
+                                         th:text="#{room.type.double}">
+                                    </div>
+                                    <div th:case="'twin'"
+                                         th:text="#{room.type.twin}">
+                                    </div>
+                                    <div th:case="'triple'"
+                                         th:text="#{room.type.triple}">
+                                    </div>
+                                </th:block>
+                            </td>
+                            <td>
+                                <th:block th:if="${claim.roomClass != null}" th:switch="${claim.roomClass}">
+                                    <div th:case="'standard'"
+                                         th:text="#{room.class.standard}">
+                                    </div>
+                                    <div th:case="'business'"
+                                         th:text="#{room.class.business}">
+                                    </div>
+                                    <div th:case="'lux'"
+                                         th:text="#{room.class.lux}">
+                                    </div>
+                                </th:block>
+                            </td>
                             <td th:text="${claim.checkinDate}"></td>
                             <td th:text="${claim.checkoutDate}"></td>
                             <td>
@@ -304,8 +333,19 @@
                             <td th:text="${confirmrequest.claimId}"></td>
                             <td th:text="${confirmrequest.roomId}"></td>
                             <td th:text="${confirmrequest.confirmRequestDate}"></td>
-                            <td th:text="${confirmrequest.status}"></td>
-
+                            <td>
+                                <th:block th:if="${confirmrequest.status != null}" th:switch="${confirmrequest.status}">
+                                    <div class="badge badge-danger text-uppercase" th:case="'new'"
+                                         th:text="#{status.new}">
+                                    </div>
+                                    <div class="badge badge-success text-uppercase" th:case="'confirmed'"
+                                         th:text="#{status.confirmed}">
+                                    </div>
+                                    <div class="badge badge-secondary text-uppercase" th:case="'cancelled'"
+                                         th:text="#{status.cancelled}">
+                                    </div>
+                                </th:block>
+                            </td>
                         </tr>
                     </th:block>
                     </tbody>
@@ -347,8 +387,19 @@
                             <td th:text="${invoice.amount}"></td>
                             <td th:text="${invoice.bookingId}"></td>
                             <td th:text="${invoice.invoiceDate}"></td>
-                            <td th:text="${invoice.status}"></td>
-
+                            <td>
+                                <th:block th:if="${invoice.status != null}" th:switch="${invoice.status}">
+                                    <div class="badge badge-danger text-uppercase" th:case="'new'"
+                                         th:text="#{status.new}">
+                                    </div>
+                                    <div class="badge badge-success text-uppercase" th:case="'paid'"
+                                         th:text="#{status.paid}">
+                                    </div>
+                                    <div class="badge badge-secondary text-uppercase" th:case="'cancelled'"
+                                         th:text="#{status.cancelled}">
+                                    </div>
+                                </th:block>
+                            </td>
                         </tr>
                     </th:block>
                     </tbody>
@@ -358,7 +409,7 @@
             <!--            Add a room-->
             <div class="tab-pane fade" id="new-room" role="tabpanel"
                  aria-labelledby="new-room-tab">
-                <form class="mt-2" method="post" action="controller?command=addRoom">
+                <form class="mt-2" th:method="POST" th:action="@{/manager1/addRoom}">
                     <div class="form-group">
                         <div class="row">
                             <div class="col">
@@ -385,12 +436,26 @@
                                        required>
                             </div>
                             <div class="col">
-                                <input type="number" name="price" class="form-control"
+
+                                <input type="number" id="price" required="required"
+                                       name="price" class="form-control"
                                        step="0.01"
-                                       th:placeholder="#{manager.modal.placeholder.price}"
-                                       min="0" minlength="1"
-                                       required>
+                                       th:placeholder="#{manager.modal.placeholder.price}" value=""
+                                       min="1" minlength="1"/>
+<!--                                <div style="color:red" th:if="${#fields.hasErrors('price')}"-->
+<!--                                     th:errors="*{price}">Price Error-->
+<!--                                </div>-->
                             </div>
+<!--                            <div class="col">-->
+<!--                                <input type="number" th:field="*{price}" id="price" required="required"-->
+<!--                                       name="price" class="form-control"-->
+<!--                                       step="0.01"-->
+<!--                                       th:placeholder="#{manager.modal.placeholder.price}" value=""-->
+<!--                                       min="1" minlength="1"/>-->
+<!--                                <div style="color:red" th:if="${#fields.hasErrors('price')}"-->
+<!--                                     th:errors="*{price}">Price Error-->
+<!--                                </div>-->
+<!--                            </div>-->
                             <div class="col">
                                 <select class="custom-select" name="roomStatus">
                                     <option value="available" th:text="#{sort.status.available}"></option>

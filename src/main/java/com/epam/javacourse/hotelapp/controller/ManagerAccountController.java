@@ -23,6 +23,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -166,4 +167,18 @@ public class ManagerAccountController {
 
         return modelAndView;
     }
+
+    @PostMapping("/addRoom")
+    public String saveRoom(@Valid RoomDto newRoom,
+                           BindingResult bindingResult) throws AppException {
+
+        if (bindingResult.hasErrors())
+            return "redirect:/manager1/addRoom";
+
+
+        roomService.createRoom(newRoom);
+
+        return REDIRECT_MANAGER_ACCOUNT;
+    }
+
 }

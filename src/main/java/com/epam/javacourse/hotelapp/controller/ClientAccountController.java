@@ -141,12 +141,6 @@ public class ClientAccountController {
         return "new_room";
     }
 
-    @PostMapping("/saveRoom")
-    public String saveEmployee(@ModelAttribute("room") Room room) {
-        // save room to database
-        roomService.saveRoom(room);
-        return "redirect:/";
-    }
 
     @GetMapping("/showFormForUpdate/{id}")
     public String showFormForUpdate(@PathVariable(value = "id") int id, Model model) throws AppException {

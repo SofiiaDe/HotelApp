@@ -3,10 +3,12 @@ package com.epam.javacourse.hotelapp.service.impl;
 import com.epam.javacourse.hotelapp.dto.ClaimDto;
 import com.epam.javacourse.hotelapp.dto.RoomDto;
 import com.epam.javacourse.hotelapp.exception.AppException;
+import com.epam.javacourse.hotelapp.exception.DBException;
 import com.epam.javacourse.hotelapp.model.Room;
 import com.epam.javacourse.hotelapp.repository.CustomizedRoomRepository;
 import com.epam.javacourse.hotelapp.repository.RoomRepository;
 import com.epam.javacourse.hotelapp.service.interfaces.IRoomService;
+import com.epam.javacourse.hotelapp.utils.mappers.RoomMapper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,8 +37,9 @@ public class RoomServiceImpl implements IRoomService {
 //        return roomRepository.findById(roomId);
 //    }
 
-    public void saveRoom(final Room room) {
-        roomRepository.save(room);
+    @Override
+    public void createRoom(RoomDto room) {
+        roomRepository.save(RoomMapper.mapFromDto(room));
     }
 
     @Override
@@ -128,6 +131,15 @@ public class RoomServiceImpl implements IRoomService {
         if (checkinDate.isAfter(checkoutDate) || checkoutDate.isEqual(checkinDate)) {
             throw new AppException("Check-in and check-out dates are overlapping or equal");
 
+        }
+    }
+
+    @Override
+    public List<Integer> getRoomsNumbers() throws AppException {
+        try {
+            return roomRepository.findAllRoomNumbers();
+        } catch (DBException exception) {
+            throw new AppException("Can't get all rooms' numbers");
         }
     }
 

@@ -34,7 +34,6 @@ public class RegistrationController {
     @Autowired
     IUserService userService;
 
-
     @Autowired
     private AuthenticationManager authenticationManager;
 

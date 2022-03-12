@@ -18,11 +18,13 @@ public interface IRoomService {
 
     List<Room> getAllRooms();
 
-    void saveRoom(Room room);
+    void createRoom(RoomDto room);
 
     void deleteRoomById(int id);
 
     RoomDto chooseSuitableRoomForRequest(ClaimDto claimDto, List<RoomDto> freeRooms);
+
+    List<Integer> getRoomsNumbers() throws AppException;
 
     List<Room> findPaginated(int pageNo, int pageSize, String sortBy, String sortType, String roomStatus, String roomSeats);
 
