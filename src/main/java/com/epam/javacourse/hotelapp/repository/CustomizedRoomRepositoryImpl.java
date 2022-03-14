@@ -7,11 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
-import javax.persistence.TypedQuery;
+import javax.persistence.*;
 import javax.persistence.criteria.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -30,46 +28,76 @@ public class CustomizedRoomRepositoryImpl implements CustomizedRoomRepository {
     @Lazy
     RoomRepository roomRepository;
 
-    public static final String SQL_GET_AVAILABLE_ROOMS = "SELECT * FROM rooms r LEFT OUTER JOIN (SELECT DISTINCT(room_id) " +
-            "FROM bookings b LEFT JOIN invoices i ON i.booking_id = b.id WHERE (b.checkin_date <= ? AND b.checkout_date >= ?) " +
-            "AND i.status != 'cancelled') q ON q.room_id = r.id WHERE q.room_id IS null AND room_status = 'available' ";
-
-    public static final String SQL_GET_ROOMS_BASIC_QUERY = "SELECT ?0? FROM rooms r LEFT OUTER JOIN (SELECT DISTINCT(room_id) " +
-            "FROM bookings b LEFT JOIN invoices i ON i.booking_id = b.id WHERE (b.checkin_date <= ? AND b.checkout_date >= ?) " +
-            "AND i.status ?1?) q ON q.room_id = r.id WHERE q.room_id IS ?2? null ";
-
-//     case RESERVED:
-//    result = result.replace("?1?", "= 'new' ");
-//    result = result.replace("?2?", "not");
-
-//            case BOOKED:
-//    result = result.replace("?1?", "= 'paid' ");
-//    result = result.replace("?2?", "not");
-
-//            case UNAVAILABLE:
-//    result = result.replace("?1?", "!= 'cancelled' ");
-//    result += "and room_status = 'unavailable' ";
-//    result = result.replace("?2?", "")
-//
-//    default:
-//    result = result.replace("?1?", "!= 'cancelled'");
-//    result += "and room_status = 'available' ";
-//    result = result.replace("?2?", "");
 
     @PersistenceContext
     private EntityManager entityManager;
 
-    private List<Integer> getOccupiedRoomsIds(LocalDate checkin, LocalDate checkout) {
-        String hql = "SELECT b FROM Booking b LEFT JOIN Invoice i ON i.bookingId.id = b.id " +
-                "WHERE (b.checkinDate <= :checkin AND b.checkoutDate >= :checkout) AND i.invoiceStatus != 'cancelled'";
-        TypedQuery<Booking> query = entityManager.createQuery(hql, Booking.class);
-        query.setParameter("checkin", checkin);
-        query.setParameter("checkout", checkout);
-        List<Booking> validBookings = query.getResultList();
-        return validBookings.stream()
-                .map(Booking::getRoomId)
-                .distinct()
-                .collect(Collectors.toList());
+    @Transactional
+    @Override
+    public List<Room> findRoomsToBook(LocalDate checkin, LocalDate checkout, int pageSize, int page, String sortBy, String sortType, String sortSeats, String roomStatus) {
+        List<Room> paginatedResult = new ArrayList<>();
+        StoredProcedureQuery spQuery;
+
+        try {
+            if (roomStatus == null) {
+                spQuery = this.entityManager.createNamedStoredProcedureQuery("getAvailableRooms");
+            } else {
+                switch (roomStatus) {
+                    case "reserved":
+                        spQuery = this.entityManager.createNamedStoredProcedureQuery("getReservedRooms");
+                        break;
+                    case "booked":
+                        spQuery = this.entityManager.createNamedStoredProcedureQuery("getBookedRooms");
+                        break;
+                    case "unavailable":
+                        spQuery = this.entityManager.createNamedStoredProcedureQuery("getUnavailableRooms");
+                        break;
+
+                    default:
+                        spQuery = this.entityManager.createNamedStoredProcedureQuery("getAvailableRooms");
+                }
+            }
+            spQuery.setParameter("checkin_date", checkin);
+            spQuery.setParameter("checkout_date", checkout);
+
+            if (sortSeats != null && !sortSeats.isEmpty()) {
+                spQuery.setParameter("room_seats", sortSeats);
+            } else {
+                spQuery.setParameter("room_seats", null);
+            }
+
+//            if (sortType.isSorted()) {
+//
+//                var sortParameters = sortType.toList();
+//
+//                if (!sortType.isEmpty()) {
+//                    for (var s : sortParameters) {
+//                        spQuery.setParameter("sortBy", s.getProperty());
+//                        spQuery.setParameter("sortType", s.getDirection().toString().toLowerCase());
+//                    }
+//                }
+//            }
+
+            if (sortBy != null && !sortBy.isEmpty()) {
+                spQuery.setParameter("sortBy", sortBy);
+            }
+            if (sortType != null && !sortType.isEmpty()) {
+                spQuery.setParameter("sortType", sortType);
+            }
+
+            spQuery.execute();
+            List<Room> result = (List<Room>) spQuery.getResultList();
+
+            entityManager.close();
+
+            paginatedResult = result.stream()
+                    .skip((long) pageSize * (page - 1)).limit(pageSize).collect(Collectors.toList());
+
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+
+        return paginatedResult;
     }
 
     @Override
@@ -84,134 +112,17 @@ public class CustomizedRoomRepositoryImpl implements CustomizedRoomRepository {
                 .filter(room -> !test.contains(room.getId())).collect(Collectors.toList());
     }
 
-    @Override
-    public List<Room> findPageableRooms(LocalDate checkin, LocalDate checkout, int pageSize, int page, Sort sortType, String sortSeats) {
-
-        if (sortSeats != null && !sortSeats.isEmpty()) {
-            HQL_AVAILABLE_ROOMS += " AND room_seats = '" + sortSeats.toLowerCase() + "'";
-        }
-
-        if (sortType.isSorted()) {
-
-            if (!sortType.isEmpty()) {
-                HQL_AVAILABLE_ROOMS += " ORDER BY ";
-            }
-
-            var sortParameters = sortType.toList();
-            var lastElement = sortParameters.get(sortParameters.size() - 1);
-            for (var s : sortParameters) {
-                HQL_AVAILABLE_ROOMS += s.getProperty() + ' ' + s.getDirection();
-                if (s != lastElement) {
-                    HQL_AVAILABLE_ROOMS += ",";
-                }
-            }
-        }
-
-
-        TypedQuery<Room> query = entityManager.createQuery(HQL_AVAILABLE_ROOMS, Room.class);
-        List<Room> availableRooms = query.getResultList();
-
-        List<Integer> test = getOccupiedRoomsIds(checkin, checkout);
-
-        var result = availableRooms.stream()
-                .filter(room -> !test.contains(room.getId())).skip(pageSize * (page - 1)).limit(pageSize).collect(Collectors.toList());
-
-        return result;
-    }
-
-    @Override
-    public List<Room> findPageableRoomsSortedByStatus(LocalDate checkin, LocalDate checkout, int pageSize, int page, Sort sortType, String sortSeats, String sortStatus) {
-
-        String hql = null;
-        List<Room> result;
-
-        if (sortType.isUnsorted() && sortSeats == null && sortStatus == null) {
-            hql = "SELECT r FROM Room r WHERE r.roomStatus = 'available'";
-
-            TypedQuery<Room> query = entityManager.createQuery(hql, Room.class);
-            List<Room> availableRooms = query.getResultList();
-
-            List<Integer> test = getOccupiedRoomsIds(checkin, checkout);
-
-            result = availableRooms.stream()
-                    .filter(room -> !test.contains(room.getId())).skip(pageSize * (page - 1)).limit(pageSize).collect(Collectors.toList());
-
-        } else {
-
-            if (sortStatus != null) {
-                switch (sortStatus) {
-                    case "reserved":
-                        hql = "SELECT * FROM rooms r LEFT OUTER JOIN " +
-                                "(SELECT DISTINCT(room_id) FROM bookings b LEFT JOIN invoices i ON i.booking_id = b.id " +
-                                "WHERE (b.checkin_date <= ? AND b.checkout_date >= ?) AND i.status = 'new')" +
-                                "q ON r.id WHERE r.id IS not null ";
-                        break;
-
-                    case "booked":
-                        hql = "SELECT * FROM rooms r LEFT OUTER JOIN " +
-                                "(SELECT DISTINCT(room_id) FROM bookings b LEFT JOIN invoices i ON i.booking_id = b.id " +
-                                "WHERE (b.checkin_date <= ? AND b.checkout_date >= ?) AND i.status = 'paid')" +
-                                "q ON r.id WHERE r.id IS not null ";
-                        break;
-                    case "unavailable":
-                        hql = "SELECT * FROM rooms r LEFT OUTER JOIN " +
-                                "(SELECT DISTINCT(room_id) FROM bookings b LEFT JOIN invoices i ON i.booking_id = b.id " +
-                                "WHERE (b.checkin_date <= ? AND b.checkout_date >= ?) AND i.status != 'cancelled')" +
-                                "q ON r.id WHERE r.id IS null and room_status = 'unavailable' ";
-                        break;
-
-                    default:
-                        hql = "SELECT * FROM rooms r LEFT OUTER JOIN " +
-                                "(SELECT DISTINCT(room_id) FROM bookings b LEFT JOIN invoices i ON i.booking_id = b.id " +
-                                "WHERE (b.checkin_date <= ? AND b.checkout_date >= ?) AND i.status != 'cancelled')" +
-                                "q ON r.id WHERE r.id IS null and room_status = 'available' ";
-                }
-            }
-
-
-            if (sortSeats != null && !sortSeats.isEmpty()) {
-                hql += " AND room_seats = '" + sortSeats.toLowerCase() + "'";
-            }
-
-            if (sortType.isSorted()) {
-
-                if (!sortType.isEmpty()) {
-                    hql += " ORDER BY ";
-                }
-
-                var sortParameters = sortType.toList();
-                var lastElement = sortParameters.get(sortParameters.size() - 1);
-                for (var s : sortParameters) {
-                    hql += s.getProperty() + ' ' + s.getDirection();
-                    if (s != lastElement) {
-                        hql += ",";
-                    }
-                }
-            }
-
-            Query q = entityManager.createNativeQuery(hql);
-            q.setParameter(1, checkin);
-            q.setParameter(2, checkout);
-            result = (List<Room>) q.getResultList();
-
-        }
-
-        return result;
-
-    }
-
-    public List<Integer> getRoomsIds(LocalDate checkin, LocalDate checkout, String status) {
+    private List<Integer> getOccupiedRoomsIds(LocalDate checkin, LocalDate checkout) {
         String hql = "SELECT b FROM Booking b LEFT JOIN Invoice i ON i.bookingId.id = b.id " +
-                "WHERE (b.checkinDate <= :checkin AND b.checkoutDate >= :checkout) AND i.invoiceStatus = '" + status + "'";
+                "WHERE (b.checkinDate <= :checkin AND b.checkoutDate >= :checkout) AND i.invoiceStatus != 'cancelled'";
         TypedQuery<Booking> query = entityManager.createQuery(hql, Booking.class);
         query.setParameter("checkin", checkin);
         query.setParameter("checkout", checkout);
-        List<Booking> reservedBookings = query.getResultList();
-        return reservedBookings.stream()
+        List<Booking> validBookings = query.getResultList();
+        return validBookings.stream()
                 .map(Booking::getRoomId)
                 .distinct()
                 .collect(Collectors.toList());
-
     }
 
 }

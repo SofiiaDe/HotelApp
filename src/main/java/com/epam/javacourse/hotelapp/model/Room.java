@@ -3,8 +3,54 @@ package com.epam.javacourse.hotelapp.model;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 
+
+@NamedStoredProcedureQuery(
+        name="getReservedRooms",
+        procedureName="reserved_rooms",
+        resultClasses = { Room.class },
+        parameters={
+                @StoredProcedureParameter(name="checkin_date", type= LocalDate.class, mode=ParameterMode.IN),
+                @StoredProcedureParameter(name="checkout_date", type= LocalDate.class, mode=ParameterMode.IN),
+                @StoredProcedureParameter(name="room_seats", type= String.class, mode=ParameterMode.IN),
+                @StoredProcedureParameter(name="sortBy", type= String.class, mode=ParameterMode.IN),
+                @StoredProcedureParameter(name="sortType", type= String.class, mode=ParameterMode.IN)
+        })
+@NamedStoredProcedureQuery(
+        name="getBookedRooms",
+        procedureName="booked_rooms",
+        resultClasses = { Room.class },
+        parameters={
+                @StoredProcedureParameter(name="checkin_date", type= LocalDate.class, mode=ParameterMode.IN),
+                @StoredProcedureParameter(name="checkout_date", type= LocalDate.class, mode=ParameterMode.IN),
+                @StoredProcedureParameter(name="room_seats", type= String.class, mode=ParameterMode.IN),
+                @StoredProcedureParameter(name="sortBy", type= String.class, mode=ParameterMode.IN),
+                @StoredProcedureParameter(name="sortType", type= String.class, mode=ParameterMode.IN)
+        })
+@NamedStoredProcedureQuery(
+        name="getUnavailableRooms",
+        procedureName="unavailable_rooms",
+        resultClasses = { Room.class },
+        parameters={
+                @StoredProcedureParameter(name="checkin_date", type= LocalDate.class, mode=ParameterMode.IN),
+                @StoredProcedureParameter(name="checkout_date", type= LocalDate.class, mode=ParameterMode.IN),
+                @StoredProcedureParameter(name="room_seats", type= String.class, mode=ParameterMode.IN),
+                @StoredProcedureParameter(name="sortBy", type= String.class, mode=ParameterMode.IN),
+                @StoredProcedureParameter(name="sortType", type= String.class, mode=ParameterMode.IN)
+        })
+@NamedStoredProcedureQuery(
+        name="getAvailableRooms",
+        procedureName="available_rooms",
+        resultClasses = { Room.class },
+        parameters={
+                @StoredProcedureParameter(name="checkin_date", type= LocalDate.class, mode=ParameterMode.IN),
+                @StoredProcedureParameter(name="checkout_date", type= LocalDate.class, mode=ParameterMode.IN),
+                @StoredProcedureParameter(name="room_seats", type= String.class, mode=ParameterMode.IN),
+                @StoredProcedureParameter(name="sortBy", type= String.class, mode=ParameterMode.IN),
+                @StoredProcedureParameter(name="sortType", type= String.class, mode=ParameterMode.IN)
+        })
 @Entity
 @Table(name = "rooms")
 public class Room implements Serializable {

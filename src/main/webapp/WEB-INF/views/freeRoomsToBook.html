@@ -38,7 +38,7 @@
     <!--        <jsp:useBean id="now" class="java.util.Date"/>-->
     <!--        <fmt:formatDate var="currentDate" value="${now}" pattern="yyyy-MM-dd"/>-->
     <form th:method="GET" th:action="@{/client/book}">
-        <input type="hidden" value="freeRoomsToBook" />
+        <input type="hidden" value="freeRoomsToBook"/>
         <div class="booking-wrap d-flex justify-content-between align-items-center">
             <div class="single-select-box mb-30">
                 <!-- select check-in date -->
@@ -48,7 +48,7 @@
                 </div>
                 <div class="booking-datepicker">
                     <input type="date" id="checkin" name="checkin" placeholder="${currentDate}" min="${currentDate}"
-                           required />
+                           required/>
                     <!--                           th:value="*{checkin}-->
 
                 </div>
@@ -61,7 +61,7 @@
                         </span>
                 </div>
                 <div class="booking-datepicker">
-                    <input type="date" name="checkout" placeholder="${currentDate}" min="${currentDate}" required />
+                    <input type="date" name="checkout" placeholder="${currentDate}" min="${currentDate}" required/>
                 </div>
             </div>
 
@@ -169,7 +169,119 @@
                                 <h5 class="mb-1" th:text="#{client.book.type}">
                                     :
                                 </h5>
-                                <p th:text="${room.roomSeats}"></p>
+                                 <th:block th:if="${room.roomSeats != null}" th:switch="${room.roomSeats}">
+                                    <div th:case="'single'"
+                                         th:text="#{room.type.single}">
+                                    </div>
+                                    <div th:case="'double'"
+                                         th:text="#{room.type.double}">
+                                    </div>
+                                    <div th:case="'twin'"
+                                         th:text="#{room.type.twin}">
+                                    </div>
+                                    <div th:case="'triple'"
+                                         th:text="#{room.type.triple}">
+                                    </div>
+                                </th:block>
+
+                                <th:block th:if="${room.id != null}" th:switch="${room.id}">
+                                    <div th:case="1"> <img th:src="@{/pictures/1single_business.jpg}"
+                                                           alt="single business"
+                                                           style="width:400px;height:300px;">
+                                    </div>
+                                                                    <div th:case="2"> <img
+                                                                            th:src="@{/pictures/2double_standard.jpg}"
+                                                                            alt="double standard"
+                                                                            style="width:400px;height:300px;">
+                                                                    </div>
+                                                                    <div th:case="3">
+                                                                        <img th:src="@{/pictures/3twin_business.jpg}"
+                                                                             alt="twin business"
+                                                                             style="width:400px;height:300px;">
+                                                                    </div>
+                                                                    <div th:case="4">
+                                                                        <img th:src="@{/pictures/4triple_standard.jpg}"
+                                                                             alt="triple standard"
+                                                                             style="width:400px;height:300px;">
+                                                                        </div>
+                                                                        <div th:case="5">
+                                                                        <img th:src="@{/pictures/5lux_double.jpg}"
+                                                                             alt="double lux"
+                                                                             style="width:400px;height:300px;">
+                                                                    </div>
+                                                                    <div th:case="6">
+                                                                        <img th:src="@{/pictures/6single_business.jpg}"
+                                                                             alt="single business"
+                                                                             style="width:400px;height:300px;">
+                                                                    </div>
+                                                                    <div th:case="7">
+                                                                        <img th:src="@{/pictures/7double_standard.jpg}"
+                                                                             alt="double standard"
+                                                                             style="width:400px;height:300px;">
+                                                                    </div>
+                                                                    <div th:case="8">
+                                                                        <img th:src="@{/pictures/8business_double.jpg}"
+                                                                             alt="double business"
+                                                                             style="width:400px;height:300px;">
+                                                                    </div>
+                                                                    <div th:case="9">
+                                                                        <img th:src="@{/pictures/9triple_business.jpg}"
+                                                                             alt="triple business"
+                                                                             style="width:400px;height:300px;">
+                                                                    </div>
+                                                                    <div th:case="10">
+                                                                        <img th:src="@{/pictures/10lux_twin.jpg}"
+                                                                             alt="twin lux"
+                                                                             style="width:400px;height:300px;">
+                                                                    </div>
+                                                                    <div th:case="11">
+                                                                        <img th:src="@{/pictures/11single_lux.jpg}"
+                                                                             alt="single lux"
+                                                                             style="width:400px;height:300px;">
+                                                                    </div>
+                                                                    <div th:case="12">
+                                                                        <img th:src="@{/pictures/12double_standard.jpg}"
+                                                                             alt="double standard"
+                                                                             style="width:400px;height:300px;">
+                                                                    </div>
+                                                                    <div th:case="13">
+                                                                        <img th:src="@{/pictures/13business_double.jpg}"
+                                                                             alt="double business"
+                                                                             style="width:400px;height:300px;">
+                                                                    </div>
+                                                                    <div th:case="14">
+                                                                        <img th:src="@{/pictures/14triple_business.jpg}"
+                                                                             alt="triple business"
+                                                                             style="width:400px;height:300px;">
+                                                                    </div>
+                                                                    <div th:case="15">
+                                                                        <img th:src="@{/pictures/15twin_standard.jpg}"
+                                                                             alt="twin standard"
+                                                                             style="width:400px;height:300px;">
+                                                                    </div>
+                                                                    <div th:case="16">
+                                                                        <img th:src="@{/pictures/16single_standard.jpg}"
+                                                                             alt="single standard"
+                                                                             style="width:400px;height:300px;">
+                                                                    </div>
+                                                                    <div th:case="17">
+                                                                        <img th:src="@{/pictures/17single_standard.jpg}"
+                                                                             alt="single standard"
+                                                                             style="width:400px;height:300px;">
+                                                                    </div>
+                                                                    <div th:case="18">
+                                                                        <img th:src="@{/pictures/18single_lux.jpg}"
+                                                                             alt="single lux"
+                                                                             style="width:400px;height:300px;">
+                                                                    </div>
+                                    <div th:case="19">
+                                                                        <img th:src="@{/pictures/19double_business.jpg}"
+                                                                             alt="double business"
+                                                                             style="width:400px;height:300px;">
+                                                                    </div>
+
+
+                                </th:block>
 
                                 <small>No. <small th:text="${room.roomNumber}"></small></small>
 
@@ -178,12 +290,21 @@
                                 <h5 class="mb-1" th:text="#{client.book.class}">
                                     :
                                 </h5>
-                                <p th:text="${room.roomClass}"></p>
-
+                                <th:block th:if="${room.roomClass != null}" th:switch="${room.roomClass}">
+                                    <div th:case="'standard'"
+                                         th:text="#{room.class.standard}">
+                                    </div>
+                                    <div th:case="'business'"
+                                         th:text="#{room.class.business}">
+                                    </div>
+                                    <div th:case="'lux'"
+                                         th:text="#{room.class.lux}">
+                                    </div>
+                                </th:block>
                             </div>
                             <small>$ <small th:text="${room.price}"></small></small>
 
-                            <th:block th:if="${roomStatus == null || roomStatus == 'available'}">
+                            <th:block th:if="${room.roomStatus == null || room.roomStatus == 'available'}">
                                 <div id="bookBtn">
                                     <button class="btn btn-light" type="submit" th:text="#{book.button}">
                                     </button>
@@ -207,9 +328,9 @@
 
     <c:if test="${requestScope != null && requestScope.page != null && requestScope.pageCount != null}">
         <form action="controller">
-            <input type="hidden" name="command" value="freeRoomsPage" />
-            <input type="hidden" name="checkin" value="${requestScope.checkin}" />
-            <input type="hidden" name="checkout" value="${requestScope.checkout}" />
+            <input type="hidden" name="command" value="freeRoomsPage"/>
+            <input type="hidden" name="checkin" value="${requestScope.checkin}"/>
+            <input type="hidden" name="checkout" value="${requestScope.checkout}"/>
 
             <!--            <nav aria-label="Free rooms navigation">-->
             <!--                <div th:insert="fragments/pagination.html"></div>-->

@@ -26,12 +26,15 @@ public interface IRoomService {
 
     List<Integer> getRoomsNumbers() throws AppException;
 
-    List<Room> findPaginated(int pageNo, int pageSize, String sortBy, String sortType, String roomStatus, String roomSeats);
-
     List<Room> getFreeRoomsForPeriod(LocalDate checkin, LocalDate checkout) throws AppException;
 
     int getRoomsNumberForPeriod(LocalDate checkinDate, LocalDate checkoutDate) throws AppException;
 
-    List<Room> getAvailablePageableRoomsForPeriod(LocalDate checkin, LocalDate checkout, int pageSize, int page, Sort sortType, String sortSeats, String status);
+//    List<Room> getAvailablePageableRoomsForPeriod(LocalDate checkin, LocalDate checkout, int pageSize, int page, Sort sortType, String sortSeats, String status);
 //    Page<Room> findPaginated(int pageNo, int pageSize, String sortBy, String sortType, String roomStatus, String roomSeats);
+
+//    List<Room> getRoomsForPeriod(LocalDate checkin, LocalDate checkout, int pageSize, int page, Sort sortType, String sortSeats, String status);
+
+    List<Room> getRoomsForPeriod(LocalDate checkin, LocalDate checkout, int pageSize, int page, String sortBy, String sortType, String sortSeats, String status);
+
 }

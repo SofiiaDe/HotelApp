@@ -33,10 +33,6 @@ public class RoomServiceImpl implements IRoomService {
     @Autowired
     CustomizedRoomRepository customizedRoomRepository;
 
-//    public Optional<Room> getRoomById(int roomId) throws AppException {
-//        return roomRepository.findById(roomId);
-//    }
-
     @Override
     public void createRoom(RoomDto room) {
         roomRepository.save(RoomMapper.mapFromDto(room));
@@ -63,16 +59,6 @@ public class RoomServiceImpl implements IRoomService {
     public void deleteRoomById(int id) {
         this.roomRepository.deleteById(id);
     }
-
-//    int pageNumber = 1;
-//    int pageSize = 5;
-//    Pageable pageable = PageRequest.of(pageNumber, pageSize);
-
-//    Page<Room> page = roomRepository.findAll(pageable);
-//    List<Room> listRooms = page.getContent();
-
-//    long totalItems = page.getTotalElements();
-//    int totalPages = page.getTotalPages();
 
     @Override
     public RoomDto chooseSuitableRoomForRequest(ClaimDto claimDto, List<RoomDto> freeRooms) {
@@ -111,14 +97,18 @@ public class RoomServiceImpl implements IRoomService {
         ensureDatesAreValid(checkinDate, checkoutDate);
         return customizedRoomRepository.findAvailableRooms(checkinDate, checkoutDate).size();
     }
+//
+//    @Override
+//    public List<Room> getAvailablePageableRoomsForPeriod(LocalDate checkin, LocalDate checkout, int pageSize, int page, Sort sortType, String sortSeats, String status) {
+////        return customizedRoomRepository.findPageableRooms(checkin, checkout, pageSize, page, sortType, sortSeats, status);
+//        return customizedRoomRepository.findPageableRoomsSortedByStatus(checkin, checkout, pageSize, page, sortType, sortSeats, status);
+//
+//    }
 
     @Override
-    public List<Room> getAvailablePageableRoomsForPeriod(LocalDate checkin, LocalDate checkout, int pageSize, int page, Sort sortType, String sortSeats, String status) {
-//        return customizedRoomRepository.findPageableRooms(checkin, checkout, pageSize, page, sortType, sortSeats, status);
-        return customizedRoomRepository.findPageableRoomsSortedByStatus(checkin, checkout, pageSize, page, sortType, sortSeats, status);
-
+    public List<Room> getRoomsForPeriod(LocalDate checkin, LocalDate checkout, int pageSize, int page, String sortBy, String sortType, String sortSeats, String status) {
+        return customizedRoomRepository.findRoomsToBook(checkin, checkout, pageSize, page, sortBy, sortType, sortSeats, status);
     }
-
 
     /**
      * validates if checkin date is not after checkout date or checkout date is equal to checkin date
@@ -141,47 +131,6 @@ public class RoomServiceImpl implements IRoomService {
         } catch (DBException exception) {
             throw new AppException("Can't get all rooms' numbers");
         }
-    }
-
-    @Override
-    public List<Room> findPaginated(int pageNo, int pageSize, String sortBy, String sortType, String roomStatus, String roomSeats) {
-        logger.info("Fetching the paginated rooms from the DB.");
-        Sort sort = Objects.equals(sortBy, "class") ? Sort.by("roomClass") : Sort.by("price");
-
-        Sort sortOrder = Objects.equals(sortType, "asc") ? sort.ascending() : sort.descending();
-
-        sort.and(sortOrder);
-        Sort roomStatusSort;
-
-//        List<Room> result = customizedRoomRepository.findAvailablePageableRooms()
-
-//        if(roomStatus == "available") {
-        //roomStatusSort = Sort.by().
-//            Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);
-//            this.roomRepository.findByRoomClassEquals(pageable, "`");
-//        }
-
-//        sort = sort.and(roomStatusSort);
-
-
-//        Sort sort = sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortField).ascending() :
-//                Sort.by(sortField).descending();
-//
-//        Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);
-        //this.roomRepository.findBy()
-//        try{
-//            return this.roomRepository.findAll(pageable);
-//            Page<Room> result = (Page<Room>)
-//        var data = this.customizedRoomRepository.findAvailablePageableRooms();
-
-//            return null;
-//
-//        }
-//        catch (Exception exception)
-//        {
-//            var i =0;
-//        }
-        return null;
     }
 
 
