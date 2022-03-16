@@ -290,7 +290,6 @@ public class ClientAccountController {
                     new ArrayList<>();
 
         }
-//        List<Room> page = roomService.findPaginated(pageNo, pageSize, sortBy, sortType, roomStatus, roomSeats);
 
         // pagination parameters
         model.addAttribute("currentPage", page);

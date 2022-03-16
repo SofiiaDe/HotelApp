@@ -24,9 +24,9 @@ public interface IInvoiceService {
      * @throws AppException
      */
     void updateInvoiceStatusToCancelled() throws AppException;
-//
-//    List<Invoice> getInvoicesByStatus(String status) throws AppException;
-//
+
+    List<InvoiceDto> getInvoicesByStatus(String status) throws AppException;
+
     /**
      * Updates invoice's status to 'paid' in case of successful payment transaction.
      * @param invoiceId

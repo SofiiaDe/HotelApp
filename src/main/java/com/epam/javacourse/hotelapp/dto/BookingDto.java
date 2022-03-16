@@ -27,17 +27,20 @@ public class BookingDto {
     private int claimId;
     private User user;
 
+    private boolean status;
+
     public BookingDto() {
     }
 
     public BookingDto(int id, int userId, LocalDate checkin, LocalDate checkout,
-                      int roomId, int claimId) {
+                      int roomId, int claimId, boolean status) {
         this.id = id;
         this.userId = userId;
         this.checkin = checkin;
         this.checkout = checkout;
         this.roomId = roomId;
         this.claimId = claimId;
+        this.status = status;
     }
 
     public int getId() {
@@ -94,5 +97,13 @@ public class BookingDto {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public boolean isStatus() {
+        return status;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
     }
 }

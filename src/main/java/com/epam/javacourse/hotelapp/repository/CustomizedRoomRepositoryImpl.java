@@ -35,6 +35,8 @@ public class CustomizedRoomRepositoryImpl implements CustomizedRoomRepository {
     @Transactional
     @Override
     public List<Room> findRoomsToBook(LocalDate checkin, LocalDate checkout, int pageSize, int page, String sortBy, String sortType, String sortSeats, String roomStatus) {
+//    public List<Room> findRoomsToBook(LocalDate checkin, LocalDate checkout, int pageSize, int page, Sort sortType, String sortSeats, String roomStatus) {
+
         List<Room> paginatedResult = new ArrayList<>();
         StoredProcedureQuery spQuery;
 

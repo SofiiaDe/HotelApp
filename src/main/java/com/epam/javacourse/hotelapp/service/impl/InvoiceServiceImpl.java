@@ -56,6 +56,14 @@ public class InvoiceServiceImpl implements IInvoiceService {
         return result;
     }
 
+    @Override
+    public List<InvoiceDto> getInvoicesByStatus(String status) throws AppException {
+        List<Invoice> invoices = invoiceRepository.findInvoicesByStatus(status);
+        List<InvoiceDto> invoicesDto = new ArrayList<>();
+        invoices.forEach(x -> invoicesDto.add(InvoiceMapper.mapToDto(x)));
+        return invoicesDto;
+    }
+
 
     @Override
     public List<InvoiceManagerDto> getAllDetailedInvoices() throws AppException {
@@ -117,11 +125,6 @@ public class InvoiceServiceImpl implements IInvoiceService {
                         .filter(b -> b.getId() == invoice.getBookingId().getId())
                         .findFirst()
                         .get();
-//                Optional<Room> optionalRoom = roomService.getRoomById(booking.getRoomId());
-//                if (optionalRoom.isEmpty()) {
-//                    throw new ChangeSetPersister.NotFoundException();
-//                }
-//                Room room = optionalRoom.get();
 
                 Room room = roomRepository.getById(booking.getRoomId());
 
@@ -148,8 +151,8 @@ public class InvoiceServiceImpl implements IInvoiceService {
      *
      * @throws AppException
      */
-    @Scheduled(cron = "0 0 12 * * ?")
-    //@Scheduled(cron = "@daily"
+    @Transactional
+    @Scheduled(cron = "0 0 0 * * *", zone="Europe/Sofia")
     @Override
     public void updateInvoiceStatusToCancelled() throws AppException {
         try {
@@ -160,7 +163,6 @@ public class InvoiceServiceImpl implements IInvoiceService {
             for (InvoiceDto invoice : invoicesDto) {
                 if (invoice.getStatus().equals("new") &&
                         Helpers.getInvoiceDueDate(invoice).isBefore(LocalDate.now())) {
-                    invoice.setStatus("cancelled");
                     invoiceRepository.updateInvoiceStatus("cancelled", invoice.getId());
                 }
             }
@@ -188,7 +190,5 @@ public class InvoiceServiceImpl implements IInvoiceService {
             throw new AppException("Can't pay invoice", exception);
         }
     }
-
-
 
 }

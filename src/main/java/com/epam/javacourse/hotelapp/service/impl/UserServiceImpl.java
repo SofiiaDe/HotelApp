@@ -21,22 +21,13 @@ public class UserServiceImpl implements IUserService {
     private UserRepository userRepository;
 
     @Override
-    @Transactional(readOnly = true)
+    @Transactional
     public User createUser(UserDto userDto) throws UserAlreadyExistsException {
         if (emailExist(userDto.getEmail())) {
-            throw new UserAlreadyExistsException("There is an account with that email address: "
+            throw new UserAlreadyExistsException("There is an account with the following email address: "
                     + userDto.getEmail());
         }
-
-        User user = new User();
-        user.setFirstName(userDto.getFirstName());
-        user.setLastName(userDto.getLastName());
-        user.setEmail(userDto.getEmail());
-        user.setPassword(userDto.getPassword());
-        user.setCountry(userDto.getCountry());
-        user.setRole(userDto.getRole());
-
-        return userRepository.save(user);
+        return userRepository.save(UserMapper.mapFromDto(userDto));
     }
 
     private boolean emailExist(String email) {

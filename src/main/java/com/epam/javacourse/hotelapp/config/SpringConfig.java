@@ -16,7 +16,6 @@ import org.thymeleaf.spring5.view.ThymeleafViewResolver;
 @EnableScheduling
 @Configuration
 @ComponentScan("com.epam.javacourse.hotelapp")
-//@EnableWebMvc
 public class SpringConfig implements WebMvcConfigurer {
 
 

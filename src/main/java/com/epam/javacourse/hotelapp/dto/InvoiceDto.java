@@ -20,7 +20,6 @@ public class InvoiceDto {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate invoiceDate;
 
-
     private String status;
     private User user;
     private Booking booking;

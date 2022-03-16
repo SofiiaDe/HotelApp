@@ -37,10 +37,6 @@
     color: #404040;
 }
 
-.navLink {
-    color: white !important;
-}
-
 body {
     background-color: floralwhite;
 }
@@ -48,9 +44,6 @@ body {
 #web {
     margin-top: 55px;
 }
-
-
-/*home.css*/
 
 * {
     margin: 0;

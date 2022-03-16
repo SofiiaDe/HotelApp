@@ -97,24 +97,16 @@ public class RoomServiceImpl implements IRoomService {
         ensureDatesAreValid(checkinDate, checkoutDate);
         return customizedRoomRepository.findAvailableRooms(checkinDate, checkoutDate).size();
     }
-//
-//    @Override
-//    public List<Room> getAvailablePageableRoomsForPeriod(LocalDate checkin, LocalDate checkout, int pageSize, int page, Sort sortType, String sortSeats, String status) {
-////        return customizedRoomRepository.findPageableRooms(checkin, checkout, pageSize, page, sortType, sortSeats, status);
-//        return customizedRoomRepository.findPageableRoomsSortedByStatus(checkin, checkout, pageSize, page, sortType, sortSeats, status);
-//
-//    }
 
     @Override
     public List<Room> getRoomsForPeriod(LocalDate checkin, LocalDate checkout, int pageSize, int page, String sortBy, String sortType, String sortSeats, String status) {
         return customizedRoomRepository.findRoomsToBook(checkin, checkout, pageSize, page, sortBy, sortType, sortSeats, status);
     }
 
+
     /**
-     * validates if checkin date is not after checkout date or checkout date is equal to checkin date
+     * Validates if checkin date is not after checkout date or checkout date is equal to checkin date
      *
-     * @param checkinDate
-     * @param checkoutDate
      * @throws AppException in case of at least one of dates is incorrect
      */
     private void ensureDatesAreValid(LocalDate checkinDate, LocalDate checkoutDate) throws AppException {

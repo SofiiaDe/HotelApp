@@ -14,6 +14,7 @@ public class BookingMapper {
         dto.setCheckout(booking.getCheckoutDate());
         dto.setRoomId(booking.getRoomId());
         dto.setClaimId(booking.getClaimId());
+        dto.setStatus(booking.isStatus());
         return dto;
     }
 
@@ -26,6 +27,7 @@ public class BookingMapper {
         booking.setCheckoutDate(dto.getCheckout());
         booking.setRoomId(dto.getRoomId());
         booking.setClaimId(dto.getClaimId());
+        booking.setStatus(dto.isStatus());
         return booking;
     }
 }

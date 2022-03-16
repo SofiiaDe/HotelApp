@@ -5,7 +5,7 @@
 
     <title>Hotel Home page</title>
 
-    <link rel="stylesheet" href="/static/home.css">
+    <link rel="stylesheet" href="/css/style.css">
 
     <style>
 
@@ -37,9 +37,6 @@
         #web {
             margin-top: 55px;
         }
-
-
-        /*home.css*/
 
         * {
             margin: 0;
@@ -239,24 +236,9 @@
             </form>
         </div>
 
-<!--        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">-->
-<!--            <form class="form-inline" th:action="@{/language}">-->
-<!--                <button type="submit" name="en"-->
-<!--                        class="dropdown-item" onclick="changeFieldElement('langField', 'en')" >-->
-<!--                    <p th:text="#{main.menu.button.english}"></p>-->
-<!--                </button>-->
-<!--                <button type="submit" name="uk"-->
-<!--                        class="dropdown-item" onclick="changeFieldElement('langField', 'uk')">-->
-<!--                    <p th:text="#{main.menu.button.ukrainian}"></p>-->
-<!--                </button>-->
-<!--                <input name="langField" type="hidden" value="en" />-->
-<!--            </form>-->
-<!--        </div>-->
+
     </div>
 
-            </form>
-        </div>
-    </div>
 
     <div class="rightNav">
         <input type="text" name="search" id="search">
@@ -286,13 +268,21 @@
     <div class="paras" id="infoSection">
         <h1 class="sectionTag text-big" th:text="#{home.hotel.location}"></h1>
 
-        <p class="sectionSubTag text-small"
-           th:text="#{home.hotel.location.address}"><br
-            th:text="#{home.hotel.location.city}"><br
-            th:text="#{home.hotel.location.phone}"><br
-            th:text="#{home.hotel.location.email}">
-        </p>
+<!--        <p class="sectionSubTag text-small"-->
+<!--           th:text="#{home.hotel.location.address}"><br-->
+<!--            th:text="#{home.hotel.location.city}"><br-->
+<!--            th:text="#{home.hotel.location.phone}"><br-->
+<!--            th:text="#{home.hotel.location.email}">-->
+<!--        </p>-->
 
+        <p class="sectionSubTag text-small"
+           th:text="#{home.hotel.location.address}"></p>
+        <p class="sectionSubTag text-small"
+                th:text="#{home.hotel.location.city}"></p>
+        <p class="sectionSubTag text-small"
+                th:text="#{home.hotel.location.phone}"></p>
+        <p class="sectionSubTag text-small"
+           th:text="#{home.hotel.location.email}"></p>
     </div>
 
     <div class="thumbnail">

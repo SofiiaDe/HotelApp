@@ -31,6 +31,9 @@ public class Booking implements Serializable {
     @Column(name = "claim_id")
     private int claimId;
 
+    @Column(name = "status")
+    private boolean status;
+
     public Booking() {
     }
 
@@ -80,5 +83,13 @@ public class Booking implements Serializable {
 
     public void setCheckoutDate(LocalDate checkoutDate) {
         this.checkoutDate = checkoutDate;
+    }
+
+    public boolean isStatus() {
+        return status;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
     }
 }

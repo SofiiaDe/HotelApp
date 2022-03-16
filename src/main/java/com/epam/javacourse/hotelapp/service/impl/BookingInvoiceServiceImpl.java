@@ -4,6 +4,7 @@ import com.epam.javacourse.hotelapp.controller.ClientAccountController;
 import com.epam.javacourse.hotelapp.dto.BookingDto;
 import com.epam.javacourse.hotelapp.dto.InvoiceDto;
 import com.epam.javacourse.hotelapp.exception.AppException;
+import com.epam.javacourse.hotelapp.exception.DBException;
 import com.epam.javacourse.hotelapp.model.Booking;
 import com.epam.javacourse.hotelapp.model.Invoice;
 import com.epam.javacourse.hotelapp.model.Room;
@@ -11,12 +12,15 @@ import com.epam.javacourse.hotelapp.repository.BookingRepository;
 import com.epam.javacourse.hotelapp.repository.InvoiceRepository;
 import com.epam.javacourse.hotelapp.repository.RoomRepository;
 import com.epam.javacourse.hotelapp.service.interfaces.IBookingInvoiceService;
+import com.epam.javacourse.hotelapp.service.interfaces.IBookingService;
+import com.epam.javacourse.hotelapp.service.interfaces.IInvoiceService;
 import com.epam.javacourse.hotelapp.utils.Helpers;
 import com.epam.javacourse.hotelapp.utils.mappers.BookingMapper;
 import com.epam.javacourse.hotelapp.utils.mappers.InvoiceMapper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,6 +28,8 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.time.LocalDate;
 import java.time.Period;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class BookingInvoiceServiceImpl implements IBookingInvoiceService {
@@ -38,6 +44,12 @@ public class BookingInvoiceServiceImpl implements IBookingInvoiceService {
 
     @Autowired
     RoomRepository roomRepository;
+
+    @Autowired
+    IInvoiceService invoiceService;
+
+    @Autowired
+    IBookingService bookingService;
 
     @Override
     @Transactional
@@ -72,7 +84,28 @@ public class BookingInvoiceServiceImpl implements IBookingInvoiceService {
         amount = amount.add(totalCost);
 
         return amount;
-//            throw new AppException("Can't calculate invoice amount", exception);
+    }
 
+    /**
+     * Execute at 12 pm every day.
+     *
+     * @throws AppException
+     */
+    @Transactional
+    @Scheduled(cron = "0 0 0 * * *", zone="Europe/Sofia") // The pattern is: second, minute, hour, day, month, weekday
+    @Override
+    public void cancelUnpaidBookings() throws AppException {
+
+        try {
+            List<InvoiceDto> unpaidInvoicesDto = invoiceService.getInvoicesByStatus("cancelled");
+
+            for (InvoiceDto invoice : unpaidInvoicesDto) {
+                BookingDto bookingDto = bookingService.getBookingById(invoice.getBookingId());
+                bookingService.updateBookingStatus(bookingDto, false);
+            }
+        } catch (DBException exception) {
+            throw new AppException("Scheduler can't cancel unpaid booking", exception);
+        }
+        logger.info("Daily booking updates were completed by scheduler");
     }
 }

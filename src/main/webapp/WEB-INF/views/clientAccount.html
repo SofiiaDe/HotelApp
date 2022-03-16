@@ -5,7 +5,7 @@
 
     <title>Client account</title>
 
-    <link rel="stylesheet" href="/static/home.css">
+    <link rel="stylesheet" href="/css/stxxyle.css">
 
 
 </head>
@@ -108,7 +108,25 @@
                                     </div>
                                 </th:block>
                             </td>
-                            <td th:text="${booking.bookingStatus}"></td>
+                            <td>
+                            <th:block th:if="${booking.bookingStatus != null}" th:switch="${booking.bookingStatus.text}">
+                                <div th:case="'new'"
+                                     th:text="#{status.new}">
+                                </div>
+                                <div th:case="'cancelled'"
+                                     th:text="#{status.cancelled}">
+                                </div>
+                                <div th:case="'paid'"
+                                     th:text="#{status.paid}">
+                                </div>
+                                <div th:case="'finished'"
+                                     th:text="#{status.finished}">
+                                </div>
+                                <div th:case="'ongoing'"
+                                     th:text="#{status.ongoing}">
+                                </div>
+                            </th:block>
+                            </td>
 
                         </tr>
                     </th:block>

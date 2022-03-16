@@ -21,6 +21,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 
+import java.util.Objects;
+
 import static com.epam.javacourse.hotelapp.utils.Constants.PAGE_REGISTRATION;
 
 @Controller
@@ -33,9 +35,6 @@ public class RegistrationController {
 
     @Autowired
     IUserService userService;
-
-    @Autowired
-    private AuthenticationManager authenticationManager;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -53,11 +52,16 @@ public class RegistrationController {
             return PAGE_REGISTRATION;
 
         String password = userDto.getPassword();
+        String confirmPassword = userDto.getConfirmPassword();
         String email = userDto.getEmail();
         String firstName = userDto.getFirstName();
         String lastName = userDto.getLastName();
         String country = userDto.getCountry();
         String role = userDto.getRole().trim().toLowerCase();
+
+        if(!Objects.equals(password, confirmPassword)) {
+            bindingResult.rejectValue("confirmPassword", confirmPassword, "Passwords should match");
+        }
 
         if (email == null || password == null ||
                 firstName == null || lastName == null ||
@@ -65,10 +69,6 @@ public class RegistrationController {
             return PAGE_REGISTRATION;
         }
 
-        userDto.setFirstName(firstName);
-        userDto.setLastName(lastName);
-
-        userDto.setEmail(email);
         if (!Validator.isEmailValid(email, 50)) {
             throw new AppException("Invalid email");
         }
@@ -80,23 +80,20 @@ public class RegistrationController {
         String passHash = passwordEncoder.encode(password);
         userDto.setPassword(passHash);
 
-        userDto.setCountry(country);
-        userDto.setRole(role);
-
         boolean isUserCreated = false;
         try {
             userService.createUser(userDto);
             isUserCreated = true;
         } catch (UserAlreadyExistsException e) {
             model.addAttribute("isUserExists", true);
-            logger.warn("Such user is already exists", e);
+            logger.warn("Such user already exists", e);
         }
 
         String result;
         if (isUserCreated) {
             request.getSession().setAttribute("newUser", userDto);
             logger.info("Create user with id = {}", userDto.getId());
-            result = "redirect:/login";
+            result = "redirect:/login?success";
         } else {
             result = PAGE_REGISTRATION;
         }
@@ -104,5 +101,3 @@ public class RegistrationController {
     }
 
 }
-
-

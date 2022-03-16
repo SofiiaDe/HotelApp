@@ -17,10 +17,11 @@ public interface IBookingService {
 
     List<BookingDto> getBookingsByUserId(int userId) throws AppException;
 
-    void cancelUnpaidBookings() throws AppException;
-
     List<BookingManagerDto> getAllDetailedBookings(BookingStatus bookingStatus) throws AppException;
 
     List<BookingClientDto> getUserDetailedBookings(int userID) throws AppException;
 
+    BookingDto getBookingById(int bookingId) throws AppException;
+
+    void updateBookingStatus(BookingDto bookingDto, boolean status) throws AppException;
 }

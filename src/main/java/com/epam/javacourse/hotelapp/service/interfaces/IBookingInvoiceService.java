@@ -16,4 +16,6 @@ public interface IBookingInvoiceService {
 
     BigDecimal getInvoiceAmount(BookingDto booking) throws AppException;
 
+    void cancelUnpaidBookings() throws AppException;
+
 }
