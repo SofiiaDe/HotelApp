@@ -1,6 +1,7 @@
 
 package com.epam.javacourse.hotelapp.utils.validation;
 
+import com.epam.javacourse.hotelapp.exception.AppException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -64,6 +65,18 @@ public class Validator {
             logger.error("Cannot get date type", e);
         }
         return parsedDate;
+    }
+
+    /**
+     * Validates if checkin date is not after checkout date or checkout date is equal to checkin date
+     *
+     * @throws AppException in case of at least one of dates is incorrect
+     */
+    public static void ensureDatesAreValid(LocalDate checkinDate, LocalDate checkoutDate) throws AppException {
+        if (checkinDate.isAfter(checkoutDate) || checkoutDate.isEqual(checkinDate)) {
+            throw new AppException("Check-in and check-out dates are overlapping or equal");
+
+        }
     }
 
     /**

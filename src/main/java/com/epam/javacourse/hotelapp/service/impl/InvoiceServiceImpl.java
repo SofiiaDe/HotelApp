@@ -57,7 +57,7 @@ public class InvoiceServiceImpl implements IInvoiceService {
     }
 
     @Override
-    public List<InvoiceDto> getInvoicesByStatus(String status) throws AppException {
+    public List<InvoiceDto> getInvoicesByStatus(String status) {
         List<Invoice> invoices = invoiceRepository.findInvoicesByStatus(status);
         List<InvoiceDto> invoicesDto = new ArrayList<>();
         invoices.forEach(x -> invoicesDto.add(InvoiceMapper.mapToDto(x)));
@@ -98,7 +98,7 @@ public class InvoiceServiceImpl implements IInvoiceService {
                         ));
             }
             return result;
-        } catch (DBException exception) {
+        } catch (Exception exception) {
             throw new AppException("Can't retrieve all invoices to show in the manager's account", exception);
         }
     }
@@ -141,7 +141,7 @@ public class InvoiceServiceImpl implements IInvoiceService {
                         ));
             }
             return result;
-        } catch (DBException exception) {
+        } catch (Exception exception) {
             throw new AppException("Can't retrieve client's invoices to show in the client's account", exception);
         }
     }
@@ -166,7 +166,7 @@ public class InvoiceServiceImpl implements IInvoiceService {
                     invoiceRepository.updateInvoiceStatus("cancelled", invoice.getId());
                 }
             }
-        } catch (DBException exception) {
+        } catch (Exception exception) {
             throw new AppException("Scheduler can't cancel unpaid invoice", exception);
         }
 
@@ -186,7 +186,7 @@ public class InvoiceServiceImpl implements IInvoiceService {
             invoiceToBePaid.setInvoiceStatus("paid");
             invoiceRepository.updateInvoiceStatus("paid", invoiceToBePaid.getId());
 
-        } catch (DBException | ChangeSetPersister.NotFoundException exception) {
+        } catch (ChangeSetPersister.NotFoundException exception) {
             throw new AppException("Can't pay invoice", exception);
         }
     }

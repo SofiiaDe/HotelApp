@@ -84,7 +84,7 @@ public class BookingServiceImpl implements IBookingService {
             allUserBookings = bookingRepository.findBookingsByUserId(userID);
             result = new ArrayList<>();
 
-        } catch (DBException exception) {
+        } catch (Exception exception) {
             throw new AppException("Can't retrieve list of client's bookings to show in the client's account", exception);
         }
 
@@ -147,7 +147,7 @@ public class BookingServiceImpl implements IBookingService {
                                 invoiceDtos.stream().filter(i -> i.getBookingId() == booking.getId()).findFirst().get().getStatus().equals("paid")
                         ));
             }
-        } catch (DBException exception) {
+        } catch (Exception exception) {
             throw new AppException("Can't retrieve list of all bookings to show in the manager's account", exception);
         }
         return result;

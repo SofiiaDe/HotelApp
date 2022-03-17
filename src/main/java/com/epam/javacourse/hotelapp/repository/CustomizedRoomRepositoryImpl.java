@@ -1,5 +1,7 @@
 package com.epam.javacourse.hotelapp.repository;
 
+import com.epam.javacourse.hotelapp.exception.AppException;
+import com.epam.javacourse.hotelapp.exception.DBException;
 import com.epam.javacourse.hotelapp.model.Booking;
 import com.epam.javacourse.hotelapp.model.Room;
 import org.hibernate.annotations.SortType;
@@ -11,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
 import javax.persistence.criteria.*;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -32,9 +35,33 @@ public class CustomizedRoomRepositoryImpl implements CustomizedRoomRepository {
     @PersistenceContext
     private EntityManager entityManager;
 
+    @Override
+    public List<Room> findAvailableRoomsForPeriod(LocalDate checkin, LocalDate checkout) throws DBException {
+        List<Room> availableRooms;
+        StoredProcedureQuery spQuery;
+
+        try {
+            spQuery = this.entityManager.createNamedStoredProcedureQuery(PROCEDURE_AVAILABLE_ROOMS);
+
+            spQuery.setParameter("checkin_date", checkin);
+            spQuery.setParameter("checkout_date", checkout);
+            spQuery.setParameter("room_seats", null);
+
+            spQuery.execute();
+            availableRooms = (List<Room>) spQuery.getResultList();
+
+            entityManager.close();
+
+        } catch (Exception exception) {
+            throw new DBException("Can't find available rooms for defined period", exception);
+        }
+        return availableRooms;
+    }
+
     @Transactional
     @Override
-    public List<Room> findRoomsToBook(LocalDate checkin, LocalDate checkout, int pageSize, int page, String sortBy, String sortType, String sortSeats, String roomStatus) {
+    public List<Room> findRoomsToBook(LocalDate checkin, LocalDate checkout, int pageSize, int page,
+                                      String sortBy, String sortType, String sortSeats, String roomStatus) throws DBException {
 //    public List<Room> findRoomsToBook(LocalDate checkin, LocalDate checkout, int pageSize, int page, Sort sortType, String sortSeats, String roomStatus) {
 
         List<Room> paginatedResult = new ArrayList<>();
@@ -42,21 +69,21 @@ public class CustomizedRoomRepositoryImpl implements CustomizedRoomRepository {
 
         try {
             if (roomStatus == null) {
-                spQuery = this.entityManager.createNamedStoredProcedureQuery("getAvailableRooms");
+                spQuery = this.entityManager.createNamedStoredProcedureQuery(PROCEDURE_AVAILABLE_ROOMS);
             } else {
                 switch (roomStatus) {
                     case "reserved":
-                        spQuery = this.entityManager.createNamedStoredProcedureQuery("getReservedRooms");
+                        spQuery = this.entityManager.createNamedStoredProcedureQuery(PROCEDURE_RESERVED_ROOMS);
                         break;
                     case "booked":
-                        spQuery = this.entityManager.createNamedStoredProcedureQuery("getBookedRooms");
+                        spQuery = this.entityManager.createNamedStoredProcedureQuery(PROCEDURE_BOOKED_ROOMS);
                         break;
                     case "unavailable":
-                        spQuery = this.entityManager.createNamedStoredProcedureQuery("getUnavailableRooms");
+                        spQuery = this.entityManager.createNamedStoredProcedureQuery(PROCEDURE_UNAVAILABLE_ROOMS);
                         break;
 
                     default:
-                        spQuery = this.entityManager.createNamedStoredProcedureQuery("getAvailableRooms");
+                        spQuery = this.entityManager.createNamedStoredProcedureQuery(PROCEDURE_AVAILABLE_ROOMS);
                 }
             }
             spQuery.setParameter("checkin_date", checkin);
@@ -96,35 +123,10 @@ public class CustomizedRoomRepositoryImpl implements CustomizedRoomRepository {
                     .skip((long) pageSize * (page - 1)).limit(pageSize).collect(Collectors.toList());
 
         } catch (Exception exception) {
-            exception.printStackTrace();
+            throw new DBException("Can't find rooms to show in booking page", exception);
         }
 
         return paginatedResult;
-    }
-
-    @Override
-    public List<Room> findAvailableRooms(LocalDate checkin, LocalDate checkout) {
-
-        TypedQuery<Room> query = entityManager.createQuery(HQL_AVAILABLE_ROOMS, Room.class);
-        List<Room> availableRooms = query.getResultList();
-
-        List<Integer> test = getOccupiedRoomsIds(checkin, checkout);
-
-        return availableRooms.stream()
-                .filter(room -> !test.contains(room.getId())).collect(Collectors.toList());
-    }
-
-    private List<Integer> getOccupiedRoomsIds(LocalDate checkin, LocalDate checkout) {
-        String hql = "SELECT b FROM Booking b LEFT JOIN Invoice i ON i.bookingId.id = b.id " +
-                "WHERE (b.checkinDate <= :checkin AND b.checkoutDate >= :checkout) AND i.invoiceStatus != 'cancelled'";
-        TypedQuery<Booking> query = entityManager.createQuery(hql, Booking.class);
-        query.setParameter("checkin", checkin);
-        query.setParameter("checkout", checkout);
-        List<Booking> validBookings = query.getResultList();
-        return validBookings.stream()
-                .map(Booking::getRoomId)
-                .distinct()
-                .collect(Collectors.toList());
     }
 
 }

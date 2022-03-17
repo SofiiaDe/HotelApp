@@ -17,9 +17,9 @@ import java.util.List;
 public interface BookingRepository extends JpaRepository<Booking, Integer> {
 
     @Query("SELECT b FROM Booking b WHERE b.userId.id = :id")
-    List<Booking> findBookingsByUserId(@Param("id") int userId) throws DBException;
+    List<Booking> findBookingsByUserId(@Param("id") int userId);
 
     @Modifying
     @Query("UPDATE Booking b SET b.status = :status where b.id = :id")
-    void updateBookingStatus(@Param("status") boolean status, @Param("id") Integer bookingId) throws DBException;
+    void updateBookingStatus(@Param("status") boolean status, @Param("id") Integer bookingId);
 }

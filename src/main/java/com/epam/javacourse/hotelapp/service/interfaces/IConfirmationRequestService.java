@@ -8,11 +8,11 @@ import com.epam.javacourse.hotelapp.exception.AppException;
 import java.time.LocalDate;
 import java.util.List;
 
-public interface IConfirmationRequest {
+public interface IConfirmationRequestService {
 
     void createConfirmRequest(ConfirmationRequestDto confirmRequestDto);
 
-    ConfirmationRequestDto getConfirmRequestById(int confirmRequestId) throws AppException;
+    ConfirmationRequestDto getConfirmRequestById(int confirmRequestId);
 
 //    List<ConfirmationRequest> getConfirmRequestsByUserId(int userId) throws AppException;
 //

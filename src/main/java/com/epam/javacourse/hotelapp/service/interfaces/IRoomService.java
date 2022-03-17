@@ -13,16 +13,15 @@ import java.util.Optional;
 
 public interface IRoomService {
 
-    //    Optional<Room> getRoomById(int roomId) throws AppException;
-    Room getRoomById(int roomId) throws AppException;
+    RoomDto getRoomById(int roomId) throws AppException;
 
-    List<Room> getAllRooms();
+    List<RoomDto> getAllRooms();
 
     void createRoom(RoomDto room);
 
     void deleteRoomById(int id);
 
-    RoomDto chooseSuitableRoomForRequest(ClaimDto claimDto, List<RoomDto> freeRooms);
+    RoomDto chooseSuitableRoomForRequest(ClaimDto claimDto, List<RoomDto> freeRooms) throws AppException;
 
     List<Integer> getRoomsNumbers() throws AppException;
 
@@ -32,7 +31,8 @@ public interface IRoomService {
 
 //    Page<Room> findPaginated(int pageNo, int pageSize, String sortBy, String sortType, String roomStatus, String roomSeats);
 
-    List<Room> getRoomsForPeriod(LocalDate checkin, LocalDate checkout, int pageSize, int page, String sortBy, String sortType, String sortSeats, String status);
+    List<Room> getRoomsForPeriod(LocalDate checkin, LocalDate checkout, int pageSize, int page,
+                                 String sortBy, String sortType, String sortSeats, String status) throws AppException;
 //List<Room> getRoomsForPeriod(LocalDate checkin, LocalDate checkout, int pageSize, int page, Sort sortType, String sortSeats, String status);
 
 }

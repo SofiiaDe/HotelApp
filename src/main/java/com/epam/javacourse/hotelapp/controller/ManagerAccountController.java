@@ -2,12 +2,9 @@ package com.epam.javacourse.hotelapp.controller;
 
 import com.epam.javacourse.hotelapp.dto.*;
 import com.epam.javacourse.hotelapp.exception.AppException;
-import com.epam.javacourse.hotelapp.model.Claim;
-import com.epam.javacourse.hotelapp.model.ConfirmationRequest;
 import com.epam.javacourse.hotelapp.model.Room;
 import com.epam.javacourse.hotelapp.service.interfaces.*;
 import com.epam.javacourse.hotelapp.utils.enums.BookingStatus;
-import com.epam.javacourse.hotelapp.utils.mappers.BookingMapper;
 import com.epam.javacourse.hotelapp.utils.mappers.ClaimMapper;
 import com.epam.javacourse.hotelapp.utils.mappers.RoomMapper;
 import com.epam.javacourse.hotelapp.utils.mappers.UserMapper;
@@ -23,7 +20,6 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,13 +34,13 @@ public class ManagerAccountController {
 
     private final IClaimService claimService;
     private final IBookingService bookingService;
-    private final IConfirmationRequest confirmRequestService;
+    private final IConfirmationRequestService confirmRequestService;
     private final IInvoiceService invoiceService;
     private final IRoomService roomService;
     private final IUserService userService;
 
     public ManagerAccountController(IClaimService claimService, IBookingService bookingService,
-                                    IConfirmationRequest confirmRequestService, IInvoiceService invoiceService,
+                                    IConfirmationRequestService confirmRequestService, IInvoiceService invoiceService,
                                     IRoomService roomService, IUserService userService) {
         this.claimService = claimService;
         this.bookingService = bookingService;
@@ -120,21 +116,13 @@ public class ManagerAccountController {
 
         List<RoomDto> freeRoomsRequest = new ArrayList<>();
 
-        try {
-            List<Room> freeRooms = roomService.getFreeRoomsForPeriod(checkin, checkout);
-            freeRooms.forEach(x -> freeRoomsRequest.add(RoomMapper.mapToDto(x)));
-        } catch (AppException exception) {
-            String errorMessage = "Can't retrieve free rooms for period";
-            logger.error(errorMessage, exception);
-            request.setAttribute("errorMessage", "Can't retrieve rooms data");
-            return PAGE_ERROR;
-        }
-
-        String notification;
+        List<Room> freeRooms = roomService.getFreeRoomsForPeriod(checkin, checkout);
+        freeRooms.forEach(x -> freeRoomsRequest.add(RoomMapper.mapToDto(x)));
 
         if (freeRoomsRequest.isEmpty()) {
-            notification = "There are no free rooms.";
-            request.setAttribute("notification", notification);
+            String notification = "There are no free rooms.";
+            logger.info(notification);
+            request.setAttribute("error", notification);
             return PAGE_MANAGER_ACCOUNT;
         }
 
@@ -170,15 +158,34 @@ public class ManagerAccountController {
 
     @PostMapping("/addRoom")
     public String saveRoom(@Valid RoomDto newRoom,
-                           BindingResult bindingResult) throws AppException {
+                           BindingResult bindingResult) {
 
         if (bindingResult.hasErrors())
             return "redirect:/manager1/addRoom";
-
 
         roomService.createRoom(newRoom);
 
         return REDIRECT_MANAGER_ACCOUNT;
     }
+
+    @GetMapping("/showFormForUpdate/{id}")
+    public String showFormForUpdate(@PathVariable(value = "id") int id, Model model) throws AppException {
+
+        // get room from the service
+        RoomDto room = roomService.getRoomById(id);
+
+        // set room as a model attribute to pre-populate the form
+        model.addAttribute("room", room);
+        return "updateRoom";
+    }
+
+    @GetMapping("/deleteRoom/{id}")
+    public String deleteEmployee(@PathVariable(value = "id") int id) {
+
+        // call delete room method
+        this.roomService.deleteRoomById(id);
+        return "redirect:/";
+    }
+
 
 }

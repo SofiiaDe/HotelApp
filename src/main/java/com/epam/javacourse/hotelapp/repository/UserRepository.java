@@ -20,7 +20,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     User findUserByEmail(@Param("email") String email);
 
     @Query("SELECT u FROM User u WHERE u.id IN :ids")
-    List<User> findUsersByIds(@Param("ids") List<Integer> ids) throws DBException;
+    List<User> findUsersByIds(@Param("ids") List<Integer> ids);
 
 
 }

@@ -1,25 +1,31 @@
 package com.epam.javacourse.hotelapp.service.impl;
 
 import com.epam.javacourse.hotelapp.dto.ClaimDto;
+import com.epam.javacourse.hotelapp.dto.InvoiceDto;
 import com.epam.javacourse.hotelapp.dto.RoomDto;
 import com.epam.javacourse.hotelapp.exception.AppException;
 import com.epam.javacourse.hotelapp.exception.DBException;
+import com.epam.javacourse.hotelapp.model.ConfirmationRequest;
+import com.epam.javacourse.hotelapp.model.Invoice;
 import com.epam.javacourse.hotelapp.model.Room;
 import com.epam.javacourse.hotelapp.repository.CustomizedRoomRepository;
 import com.epam.javacourse.hotelapp.repository.RoomRepository;
 import com.epam.javacourse.hotelapp.service.interfaces.IRoomService;
+import com.epam.javacourse.hotelapp.utils.mappers.ConfirmationRequestMapper;
+import com.epam.javacourse.hotelapp.utils.mappers.InvoiceMapper;
 import com.epam.javacourse.hotelapp.utils.mappers.RoomMapper;
+import com.epam.javacourse.hotelapp.utils.validation.Validator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
 
 import org.springframework.stereotype.Service;
 
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -39,20 +45,25 @@ public class RoomServiceImpl implements IRoomService {
     }
 
     @Override
-    public List<Room> getAllRooms() {
-        return roomRepository.findAll();
+    public List<RoomDto> getAllRooms() {
+        List<Room> rooms = roomRepository.findAll();
+        List<RoomDto> roomsDto = new ArrayList<>();
+        rooms.forEach(x -> roomsDto.add(RoomMapper.mapToDto(x)));
+        return roomsDto;
     }
 
     @Override
-    public Room getRoomById(int id) throws AppException {
-        Optional<Room> optional = roomRepository.findById(id);
+    public RoomDto getRoomById(int id) {
+
+        Optional<Room> optionalRoom = roomRepository.findById(id);
         Room room;
-        if (optional.isPresent()) {
-            room = optional.get();
+        if (optionalRoom.isEmpty()) {
+            logger.error("Can't get room with id = {}", id);
+            throw new NoSuchElementException("Not found room with id = " + id);
         } else {
-            throw new RuntimeException("Room not found for id :: " + id);
+            room = optionalRoom.get();
         }
-        return room;
+        return RoomMapper.mapToDto(room);
     }
 
     @Override
@@ -61,7 +72,7 @@ public class RoomServiceImpl implements IRoomService {
     }
 
     @Override
-    public RoomDto chooseSuitableRoomForRequest(ClaimDto claimDto, List<RoomDto> freeRooms) {
+    public RoomDto chooseSuitableRoomForRequest(ClaimDto claimDto, List<RoomDto> freeRooms) throws AppException {
 
         RoomDto suitableRoom = null;
 
@@ -81,6 +92,7 @@ public class RoomServiceImpl implements IRoomService {
         } catch (Exception exception) {
             String errorMessage = "Can't select suitable room to make confirmation request for application with id=" + claimDto.getId();
             logger.error(errorMessage, exception);
+            throw new AppException(errorMessage, exception);
         }
         return suitableRoom;
     }
@@ -88,39 +100,40 @@ public class RoomServiceImpl implements IRoomService {
 
     @Override
     public List<Room> getFreeRoomsForPeriod(LocalDate checkin, LocalDate checkout) throws AppException {
-        return customizedRoomRepository.findAvailableRooms(checkin, checkout);
-    }
-
-    @Override
-    public int getRoomsNumberForPeriod(LocalDate checkinDate, LocalDate checkoutDate) throws AppException {
-
-        ensureDatesAreValid(checkinDate, checkoutDate);
-        return customizedRoomRepository.findAvailableRooms(checkinDate, checkoutDate).size();
-    }
-
-    @Override
-    public List<Room> getRoomsForPeriod(LocalDate checkin, LocalDate checkout, int pageSize, int page, String sortBy, String sortType, String sortSeats, String status) {
-        return customizedRoomRepository.findRoomsToBook(checkin, checkout, pageSize, page, sortBy, sortType, sortSeats, status);
-    }
-
-
-    /**
-     * Validates if checkin date is not after checkout date or checkout date is equal to checkin date
-     *
-     * @throws AppException in case of at least one of dates is incorrect
-     */
-    private void ensureDatesAreValid(LocalDate checkinDate, LocalDate checkoutDate) throws AppException {
-        if (checkinDate.isAfter(checkoutDate) || checkoutDate.isEqual(checkinDate)) {
-            throw new AppException("Check-in and check-out dates are overlapping or equal");
-
+        try {
+            return customizedRoomRepository.findAvailableRoomsForPeriod(checkin, checkout);
+        } catch (DBException exception) {
+            throw new AppException("Can't retrieve free rooms for the specified period from " + checkin + " to " + checkout, exception);
         }
     }
+
+    @Override
+    public int getRoomsNumberForPeriod(LocalDate checkin, LocalDate checkout) throws AppException {
+        try {
+            Validator.ensureDatesAreValid(checkin, checkout);
+            return customizedRoomRepository.findAvailableRoomsForPeriod(checkin, checkout).size();
+        } catch (DBException exception) {
+            throw new AppException("Can't retrieve free rooms number for the specified period from " + checkin + " to " + checkout, exception);
+        }
+    }
+
+    @Override
+    public List<Room> getRoomsForPeriod(LocalDate checkin, LocalDate checkout, int pageSize, int page,
+                                        String sortBy, String sortType, String sortSeats, String status) throws AppException {
+        try {
+            return customizedRoomRepository.findRoomsToBook(checkin, checkout, pageSize, page, sortBy, sortType, sortSeats, status);
+        } catch (DBException exception) {
+            throw new AppException("Can't retrieve rooms for the specified period from " + checkin + " to " + checkout, exception);
+        }
+
+    }
+
 
     @Override
     public List<Integer> getRoomsNumbers() throws AppException {
         try {
             return roomRepository.findAllRoomNumbers();
-        } catch (DBException exception) {
+        } catch (Exception exception) {
             throw new AppException("Can't get all rooms' numbers");
         }
     }

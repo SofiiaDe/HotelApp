@@ -15,6 +15,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.crossstore.ChangeSetPersister;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -55,6 +56,7 @@ public class ClaimServiceImpl implements IClaimService {
             claim = optionalClaim.get();
         } else {
             logger.error("Can't get claim with id = {}", claimId);
+            throw new NoSuchElementException("Not found claim with id = " + claimId);
         }
 
         return ClaimMapper.mapToDto(claim);
@@ -95,7 +97,7 @@ public class ClaimServiceImpl implements IClaimService {
                         ));
             }
             return result;
-        } catch (DBException exception) {
+        } catch (Exception exception) {
             throw new AppException("Can't retrieve client's claims to show in the client's account", exception);
         }
     }
@@ -139,7 +141,7 @@ public class ClaimServiceImpl implements IClaimService {
             }
             return result;
 
-        } catch (DBException | ChangeSetPersister.NotFoundException exception) {
+        } catch (ChangeSetPersister.NotFoundException exception) {
             throw new AppException("Can't retrieve all applications to show in the manager's account", exception);
         }
 

@@ -103,7 +103,7 @@ public class BookingInvoiceServiceImpl implements IBookingInvoiceService {
                 BookingDto bookingDto = bookingService.getBookingById(invoice.getBookingId());
                 bookingService.updateBookingStatus(bookingDto, false);
             }
-        } catch (DBException exception) {
+        } catch (Exception exception) {
             throw new AppException("Scheduler can't cancel unpaid booking", exception);
         }
         logger.info("Daily booking updates were completed by scheduler");

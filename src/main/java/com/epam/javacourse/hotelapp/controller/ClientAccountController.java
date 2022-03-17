@@ -9,7 +9,6 @@ import com.epam.javacourse.hotelapp.utils.mappers.UserMapper;
 import com.epam.javacourse.hotelapp.utils.validation.Validator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -33,13 +32,13 @@ public class ClientAccountController {
 
     private final IClaimService claimService;
     private final IBookingService bookingService;
-    private final IConfirmationRequest confirmRequestService;
+    private final IConfirmationRequestService confirmRequestService;
     private final IInvoiceService invoiceService;
     private final IRoomService roomService;
     private final IBookingInvoiceService bookingInvoiceService;
 
     public ClientAccountController(IClaimService claimService, IBookingService bookingService,
-                                   IConfirmationRequest confirmRequestService, IInvoiceService invoiceService,
+                                   IConfirmationRequestService confirmRequestService, IInvoiceService invoiceService,
                                    IRoomService roomService, IBookingInvoiceService bookingInvoiceService) {
         this.claimService = claimService;
         this.bookingService = bookingService;
@@ -127,112 +126,9 @@ public class ClientAccountController {
         return REDIRECT_CLIENT_ACCOUNT;
     }
 
-    @GetMapping("/showNewRoomForm")
-    public String showNewRoomForm(Model model) {
-        // create model attribute to bind form data
-        Room room = new Room();
-        model.addAttribute("room", room);
-        return "new_room";
-    }
-
-
-    @GetMapping("/showFormForUpdate/{id}")
-    public String showFormForUpdate(@PathVariable(value = "id") int id, Model model) throws AppException {
-
-        // get room from the service
-        Room room = roomService.getRoomById(id);
-
-        // set room as a model attribute to pre-populate the form
-        model.addAttribute("room", room);
-        return "update_room";
-    }
-
-    @GetMapping("/deleteRoom/{id}")
-    public String deleteEmployee(@PathVariable(value = "id") int id) {
-
-        // call delete room method
-        this.roomService.deleteRoomById(id);
-        return "redirect:/";
-    }
-
-
-//    @GetMapping("/book")
-//    public String findPaginated(//@PathVariable(value = "pageNo")
-//                                @RequestParam(value = "page", required = false)
-//                                        Integer page,
-//                                @RequestParam(value = "sortBy", required = false)
-//                                        String sortByParam,
-//                                @RequestParam(value = "sortType", required = false)
-//                                        String sortTypeParam,
-//                                @RequestParam(value = "status", required = false)
-//                                        String roomStatusParam,
-//                                @RequestParam(value = "seats", required = false)
-//                                        String roomSeatsParam,
-//                                @RequestParam(value = "checkin", required = false)
-//                                        String checkinDate,
-//                                @RequestParam(value = "checkout", required = false)
-//                                        String checkoutDate,
-//                                Model model) throws AppException {
-//        int pageSize = 5;
-//
-//        if (page == null || page <= 0) {
-//            page = 1;
-//        }
-//
-////        List<Room> freeRooms = page.getContent();
-//        List<Room> freeRooms;
-//        int totalFreeRooms;
-//        int totalPageCount = 0;
-//        Sort sortBy;
-//        Sort sortType;
-//
-//        if (checkinDate == null || checkoutDate == null) {
-//            freeRooms = Collections.emptyList();
-//
-//        } else {
-//            LocalDate checkin = Validator.dateParameterToLocalDate(checkinDate);
-//            LocalDate checkout = Validator.dateParameterToLocalDate(checkoutDate);
-//
-//            if (sortByParam == null) {
-//                sortBy = Sort.unsorted();
-//            } else {
-//                sortBy = Objects.equals(sortByParam, "class") ? Sort.by("roomClass") : Sort.by("price");
-//            }
-//
-//            if (sortTypeParam == null) {
-//                sortType = Sort.unsorted();
-//            } else {
-//                sortType = Objects.equals(sortTypeParam, "asc") ? sortBy.ascending() : sortBy.descending();
-//            }
-//
-//            freeRooms = roomService.getAvailablePageableRoomsForPeriod(checkin, checkout, pageSize, page, sortType, roomSeatsParam, roomStatusParam);
-//
-//            totalFreeRooms = roomService.getRoomsNumberForPeriod(checkin, checkout);
-//            totalPageCount = (int) Math.ceil((float) totalFreeRooms / pageSize);
-//
-//        }
-////        List<Room> page = roomService.findPaginated(pageNo, pageSize, sortBy, sortType, roomStatus, roomSeats);
-//
-//        // pagination parameters
-//        model.addAttribute("currentPage", page);
-//        model.addAttribute("totalPageCount", totalPageCount);
-//
-//        // sorting parameters
-////        model.addAttribute("sortBy", sortBy);
-////        model.addAttribute("sortType", sortType);
-////        model.addAttribute("status", roomStatus);
-//        model.addAttribute("seats", roomSeatsParam);
-//        model.addAttribute("checkin", checkinDate);
-//        model.addAttribute("checkout", checkoutDate);
-//
-//        // free rooms
-//        model.addAttribute("freeRooms", freeRooms);
-//        return PAGE_FREE_ROOMS;
-//    }
 
     @GetMapping("/book")
-    public String findPaginated(//@PathVariable(value = "pageNo")
-                                @RequestParam(value = "page", required = false)
+    public String findPaginated(@RequestParam(value = "page", required = false)
                                         Integer page,
                                 @RequestParam(value = "sortBy", required = false)
                                         String sortByParam,
@@ -253,12 +149,11 @@ public class ClientAccountController {
             page = 1;
         }
 
-//        List<Room> freeRooms = page.getContent();
         List<Room> freeRooms;
         int totalFreeRooms;
         int totalPageCount = 0;
-        Sort sortBy;
-        Sort sortType;
+//        Sort sortBy;
+//        Sort sortType;
 
         if (checkinDate == null || checkoutDate == null) {
             freeRooms = Collections.emptyList();
@@ -330,8 +225,6 @@ public class ClientAccountController {
         if (!Validator.isCorrectDate(checkinDate, checkoutDate, request)) {
             throw new AppException("Incorrect dates");
         }
-
-        int roomId = bookingDto.getRoomId();
 
         bookingDto.setUserId(authorisedUser.getId());
         bookingDto.setUser(UserMapper.mapFromDto(authorisedUser));
