@@ -3,6 +3,7 @@ package com.epam.javacourse.hotelapp.service.impl;
 import com.epam.javacourse.hotelapp.dto.*;
 import com.epam.javacourse.hotelapp.exception.AppException;
 import com.epam.javacourse.hotelapp.exception.DBException;
+import com.epam.javacourse.hotelapp.model.Booking;
 import com.epam.javacourse.hotelapp.model.Invoice;
 import com.epam.javacourse.hotelapp.model.Room;
 import com.epam.javacourse.hotelapp.model.User;
@@ -47,6 +48,19 @@ public class InvoiceServiceImpl implements IInvoiceService {
     @Autowired
     UserRepository userRepository;
 
+    @Override
+    public InvoiceDto getInvoiceById(int invoiceId) {
+
+        Optional<Invoice> optionalInvoice = invoiceRepository.findById(invoiceId);
+        Invoice invoice = null;
+        if (optionalInvoice.isPresent()) {
+            invoice = optionalInvoice.get();
+        } else {
+            logger.error("Can't get invoice with id = {}", invoiceId);
+        }
+
+        return InvoiceMapper.mapToDto(invoice);
+    }
 
     @Override
     public List<InvoiceDto> getInvoicesByBookingsIds(List<Integer> bookingsIds) throws AppException {
@@ -147,22 +161,19 @@ public class InvoiceServiceImpl implements IInvoiceService {
     }
 
     /**
-     * Execute at 12 pm every day.
+     * Execute at 1 am every day.
      *
      * @throws AppException
      */
     @Transactional
-    @Scheduled(cron = "0 0 0 * * *", zone="Europe/Sofia")
+    @Scheduled(cron = "0 0 1 * * *", zone = "Europe/Sofia")
     @Override
     public void updateInvoiceStatusToCancelled() throws AppException {
         try {
             List<Invoice> allInvoices = invoiceRepository.findAll();
-            List<InvoiceDto> invoicesDto = new ArrayList<>();
-            allInvoices.forEach(x -> invoicesDto.add(InvoiceMapper.mapToDto(x)));
-
-            for (InvoiceDto invoice : invoicesDto) {
-                if (invoice.getStatus().equals("new") &&
-                        Helpers.getInvoiceDueDate(invoice).isBefore(LocalDate.now())) {
+            for (Invoice invoice : allInvoices) {
+                if (invoice.getInvoiceStatus().equals("new") &&
+                        Helpers.getInvoiceDueDate(InvoiceMapper.mapToDto(invoice)).isBefore(LocalDate.now())) {
                     invoiceRepository.updateInvoiceStatus("cancelled", invoice.getId());
                 }
             }
@@ -171,24 +182,6 @@ public class InvoiceServiceImpl implements IInvoiceService {
         }
 
         logger.info("Daily invoice updates were completed by scheduler");
-    }
-
-    @Transactional
-    @Override
-    public void payInvoice(int invoiceId) throws AppException {
-        try {
-            Optional<Invoice> optionalInvoice = invoiceRepository.findById(invoiceId);
-
-            if (optionalInvoice.isEmpty()) {
-                throw new ChangeSetPersister.NotFoundException();
-            }
-            Invoice invoiceToBePaid = optionalInvoice.get();
-            invoiceToBePaid.setInvoiceStatus("paid");
-            invoiceRepository.updateInvoiceStatus("paid", invoiceToBePaid.getId());
-
-        } catch (ChangeSetPersister.NotFoundException exception) {
-            throw new AppException("Can't pay invoice", exception);
-        }
     }
 
 }

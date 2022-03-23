@@ -14,12 +14,15 @@ import com.epam.javacourse.hotelapp.repository.RoomRepository;
 import com.epam.javacourse.hotelapp.service.interfaces.IBookingInvoiceService;
 import com.epam.javacourse.hotelapp.service.interfaces.IBookingService;
 import com.epam.javacourse.hotelapp.service.interfaces.IInvoiceService;
+import com.epam.javacourse.hotelapp.service.interfaces.IUserService;
 import com.epam.javacourse.hotelapp.utils.Helpers;
 import com.epam.javacourse.hotelapp.utils.mappers.BookingMapper;
 import com.epam.javacourse.hotelapp.utils.mappers.InvoiceMapper;
+import com.epam.javacourse.hotelapp.utils.mappers.UserMapper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,6 +33,7 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class BookingInvoiceServiceImpl implements IBookingInvoiceService {
@@ -50,6 +54,9 @@ public class BookingInvoiceServiceImpl implements IBookingInvoiceService {
 
     @Autowired
     IBookingService bookingService;
+
+    @Autowired
+    IUserService userService;
 
     @Override
     @Transactional
@@ -87,12 +94,13 @@ public class BookingInvoiceServiceImpl implements IBookingInvoiceService {
     }
 
     /**
-     * Execute at 12 pm every day.
+     * Execute at 1 am every day.
      *
      * @throws AppException
      */
     @Transactional
-    @Scheduled(cron = "0 0 0 * * *", zone="Europe/Sofia") // The pattern is: second, minute, hour, day, month, weekday
+    @Scheduled(cron = "0 0 1 * * *", zone = "Europe/Sofia")
+    // The pattern is: second, minute, hour, day, month, weekday
     @Override
     public void cancelUnpaidBookings() throws AppException {
 
@@ -107,5 +115,19 @@ public class BookingInvoiceServiceImpl implements IBookingInvoiceService {
             throw new AppException("Scheduler can't cancel unpaid booking", exception);
         }
         logger.info("Daily booking updates were completed by scheduler");
+    }
+
+    @Transactional
+    @Override
+    public void payInvoice(int invoiceId) throws AppException {
+        try {
+            InvoiceDto invoiceDto = invoiceService.getInvoiceById(invoiceId);
+            invoiceDto.setUser(UserMapper.mapFromDto(userService.getUserById(invoiceDto.getUserId())));
+            invoiceDto.setBooking(BookingMapper.mapFromDto(bookingService.getBookingById(invoiceDto.getBookingId())));
+            invoiceRepository.updateInvoiceStatus("paid", invoiceId);
+            bookingRepository.updateBookingStatus(true, invoiceDto.getBookingId());
+        } catch (Exception exception) {
+            throw new AppException("Can't pay invoice", exception);
+        }
     }
 }

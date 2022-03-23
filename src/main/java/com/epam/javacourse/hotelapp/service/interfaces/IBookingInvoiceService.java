@@ -18,4 +18,10 @@ public interface IBookingInvoiceService {
 
     void cancelUnpaidBookings() throws AppException;
 
+    /**
+     * Updates invoice's status to 'paid' in case of successful payment transaction.
+     * @param invoiceId
+     * @throws AppException
+     */
+    void payInvoice(int invoiceId) throws AppException;
 }

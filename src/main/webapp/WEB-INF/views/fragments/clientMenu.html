@@ -14,7 +14,7 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark" th:fragment="clientMenu">
 
     <a class="navbar-brand" href="/client/account">
-        <img src="pictures/logo-hotel.jpg" width="30" height="30" class="d-inline-block align-top" alt=""
+        <img th:src="@{/pictures/logo-hotel.jpg}" alt="logo" width="30" height="30" class="d-inline-block align-top"
              th:text="#{client.menu.label.client}"/>
     </a>
 

@@ -110,24 +110,23 @@
                             </td>
                             <td>
                             <th:block th:if="${booking.bookingStatus != null}" th:switch="${booking.bookingStatus.text}">
-                                <div th:case="'new'"
+                                <div class="badge badge-danger text-uppercase" th:case="'new'"
                                      th:text="#{status.new}">
                                 </div>
-                                <div th:case="'cancelled'"
+                                <div class="badge badge-secondary text-uppercase" th:case="'cancelled'"
                                      th:text="#{status.cancelled}">
                                 </div>
-                                <div th:case="'paid'"
+                                <div class="badge badge-success text-uppercase" th:case="'paid'"
                                      th:text="#{status.paid}">
                                 </div>
-                                <div th:case="'finished'"
+                                <div class="badge badge-warning text-uppercase" th:case="'finished'"
                                      th:text="#{status.finished}">
                                 </div>
-                                <div th:case="'ongoing'"
+                                <div class="badge badge-primary text-uppercase" th:case="'ongoing'"
                                      th:text="#{status.ongoing}">
                                 </div>
                             </th:block>
                             </td>
-
                         </tr>
                     </th:block>
                     </tbody>

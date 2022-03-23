@@ -27,12 +27,5 @@ public interface IInvoiceService {
 
     List<InvoiceDto> getInvoicesByStatus(String status) throws AppException;
 
-    /**
-     * Updates invoice's status to 'paid' in case of successful payment transaction.
-     * @param invoiceId
-     * @throws AppException
-     */
-    void payInvoice(int invoiceId) throws AppException;
-//
-//    Invoice getInvoiceById(int invoiceId) throws AppException;
+    InvoiceDto getInvoiceById(int invoiceId);
 }

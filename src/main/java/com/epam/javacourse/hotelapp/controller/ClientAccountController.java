@@ -263,7 +263,7 @@ public class ClientAccountController {
     @PostMapping(value = "/payInvoice")
     public String payInvoice(@RequestParam(value = "invoiceId") Integer invoiceId) throws AppException {
 
-        invoiceService.payInvoice(invoiceId);
+        bookingInvoiceService.payInvoice(invoiceId);
 
         return REDIRECT_CLIENT_ACCOUNT;
     }
