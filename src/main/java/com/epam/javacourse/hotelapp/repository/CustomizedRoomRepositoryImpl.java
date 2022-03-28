@@ -1,24 +1,15 @@
 package com.epam.javacourse.hotelapp.repository;
 
-import com.epam.javacourse.hotelapp.exception.AppException;
 import com.epam.javacourse.hotelapp.exception.DBException;
-import com.epam.javacourse.hotelapp.model.Booking;
 import com.epam.javacourse.hotelapp.model.Room;
-import org.hibernate.annotations.SortType;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
-import javax.persistence.criteria.*;
-import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static com.epam.javacourse.hotelapp.utils.Constants.*;
@@ -27,13 +18,19 @@ import static com.epam.javacourse.hotelapp.utils.Constants.*;
 @Component
 public class CustomizedRoomRepositoryImpl implements CustomizedRoomRepository {
 
-    @Autowired
-    @Lazy
-    RoomRepository roomRepository;
+//    @Autowired
+//    @Lazy
+//    RoomRepository roomRepository;
 
+    private final RoomRepository roomRepository;
 
     @PersistenceContext
     private EntityManager entityManager;
+
+    @Autowired
+    public CustomizedRoomRepositoryImpl(RoomRepository roomRepository) {
+        this.roomRepository = roomRepository;
+    }
 
     @Override
     public List<Room> findAvailableRoomsForPeriod(LocalDate checkin, LocalDate checkout) throws DBException {

@@ -1,11 +1,9 @@
 package com.epam.javacourse.hotelapp.service.impl;
 
-import com.epam.javacourse.hotelapp.controller.ManagerAccountController;
 import com.epam.javacourse.hotelapp.dto.ClaimClientDto;
 import com.epam.javacourse.hotelapp.dto.ClaimDto;
 import com.epam.javacourse.hotelapp.dto.ClaimManagerDto;
 import com.epam.javacourse.hotelapp.exception.AppException;
-import com.epam.javacourse.hotelapp.exception.DBException;
 import com.epam.javacourse.hotelapp.model.Claim;
 import com.epam.javacourse.hotelapp.model.User;
 import com.epam.javacourse.hotelapp.repository.*;
@@ -15,7 +13,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.crossstore.ChangeSetPersister;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,20 +24,16 @@ public class ClaimServiceImpl implements IClaimService {
 
     private static final Logger logger = LogManager.getLogger(ClaimServiceImpl.class);
 
-    @Autowired
-    ClaimRepository claimRepository;
+    private final ClaimRepository claimRepository;
+
+    private final UserRepository userRepository;
 
     @Autowired
-    UserRepository userRepository;
+    public ClaimServiceImpl(ClaimRepository claimRepository, UserRepository userRepository) {
+        this.claimRepository = claimRepository;
+        this.userRepository = userRepository;
+    }
 
-    @Autowired
-    InvoiceRepository invoiceRepository;
-
-    @Autowired
-    BookingRepository bookingRepository;
-
-    @Autowired
-    RoomRepository roomRepository;
 
     @Override
     @Transactional

@@ -8,7 +8,6 @@ import com.epam.javacourse.hotelapp.utils.validation.Validator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -30,14 +29,15 @@ public class RegistrationController {
 
     private static final Logger logger = LogManager.getLogger(RegistrationController.class);
 
-    public RegistrationController() {
+    private final IUserService userService;
+
+    private final PasswordEncoder passwordEncoder;
+
+    @Autowired
+    public RegistrationController(IUserService userService, PasswordEncoder passwordEncoder) {
+        this.userService = userService;
+        this.passwordEncoder = passwordEncoder;
     }
-
-    @Autowired
-    IUserService userService;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
 
     @GetMapping("/register")
     public String newPerson(@ModelAttribute("user") UserDto userDto) {

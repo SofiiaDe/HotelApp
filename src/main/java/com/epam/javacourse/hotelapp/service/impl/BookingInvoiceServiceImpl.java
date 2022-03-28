@@ -1,10 +1,8 @@
 package com.epam.javacourse.hotelapp.service.impl;
 
-import com.epam.javacourse.hotelapp.controller.ClientAccountController;
 import com.epam.javacourse.hotelapp.dto.BookingDto;
 import com.epam.javacourse.hotelapp.dto.InvoiceDto;
 import com.epam.javacourse.hotelapp.exception.AppException;
-import com.epam.javacourse.hotelapp.exception.DBException;
 import com.epam.javacourse.hotelapp.model.Booking;
 import com.epam.javacourse.hotelapp.model.Invoice;
 import com.epam.javacourse.hotelapp.model.Room;
@@ -22,7 +20,6 @@ import com.epam.javacourse.hotelapp.utils.mappers.UserMapper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,32 +28,36 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.time.LocalDate;
 import java.time.Period;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class BookingInvoiceServiceImpl implements IBookingInvoiceService {
 
     private static final Logger logger = LogManager.getLogger(BookingInvoiceServiceImpl.class);
 
-    @Autowired
-    BookingRepository bookingRepository;
+    private final BookingRepository bookingRepository;
+
+    private final InvoiceRepository invoiceRepository;
+
+    private final RoomRepository roomRepository;
+
+    private final IInvoiceService invoiceService;
+
+    private final IBookingService bookingService;
+
+    private final IUserService userService;
 
     @Autowired
-    InvoiceRepository invoiceRepository;
-
-    @Autowired
-    RoomRepository roomRepository;
-
-    @Autowired
-    IInvoiceService invoiceService;
-
-    @Autowired
-    IBookingService bookingService;
-
-    @Autowired
-    IUserService userService;
+    public BookingInvoiceServiceImpl(BookingRepository bookingRepository, InvoiceRepository invoiceRepository,
+                                     RoomRepository roomRepository, IInvoiceService invoiceService,
+                                     IBookingService bookingService, IUserService userService) {
+        this.bookingRepository = bookingRepository;
+        this.invoiceRepository = invoiceRepository;
+        this.roomRepository = roomRepository;
+        this.invoiceService = invoiceService;
+        this.bookingService = bookingService;
+        this.userService = userService;
+    }
 
     @Override
     @Transactional

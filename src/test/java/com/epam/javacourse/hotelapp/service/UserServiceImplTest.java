@@ -4,6 +4,7 @@ import com.epam.javacourse.hotelapp.exception.UserAlreadyExistsException;
 import com.epam.javacourse.hotelapp.model.User;
 import com.epam.javacourse.hotelapp.repository.UserRepository;
 import com.epam.javacourse.hotelapp.service.interfaces.IUserService;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -17,7 +18,7 @@ import com.epam.javacourse.hotelapp.dto.UserDto;
 
 
 @SpringBootTest
-class UserServiceTest {
+class UserServiceImplTest {
 
     @MockBean
     private UserRepository userRepository;
@@ -32,7 +33,7 @@ class UserServiceTest {
         UserDto userDTO = new UserDto();
         userDTO.setEmail("vi.v@gmail.com");
 
-//        User result = userService.createUser(userDTO);
-//        assertEquales(result);
+        User result = userService.createUser(userDTO);
+//        Assertions.assertEquals(result);
     }
 }

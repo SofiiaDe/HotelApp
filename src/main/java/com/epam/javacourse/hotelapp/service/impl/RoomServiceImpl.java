@@ -33,11 +33,15 @@ public class RoomServiceImpl implements IRoomService {
 
     private static final Logger logger = LogManager.getLogger(RoomServiceImpl.class);
 
-    @Autowired
-    RoomRepository roomRepository;
+    private final RoomRepository roomRepository;
+
+    private final CustomizedRoomRepository customizedRoomRepository;
 
     @Autowired
-    CustomizedRoomRepository customizedRoomRepository;
+    public RoomServiceImpl(RoomRepository roomRepository, CustomizedRoomRepository customizedRoomRepository) {
+        this.roomRepository = roomRepository;
+        this.customizedRoomRepository = customizedRoomRepository;
+    }
 
     @Override
     public void createRoom(RoomDto room) {

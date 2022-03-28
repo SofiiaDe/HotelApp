@@ -24,23 +24,20 @@ public class ConfirmRequestServiceImpl implements IConfirmationRequestService {
 
     private static final Logger logger = LogManager.getLogger(ConfirmRequestServiceImpl.class);
 
-    @Autowired
-    ConfirmRequestRepository confirmRequestRepository;
+    private final ConfirmRequestRepository confirmRequestRepository;
+
+    private final UserRepository userRepository;
+
+    private final ClaimRepository claimRepository;
 
     @Autowired
-    InvoiceRepository invoiceRepository;
+    public ConfirmRequestServiceImpl(ConfirmRequestRepository confirmRequestRepository,
+                                     UserRepository userRepository, ClaimRepository claimRepository) {
+        this.confirmRequestRepository = confirmRequestRepository;
+        this.userRepository = userRepository;
+        this.claimRepository = claimRepository;
+    }
 
-    @Autowired
-    BookingRepository bookingRepository;
-
-    @Autowired
-    RoomRepository roomRepository;
-
-    @Autowired
-    UserRepository userRepository;
-
-    @Autowired
-    ClaimRepository claimRepository;
 
     @Override
     @Transactional

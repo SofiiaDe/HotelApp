@@ -36,17 +36,22 @@ public class InvoiceServiceImpl implements IInvoiceService {
 
     private static final Logger logger = LogManager.getLogger(InvoiceServiceImpl.class);
 
-    @Autowired
-    InvoiceRepository invoiceRepository;
+    private final InvoiceRepository invoiceRepository;
+
+    private final BookingRepository bookingRepository;
+
+    private final RoomRepository roomRepository;
+
+    private final UserRepository userRepository;
 
     @Autowired
-    BookingRepository bookingRepository;
-
-    @Autowired
-    RoomRepository roomRepository;
-
-    @Autowired
-    UserRepository userRepository;
+    public InvoiceServiceImpl(InvoiceRepository invoiceRepository, BookingRepository bookingRepository,
+                              RoomRepository roomRepository, UserRepository userRepository) {
+        this.invoiceRepository = invoiceRepository;
+        this.bookingRepository = bookingRepository;
+        this.roomRepository = roomRepository;
+        this.userRepository = userRepository;
+    }
 
     @Override
     public InvoiceDto getInvoiceById(int invoiceId) {

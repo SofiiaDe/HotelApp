@@ -2,7 +2,6 @@ package com.epam.javacourse.hotelapp.controller;
 
 import com.epam.javacourse.hotelapp.dto.UserDto;
 import com.epam.javacourse.hotelapp.exception.AppException;
-import com.epam.javacourse.hotelapp.model.User;
 import com.epam.javacourse.hotelapp.service.interfaces.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -19,8 +18,12 @@ import static com.epam.javacourse.hotelapp.utils.Constants.*;
 @Controller
 public class UserController {
 
+    private final IUserService userService;
+
     @Autowired
-    private IUserService userService;
+    public UserController(IUserService userService) {
+        this.userService = userService;
+    }
 
     @GetMapping(value = "/user")
     public ModelAndView redirectUserToAccount(HttpSession session) throws AppException {

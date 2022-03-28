@@ -11,6 +11,7 @@ import com.epam.javacourse.hotelapp.utils.mappers.UserMapper;
 import com.epam.javacourse.hotelapp.utils.validation.Validator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -39,6 +40,7 @@ public class ManagerAccountController {
     private final IRoomService roomService;
     private final IUserService userService;
 
+    @Autowired
     public ManagerAccountController(IClaimService claimService, IBookingService bookingService,
                                     IConfirmationRequestService confirmRequestService, IInvoiceService invoiceService,
                                     IRoomService roomService, IUserService userService) {
