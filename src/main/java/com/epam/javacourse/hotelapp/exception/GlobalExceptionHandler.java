@@ -18,12 +18,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.util.Objects;
-
-import static com.epam.javacourse.hotelapp.utils.Constants.TRACE;
-
 @ControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
@@ -105,36 +99,19 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
 
     @ExceptionHandler(AppException.class)
-    public ResponseEntity<ErrorResponse> handleAppExceptions(Exception exception) {
+    public ResponseEntity<Object> handleAppExceptions(Exception exception, WebRequest request) {
         // casting the generic Exception e to CustomErrorException
         AppException appException = (AppException) exception;
 
-        HttpStatus status = appException.getStatus();
-
-        String stackTrace = ExceptionUtils.getStackTrace(appException);
-
-//        return buildErrorResponse(
-//                appException.getStatus(),
-//                appException.getMessage(),
-//                stackTrace,
-//                appException.getData());
-//        )
         logger.error("AppException has occurred", appException);
-        return new ResponseEntity<>(
-                new ErrorResponse(
-                        status,
-                        appException.getMessage(),
-                        stackTrace,
-                        appException.getData()
-                ),
-                status
-        );
+        return buildErrorResponse(appException,
+                appException.getMessage(),
+                appException.getStatus(),
+                request);
     }
 
     /**
      * a fallback method to cover all remaining cases
-     * @param exception
-     * @param request
      * @return ResponseEntity<Object>
      */
     @ExceptionHandler(RuntimeException.class)
@@ -187,17 +164,17 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 message
         );
 
-        if(printStackTrace && isTraceOn(request)){
+        if(printStackTrace ){//&& isTraceOn(request)
             errorResponse.setStackTrace(ExceptionUtils.getStackTrace(exception));
         }
         return ResponseEntity.status(httpStatus).body(errorResponse);
     }
 
-    private boolean isTraceOn(WebRequest request) {
-        String [] value = request.getParameterValues(TRACE);
-        return Objects.nonNull(value)
-                && value.length > 0
-                && value[0].contentEquals("true");
-    }
+//    private boolean isTraceOn(WebRequest request) {
+//        String [] value = request.getParameterValues(TRACE);
+//        return Objects.nonNull(value)
+//                && value.length > 0
+//                && value[0].contentEquals("true");
+//    }
 
 }

@@ -10,10 +10,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-
 import javax.servlet.http.HttpSession;
 
-import static com.epam.javacourse.hotelapp.utils.Constants.*;
+import static com.epam.javacourse.hotelapp.utils.Constants.PAGE_LOGIN;
 
 @Controller
 public class UserController {

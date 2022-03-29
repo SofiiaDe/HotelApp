@@ -3,7 +3,6 @@ package com.epam.javacourse.hotelapp.service.interfaces;
 import com.epam.javacourse.hotelapp.dto.BookingClientDto;
 import com.epam.javacourse.hotelapp.dto.BookingDto;
 import com.epam.javacourse.hotelapp.dto.BookingManagerDto;
-import com.epam.javacourse.hotelapp.dto.ClaimDto;
 import com.epam.javacourse.hotelapp.exception.AppException;
 import com.epam.javacourse.hotelapp.utils.enums.BookingStatus;
 import org.springframework.transaction.annotation.Transactional;

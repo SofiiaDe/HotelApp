@@ -1,8 +1,9 @@
 package com.epam.javacourse.hotelapp.dto;
 
-import org.hibernate.validator.constraints.UniqueElements;
-
-import javax.validation.constraints.*;
+import javax.validation.constraints.DecimalMax;
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.Digits;
+import javax.validation.constraints.Min;
 import java.math.BigDecimal;
 
 public class RoomDto {

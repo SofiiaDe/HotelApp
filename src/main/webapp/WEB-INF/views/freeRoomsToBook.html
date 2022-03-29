@@ -326,17 +326,6 @@
         </span>
 
 
-    <c:if test="${requestScope != null && requestScope.page != null && requestScope.pageCount != null}">
-        <form action="controller">
-            <input type="hidden" name="command" value="freeRoomsPage"/>
-            <input type="hidden" name="checkin" value="${requestScope.checkin}"/>
-            <input type="hidden" name="checkout" value="${requestScope.checkout}"/>
-
-            <!--            <nav aria-label="Free rooms navigation">-->
-            <!--                <div th:insert="fragments/pagination.html"></div>-->
-            <!--            </nav>-->
-        </form>
-    </c:if>
 </div>
 <div th:insert="fragments/scripts"></div>
 <script>

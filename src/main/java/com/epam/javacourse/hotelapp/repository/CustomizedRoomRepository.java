@@ -1,9 +1,7 @@
 package com.epam.javacourse.hotelapp.repository;
 
-import com.epam.javacourse.hotelapp.exception.AppException;
 import com.epam.javacourse.hotelapp.exception.DBException;
 import com.epam.javacourse.hotelapp.model.Room;
-import org.springframework.data.domain.Sort;
 
 import java.time.LocalDate;
 import java.util.List;

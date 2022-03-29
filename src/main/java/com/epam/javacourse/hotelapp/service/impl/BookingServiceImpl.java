@@ -2,7 +2,11 @@ package com.epam.javacourse.hotelapp.service.impl;
 
 import com.epam.javacourse.hotelapp.dto.*;
 import com.epam.javacourse.hotelapp.exception.AppException;
-import com.epam.javacourse.hotelapp.model.*;
+import com.epam.javacourse.hotelapp.exception.NoSuchElementFoundException;
+import com.epam.javacourse.hotelapp.model.Booking;
+import com.epam.javacourse.hotelapp.model.Invoice;
+import com.epam.javacourse.hotelapp.model.Room;
+import com.epam.javacourse.hotelapp.model.User;
 import com.epam.javacourse.hotelapp.repository.BookingRepository;
 import com.epam.javacourse.hotelapp.repository.InvoiceRepository;
 import com.epam.javacourse.hotelapp.repository.RoomRepository;
@@ -12,20 +16,16 @@ import com.epam.javacourse.hotelapp.utils.enums.BookingStatus;
 import com.epam.javacourse.hotelapp.utils.mappers.BookingMapper;
 import com.epam.javacourse.hotelapp.utils.mappers.InvoiceMapper;
 import com.epam.javacourse.hotelapp.utils.mappers.UserMapper;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 public class BookingServiceImpl implements IBookingService {
-
-    private static final Logger logger = LogManager.getLogger(BookingServiceImpl.class);
 
     private final BookingRepository bookingRepository;
 
@@ -35,7 +35,9 @@ public class BookingServiceImpl implements IBookingService {
 
     private final InvoiceRepository invoiceRepository;
 
-    public BookingServiceImpl(BookingRepository bookingRepository, RoomRepository roomRepository, UserRepository userRepository, InvoiceRepository invoiceRepository) {
+    @Autowired
+    public BookingServiceImpl(BookingRepository bookingRepository, RoomRepository roomRepository,
+                              UserRepository userRepository, InvoiceRepository invoiceRepository) {
         this.bookingRepository = bookingRepository;
         this.roomRepository = roomRepository;
         this.userRepository = userRepository;
@@ -44,7 +46,7 @@ public class BookingServiceImpl implements IBookingService {
 
 
     @Override
-    public List<BookingDto> getBookingsByUserId(int userId) throws AppException {
+    public List<BookingDto> getBookingsByUserId(int userId) {
         List<Booking> bookings = bookingRepository.findBookingsByUserId(userId);
         List<BookingDto> result = new ArrayList<>();
         bookings.forEach(x -> result.add(BookingMapper.mapToDto(x)));
@@ -54,19 +56,14 @@ public class BookingServiceImpl implements IBookingService {
     @Override
     @Transactional
     public void createBooking(BookingDto bookingDto) {
-
         bookingRepository.save(BookingMapper.mapFromDto(bookingDto));
     }
 
     @Override
-    public BookingDto getBookingById(int bookingId) throws AppException {
-        Optional<Booking> optionalBooking = bookingRepository.findById(bookingId);
-        Booking booking = null;
-        if (optionalBooking.isPresent()) {
-            booking = optionalBooking.get();
-        } else {
-            logger.error("Can't get booking with id = {}", bookingId);
-        }
+    public BookingDto getBookingById(int bookingId) {
+
+        Booking booking = bookingRepository.findById(bookingId)
+                .orElseThrow(() -> new NoSuchElementFoundException("Can't get booking with id = " + bookingId));
 
         return BookingMapper.mapToDto(booking);
     }
@@ -127,12 +124,16 @@ public class BookingServiceImpl implements IBookingService {
                     .collect(Collectors.toList());
 
             for (Booking booking : allBookings) {
-                UserDto bookingUser = UserMapper.mapToDto(
-                        users.stream()
-                                .filter(u -> u.getId() == booking.getUserId().getId())
-                                .findFirst().get());
+                User user = users.stream()
+                        .filter(u -> u.getId() == booking.getUserId().getId())
+                        .findFirst()
+                        .orElseThrow(() -> new NoSuchElementFoundException("Can't get booking user with id = " + booking.getUserId().getId()));
+                UserDto bookingUser = UserMapper.mapToDto(user);
 
                 Room room = roomRepository.getById(booking.getRoomId());
+                var tempInvoice = invoiceDtos.stream().filter(i -> i.getBookingId() == booking.getId())
+                        .findFirst()
+                        .orElseThrow(() -> new NoSuchElementFoundException("Can't get invoice"));
 
                 result.add(
                         new BookingManagerDto(booking.getId(),
@@ -141,7 +142,7 @@ public class BookingServiceImpl implements IBookingService {
                                 booking.getCheckinDate(),
                                 booking.getCheckoutDate(),
                                 room.getRoomNumber(),
-                                invoiceDtos.stream().filter(i -> i.getBookingId() == booking.getId()).findFirst().get().getStatus().equals("paid")
+                                tempInvoice.getStatus().equals("paid")
                         ));
             }
         } catch (Exception exception) {
@@ -150,9 +151,9 @@ public class BookingServiceImpl implements IBookingService {
         return result;
     }
 
+    @Transactional
     @Override
-    public void updateBookingStatus(BookingDto bookingDto, boolean status) throws AppException {
-
+    public void updateBookingStatus(BookingDto bookingDto, boolean status) {
         bookingRepository.updateBookingStatus(status, bookingDto.getId());
     }
 }

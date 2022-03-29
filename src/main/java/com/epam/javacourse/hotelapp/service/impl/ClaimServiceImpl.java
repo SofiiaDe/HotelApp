@@ -4,25 +4,26 @@ import com.epam.javacourse.hotelapp.dto.ClaimClientDto;
 import com.epam.javacourse.hotelapp.dto.ClaimDto;
 import com.epam.javacourse.hotelapp.dto.ClaimManagerDto;
 import com.epam.javacourse.hotelapp.exception.AppException;
+import com.epam.javacourse.hotelapp.exception.NoSuchElementFoundException;
 import com.epam.javacourse.hotelapp.model.Claim;
 import com.epam.javacourse.hotelapp.model.User;
-import com.epam.javacourse.hotelapp.repository.*;
+import com.epam.javacourse.hotelapp.repository.ClaimRepository;
+import com.epam.javacourse.hotelapp.repository.UserRepository;
 import com.epam.javacourse.hotelapp.service.interfaces.IClaimService;
 import com.epam.javacourse.hotelapp.utils.mappers.ClaimMapper;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 public class ClaimServiceImpl implements IClaimService {
-
-    private static final Logger logger = LogManager.getLogger(ClaimServiceImpl.class);
 
     private final ClaimRepository claimRepository;
 
@@ -42,23 +43,16 @@ public class ClaimServiceImpl implements IClaimService {
     }
 
     @Override
-    public ClaimDto getClaimById(int claimId) throws AppException {
-        Optional<Claim> optionalClaim = claimRepository.findById(claimId);
-        Claim claim = null;
-        if (optionalClaim.isPresent()) {
-            claim = optionalClaim.get();
-        } else {
-            logger.error("Can't get claim with id = {}", claimId);
-            throw new NoSuchElementException("Not found claim with id = " + claimId);
-        }
-
+    public ClaimDto getClaimById(int claimId) {
+        Claim claim = claimRepository.findById(claimId)
+                .orElseThrow(()->new NoSuchElementFoundException("Can't get claim with id = " + claimId));
         return ClaimMapper.mapToDto(claim);
     }
 
 
     @Override
     @Transactional(readOnly = true)
-    public List<ClaimDto> getClaimsByUserId(int userId) throws AppException {
+    public List<ClaimDto> getClaimsByUserId(int userId) {
         final List<ClaimDto> result = new ArrayList<>();
         List<Claim> claims = claimRepository.findClaimsByUserId(userId);
 
@@ -137,6 +131,10 @@ public class ClaimServiceImpl implements IClaimService {
         } catch (ChangeSetPersister.NotFoundException exception) {
             throw new AppException("Can't retrieve all applications to show in the manager's account", exception);
         }
+    }
 
+    @Override
+    public void removeClaim(int claimId) {
+        claimRepository.deleteById(claimId);
     }
 }

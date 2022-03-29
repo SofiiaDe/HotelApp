@@ -1,7 +1,7 @@
 package com.epam.javacourse.hotelapp.service.impl;
 
 import com.epam.javacourse.hotelapp.dto.UserDto;
-import com.epam.javacourse.hotelapp.exception.AppException;
+import com.epam.javacourse.hotelapp.exception.NoSuchElementFoundException;
 import com.epam.javacourse.hotelapp.exception.UserAlreadyExistsException;
 import com.epam.javacourse.hotelapp.model.User;
 import com.epam.javacourse.hotelapp.repository.UserRepository;
@@ -40,19 +40,21 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     @Transactional(readOnly = true)
-    public UserDto getUserByEmail(String email) throws AppException {
+    public UserDto getUserByEmail(String email) {
         return UserMapper.mapToDto(userRepository.findUserByEmail(email));
     }
 
     @Override
     @Transactional(readOnly = true)
-    public UserDto getUserById(int id) throws AppException {
-        return UserMapper.mapToDto(userRepository.getById(id));
+    public UserDto getUserById(int id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(()->new NoSuchElementFoundException("Can't get user with id = " + id));
+        return UserMapper.mapToDto(user);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<UserDto> getUsersByIds(List<Integer> ids) throws AppException {
+    public List<UserDto> getUsersByIds(List<Integer> ids) {
         List<User> users = userRepository.findUsersByIds(ids);
         List<UserDto> result = new ArrayList<>();
         users.forEach(x -> result.add(UserMapper.mapToDto(x)));
@@ -61,7 +63,7 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<UserDto> getAllUsers() throws AppException {
+    public List<UserDto> getAllUsers() {
         List<User> users = userRepository.findAll();
         List<UserDto> result = new ArrayList<>();
         users.forEach(x -> result.add(UserMapper.mapToDto(x)));

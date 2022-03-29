@@ -4,7 +4,6 @@ import com.epam.javacourse.hotelapp.model.Booking;
 import com.epam.javacourse.hotelapp.model.User;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.validation.constraints.Future;
 import javax.validation.constraints.NotBlank;
 import java.math.BigDecimal;
 import java.time.LocalDate;

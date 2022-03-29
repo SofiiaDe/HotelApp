@@ -2,27 +2,28 @@ package com.epam.javacourse.hotelapp.service.impl;
 
 import com.epam.javacourse.hotelapp.dto.*;
 import com.epam.javacourse.hotelapp.exception.AppException;
+import com.epam.javacourse.hotelapp.exception.NoSuchElementFoundException;
 import com.epam.javacourse.hotelapp.model.ConfirmationRequest;
 import com.epam.javacourse.hotelapp.model.User;
-import com.epam.javacourse.hotelapp.repository.*;
+import com.epam.javacourse.hotelapp.repository.ClaimRepository;
+import com.epam.javacourse.hotelapp.repository.ConfirmRequestRepository;
+import com.epam.javacourse.hotelapp.repository.UserRepository;
 import com.epam.javacourse.hotelapp.service.interfaces.IConfirmationRequestService;
 import com.epam.javacourse.hotelapp.utils.mappers.ClaimMapper;
 import com.epam.javacourse.hotelapp.utils.mappers.ConfirmationRequestMapper;
 import com.epam.javacourse.hotelapp.utils.mappers.UserMapper;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 public class ConfirmRequestServiceImpl implements IConfirmationRequestService {
-
-    private static final Logger logger = LogManager.getLogger(ConfirmRequestServiceImpl.class);
 
     private final ConfirmRequestRepository confirmRequestRepository;
 
@@ -38,13 +39,11 @@ public class ConfirmRequestServiceImpl implements IConfirmationRequestService {
         this.claimRepository = claimRepository;
     }
 
-
     @Override
     @Transactional
     public void createConfirmRequest(ConfirmationRequestDto confirmRequestDto) {
         confirmRequestRepository.save(ConfirmationRequestMapper.mapFromDto(confirmRequestDto));
     }
-
 
     @Override
     public LocalDate getConfirmRequestDueDate(ConfirmationRequestDto confirmRequest) {
@@ -55,15 +54,8 @@ public class ConfirmRequestServiceImpl implements IConfirmationRequestService {
     @Override
     public ConfirmationRequestDto getConfirmRequestById(int confirmRequestId) {
 
-        Optional<ConfirmationRequest> optionalConfirmRequest = confirmRequestRepository.findById(confirmRequestId);
-
-        ConfirmationRequest confirmRequest = null;
-        if (optionalConfirmRequest.isPresent()) {
-            confirmRequest = optionalConfirmRequest.get();
-        } else {
-            logger.error("Can't get confirmation request with id = {}", confirmRequestId);
-            throw new NoSuchElementException("Not found claim with id = " + confirmRequestId);
-        }
+        ConfirmationRequest confirmRequest =  confirmRequestRepository.findById(confirmRequestId)
+                .orElseThrow(()->new NoSuchElementFoundException("Can't get invoice with id = " + confirmRequestId));
 
         return ConfirmationRequestMapper.mapToDto(confirmRequest);
 
@@ -73,16 +65,9 @@ public class ConfirmRequestServiceImpl implements IConfirmationRequestService {
     @Override
     public void confirmRequestByClient(int confirmRequestId) throws AppException {
 
-        Optional<ConfirmationRequest> optionalConfirmRequest = confirmRequestRepository.findById(confirmRequestId);
-        ConfirmationRequest confirmRequest = null;
-        if (optionalConfirmRequest.isPresent()) {
-            confirmRequest = optionalConfirmRequest.get();
-        } else {
-            logger.error("Can't get claim with id = {}", confirmRequestId);
-        }
+        ConfirmationRequestDto requestToBeConfirmed;
         try {
-            ConfirmationRequestDto requestToBeConfirmed = ConfirmationRequestMapper.mapToDto(confirmRequest);
-            requestToBeConfirmed.setStatus("confirmed");
+            requestToBeConfirmed = this.getConfirmRequestById(confirmRequestId);
             confirmRequestRepository.updateConfirmRequestStatus("confirmed", requestToBeConfirmed.getId());
         } catch (Exception exception) {
             throw new AppException("Can't update confirmation request's status to 'confirmed'", exception);
@@ -112,7 +97,10 @@ public class ConfirmRequestServiceImpl implements IConfirmationRequestService {
             List<ConfirmationRequestManagerDto> result = new ArrayList<>();
 
             for (ConfirmationRequest confirmRequest : allConfirmRequests) {
-                var bookingUser = userDtos.stream().filter(u -> u.getId() == confirmRequest.getUserId().getId()).findFirst().get();
+                var bookingUser = userDtos.stream()
+                        .filter(u -> u.getId() == confirmRequest.getUserId().getId())
+                        .findFirst()
+                        .orElseThrow(() -> new NoSuchElementFoundException("Can't get bookingUser with id = " + confirmRequest.getUserId().getId()));
                 result.add(
                         new ConfirmationRequestManagerDto(confirmRequest.getId(),
                                 bookingUser.getFirstName() + ' ' + bookingUser.getLastName(),
@@ -152,7 +140,7 @@ public class ConfirmRequestServiceImpl implements IConfirmationRequestService {
                 var claim = userClaims.stream()
                         .filter(a -> a.getId() == confirmRequest.getClaimId().getId())
                         .findFirst()
-                        .get();
+                        .orElseThrow(() -> new NoSuchElementFoundException("Can't get claim with id = " + confirmRequest.getClaimId().getId()));
                 result.add(
                         new ConfirmationRequestClientDto(confirmRequest.getId(),
                                 confirmRequest.getConfirmRequestDate(),

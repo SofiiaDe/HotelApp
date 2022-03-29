@@ -11,7 +11,7 @@
 </head>
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark" th:fragment="managerMenu">
-    <a class="navbar-brand" href="/Hotel/controller?command=managerAccount">
+    <a class="navbar-brand" href="/manager1/account">
         <img th:src="@{/pictures/logo-hotel.jpg}" alt="logo" width="30" height="30" class="d-inline-block align-top"
         th:text="#{manager.menu.label.manager}">
     </a>
@@ -23,7 +23,7 @@
                 <span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="controller?command=allRooms"  th:text="#{manager.menu.button.rooms}"></a>
+                <a class="nav-link" href="allRooms"  th:text="#{manager.menu.button.rooms}"></a>
             </li>
         </ul>
 

@@ -1,12 +1,5 @@
 package com.epam.javacourse.hotelapp.utils;
 
-import com.epam.javacourse.hotelapp.model.Room;
-
-import javax.persistence.NamedStoredProcedureQuery;
-import javax.persistence.ParameterMode;
-import javax.persistence.StoredProcedureParameter;
-import java.time.LocalDate;
-
 public class Constants {
 
     private Constants() {

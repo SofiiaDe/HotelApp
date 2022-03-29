@@ -14,7 +14,6 @@ import java.util.regex.Pattern;
 
 import static com.epam.javacourse.hotelapp.utils.Constants.EMAIL_REGEX;
 import static com.epam.javacourse.hotelapp.utils.Constants.PASSWORD_REGEX;
-import static com.fasterxml.jackson.databind.jsonFormatVisitors.JsonValueFormat.EMAIL;
 
 public class Validator {
 

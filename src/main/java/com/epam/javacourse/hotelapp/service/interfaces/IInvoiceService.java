@@ -4,9 +4,7 @@ import com.epam.javacourse.hotelapp.dto.InvoiceClientDto;
 import com.epam.javacourse.hotelapp.dto.InvoiceDto;
 import com.epam.javacourse.hotelapp.dto.InvoiceManagerDto;
 import com.epam.javacourse.hotelapp.exception.AppException;
-import org.springframework.data.repository.query.Param;
 
-import java.time.LocalDate;
 import java.util.List;
 
 public interface IInvoiceService {

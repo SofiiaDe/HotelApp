@@ -2,8 +2,7 @@ package com.epam.javacourse.hotelapp.service.impl;
 
 import com.epam.javacourse.hotelapp.dto.*;
 import com.epam.javacourse.hotelapp.exception.AppException;
-import com.epam.javacourse.hotelapp.exception.DBException;
-import com.epam.javacourse.hotelapp.model.Booking;
+import com.epam.javacourse.hotelapp.exception.NoSuchElementFoundException;
 import com.epam.javacourse.hotelapp.model.Invoice;
 import com.epam.javacourse.hotelapp.model.Room;
 import com.epam.javacourse.hotelapp.model.User;
@@ -19,7 +18,6 @@ import com.epam.javacourse.hotelapp.utils.mappers.UserMapper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,7 +26,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -56,19 +53,13 @@ public class InvoiceServiceImpl implements IInvoiceService {
     @Override
     public InvoiceDto getInvoiceById(int invoiceId) {
 
-        Optional<Invoice> optionalInvoice = invoiceRepository.findById(invoiceId);
-        Invoice invoice = null;
-        if (optionalInvoice.isPresent()) {
-            invoice = optionalInvoice.get();
-        } else {
-            logger.error("Can't get invoice with id = {}", invoiceId);
-        }
-
+        Invoice invoice = invoiceRepository.findById(invoiceId)
+                .orElseThrow(()->new NoSuchElementFoundException("Can't get invoice with id = " + invoiceId));
         return InvoiceMapper.mapToDto(invoice);
     }
 
     @Override
-    public List<InvoiceDto> getInvoicesByBookingsIds(List<Integer> bookingsIds) throws AppException {
+    public List<InvoiceDto> getInvoicesByBookingsIds(List<Integer> bookingsIds) {
         List<Invoice> invoices = invoiceRepository.findInvoicesByBookingsIds(bookingsIds);
         List<InvoiceDto> result = new ArrayList<>();
         invoices.forEach(x -> result.add(InvoiceMapper.mapToDto(x)));
@@ -105,7 +96,11 @@ public class InvoiceServiceImpl implements IInvoiceService {
             ArrayList<InvoiceManagerDto> result = new ArrayList<>();
 
             for (Invoice invoice : allInvoices) {
-                UserDto bookingUser = users.stream().filter(u -> u.getId() == invoice.getUserId().getId()).findFirst().get();
+                UserDto bookingUser = users.stream()
+                        .filter(u -> u.getId() == invoice.getUserId().getId())
+                        .findFirst()
+                        .orElseThrow(() -> new NoSuchElementFoundException("Can't get bookingUser with id = " + invoice.getUserId().getId()));
+
                 result.add(
                         new InvoiceManagerDto(invoice.getId(),
                                 bookingUser.getFirstName() + ' ' + bookingUser.getLastName(),
@@ -143,7 +138,7 @@ public class InvoiceServiceImpl implements IInvoiceService {
                 BookingDto booking = userBookings.stream()
                         .filter(b -> b.getId() == invoice.getBookingId().getId())
                         .findFirst()
-                        .get();
+                        .orElseThrow(() -> new NoSuchElementFoundException("Can't get booking with id = " + invoice.getBookingId().getId()));
 
                 Room room = roomRepository.getById(booking.getRoomId());
 
@@ -166,19 +161,18 @@ public class InvoiceServiceImpl implements IInvoiceService {
     }
 
     /**
-     * Execute at 1 am every day.
+     * Execute at 3 am every day.
      *
-     * @throws AppException
      */
     @Transactional
-    @Scheduled(cron = "0 0 1 * * *", zone = "Europe/Sofia")
+    @Scheduled(cron = "0 0 3 * * *", zone = "Europe/Sofia") // The pattern is: second, minute, hour, day, month, weekday
     @Override
     public void updateInvoiceStatusToCancelled() throws AppException {
         try {
             List<Invoice> allInvoices = invoiceRepository.findAll();
             for (Invoice invoice : allInvoices) {
                 if (invoice.getInvoiceStatus().equals("new") &&
-                        Helpers.getInvoiceDueDate(InvoiceMapper.mapToDto(invoice)).isBefore(LocalDate.now())) {
+                        invoice.getDueDate().isBefore(LocalDate.now())) {
                     invoiceRepository.updateInvoiceStatus("cancelled", invoice.getId());
                 }
             }

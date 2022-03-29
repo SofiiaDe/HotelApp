@@ -86,6 +86,7 @@ public class ManagerAccountController {
         return modelAndView;
     }
 
+
     @PostMapping("/makeConfirmRequest")
     public String makeRequest(HttpServletRequest request,
                               @ModelAttribute("claim") @Valid ClaimDto claimDto,
@@ -147,6 +148,12 @@ public class ManagerAccountController {
         return REDIRECT_MANAGER_ACCOUNT;
     }
 
+    @PostMapping("/removeClaim/{id}")
+    public String removeClaim(@PathVariable(value = "id") int id) {
+        claimService.removeClaim(id);
+        return REDIRECT_MANAGER_ACCOUNT;
+    }
+
     @GetMapping(value = "/allUsersList")
     public ModelAndView getAllUsersList() throws AppException {
 
@@ -159,8 +166,8 @@ public class ManagerAccountController {
     }
 
     @PostMapping("/addRoom")
-    public String saveRoom(@Valid RoomDto newRoom,
-                           BindingResult bindingResult) {
+    public String addRoom(@Valid RoomDto newRoom,
+                          BindingResult bindingResult) {
 
         if (bindingResult.hasErrors())
             return "redirect:/manager1/addRoom";
@@ -182,9 +189,8 @@ public class ManagerAccountController {
     }
 
     @GetMapping("/deleteRoom/{id}")
-    public String deleteEmployee(@PathVariable(value = "id") int id) {
+    public String deleteRoom(@PathVariable(value = "id") int id) {
 
-        // call delete room method
         this.roomService.deleteRoomById(id);
         return "redirect:/";
     }

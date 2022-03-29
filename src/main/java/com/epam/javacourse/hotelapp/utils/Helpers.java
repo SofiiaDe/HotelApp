@@ -2,7 +2,6 @@ package com.epam.javacourse.hotelapp.utils;
 
 import com.epam.javacourse.hotelapp.dto.InvoiceDto;
 import com.epam.javacourse.hotelapp.utils.enums.BookingStatus;
-import org.springframework.data.domain.Sort;
 
 import java.time.LocalDate;
 

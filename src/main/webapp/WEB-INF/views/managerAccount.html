@@ -58,20 +58,21 @@
 
         <div class="tab-content" id="myTabContent">
             <!--            Booking-->
-            <div class="dropdown dropDownPadding">
-                <button class="btn btn-info dropdown-toggle" type="button" data-toggle="dropdown"
-                        aria-haspopup="true" aria-expanded="false"
-                        th:text="#{status}">
-                </button>
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <a class="dropdown-item" href="#" id="statusPaid" th:text="#{status.paid}"></a>
-                    <a class="dropdown-item" href="#" id="statusOngoing" th:text="#{status.ongoing}"></a>
-                    <a class="dropdown-item" href="#" id="statusFinished" th:text="#{status.finished}"></a>
-                    <a class="dropdown-item" href="#" id="statusNew" th:text="#{status.new}"></a>
-                    <a class="dropdown-item" href="#" id="statusCancelled" th:text="#{status.cancelled}"></a>
-                </div>
-            </div>
+
             <div class="tab-pane fade active show" id="booking" role="tabpanel" aria-labelledby="booking-tab">
+                <div class="dropdown dropDownPadding">
+                    <button class="btn btn-info dropdown-toggle" type="button" data-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false"
+                            th:text="#{status}">
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item" href="#" id="statusPaid" th:text="#{status.paid}"></a>
+                        <a class="dropdown-item" href="#" id="statusOngoing" th:text="#{status.ongoing}"></a>
+                        <a class="dropdown-item" href="#" id="statusFinished" th:text="#{status.finished}"></a>
+                        <a class="dropdown-item" href="#" id="statusNew" th:text="#{status.new}"></a>
+                        <a class="dropdown-item" href="#" id="statusCancelled" th:text="#{status.cancelled}"></a>
+                    </div>
+                </div>
                 <table class="table table-hover mt-2">
                     <thead>
                     <tr>
@@ -105,21 +106,31 @@
                             <td th:text="${booking.checkinDate}"></td>
                             <td th:text="${booking.checkoutDate}"></td>
                             <td th:text="${booking.roomNumber}"></td>
-                            <td th:text="${booking.bookingStatus}"></td>
-
+<!--                            <td th:text="${booking.bookingStatus}"></td>-->
+                            <td>
+                                <th:block th:if="${booking.bookingStatus != null}" th:switch="${booking.bookingStatus.text}">
+                                    <div class="badge badge-danger text-uppercase" th:case="'new'"
+                                         th:text="#{status.new}">
+                                    </div>
+                                    <div class="badge badge-secondary text-uppercase" th:case="'cancelled'"
+                                         th:text="#{status.cancelled}">
+                                    </div>
+                                    <div class="badge badge-success text-uppercase" th:case="'paid'"
+                                         th:text="#{status.paid}">
+                                    </div>
+                                    <div class="badge badge-warning text-uppercase" th:case="'finished'"
+                                         th:text="#{status.finished}">
+                                    </div>
+                                    <div class="badge badge-primary text-uppercase" th:case="'ongoing'"
+                                         th:text="#{status.ongoing}">
+                                    </div>
+                                </th:block>
+                            </td>
                         </tr>
                     </th:block>
                     </tbody>
                 </table>
 
-                <!--                <c:if test="${requestScope != null && requestScope.page != null && requestScope.pageCount != null}">-->
-                <!--                    <form action="controller">-->
-                <!--                        <input type="hidden" name="command" value="managerAccount"/>-->
-                <!--                        <nav aria-label="Manager's lift of booking navigation">-->
-                <!--                            <th:include page="/WEB-INF/components/pagination.jsp"/>-->
-                <!--                        </nav>-->
-                <!--                    </form>-->
-                <!--                </c:if>-->
             </div>
 
             <!--            Claim-->
@@ -190,12 +201,14 @@
                                     <div>
                                         <button type="submit" class="btn btn-outline-secondary btn-sm"
                                                 data-toggle="modal"
-                                                data-target="#makeRequestModalCenter" th:value="${claim.id}">
+                                                th:attr="data-target='#makeRequestModalCenter'+${claim.id }"
+                                        >
                                             <i class="material-icons" th:text="#{manager.make.request}"></i>
                                         </button>
                                         <!-- Modal -->
                                         <div class="modal fade bd-example-modal-lg"
-                                             id="makeRequestModalCenter" th:value="${claim.id}"
+                                             th:id="'makeRequestModalCenter' + ${claim.id}"
+                                             th:value="${claim.id}"
                                              tabindex="-1"
                                              role="dialog"
                                              aria-labelledby="#makeRequestModalCenterTitle"
@@ -280,9 +293,8 @@
                                         </div>
                                     </div>
                                     <div class="ml-1">
-                                        <form action="controller?command=removeclaim" method="post">
-                                            <input type="hidden" name="claim_id"
-                                                   value="${claim.id}">
+                                        <form th:action="@{/manager1/removeClaim/{id}(id=${claim.id})}" method="post">
+                                            <input type="hidden" name="id" th:value="${claim.id}">
                                             <button type="submit"
                                                     class="btn btn-outline-secondary btn-sm">
                                                 <i class="material-icons">delete_outline</i>

@@ -1,6 +1,5 @@
 package com.epam.javacourse.hotelapp.repository;
 
-import com.epam.javacourse.hotelapp.exception.DBException;
 import com.epam.javacourse.hotelapp.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

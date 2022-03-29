@@ -4,7 +4,7 @@ package com.epam.javacourse.hotelapp.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import static com.epam.javacourse.hotelapp.utils.Constants.*;
+import static com.epam.javacourse.hotelapp.utils.Constants.PAGE_LOGIN;
 
 
 @Controller

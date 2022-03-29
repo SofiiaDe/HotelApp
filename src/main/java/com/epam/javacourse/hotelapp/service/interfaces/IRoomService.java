@@ -4,12 +4,9 @@ import com.epam.javacourse.hotelapp.dto.ClaimDto;
 import com.epam.javacourse.hotelapp.dto.RoomDto;
 import com.epam.javacourse.hotelapp.exception.AppException;
 import com.epam.javacourse.hotelapp.model.Room;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Sort;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 public interface IRoomService {
 

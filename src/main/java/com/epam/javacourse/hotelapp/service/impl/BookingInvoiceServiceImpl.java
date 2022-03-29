@@ -63,45 +63,50 @@ public class BookingInvoiceServiceImpl implements IBookingInvoiceService {
     @Transactional
     public void createBookingAndInvoice(BookingDto booking, InvoiceDto invoice) throws AppException {
 
-        Booking newBooking = BookingMapper.mapFromDto(booking);
-        Invoice newInvoice = InvoiceMapper.mapFromDto(invoice);
-        bookingRepository.save(newBooking);
-        newInvoice.setBookingId(newBooking);
-        newInvoice.setDueDate(Helpers.getInvoiceDueDate(invoice));
-        invoiceRepository.save(newInvoice);
+        try {
+            Booking newBooking = BookingMapper.mapFromDto(booking);
+            Invoice newInvoice = InvoiceMapper.mapFromDto(invoice);
+            bookingRepository.save(newBooking);
+            newInvoice.setBookingId(newBooking);
+            newInvoice.setDueDate(Helpers.getInvoiceDueDate(invoice));
+            invoiceRepository.save(newInvoice);
 
-        logger.info("Create booking with id = {}", newBooking.getId());
-        logger.info("Create invoice with id = {}", newInvoice.getId());
+            logger.info("Create booking with id = {}", newBooking.getId());
+            logger.info("Create invoice with id = {}", newInvoice.getId());
+        } catch (Exception exception) {
+            throw new AppException("Can't create new booking and invoice", exception);
+        }
 
     }
 
     @Override
     public BigDecimal getInvoiceAmount(BookingDto booking) throws AppException {
+        BigDecimal amount;
+        try {
+            LocalDate checkinDate = booking.getCheckin();
+            LocalDate checkoutDate = booking.getCheckout();
+            Period period = Period.between(checkinDate, checkoutDate);
+            Room room = roomRepository.getById(booking.getRoomId());
 
+            // initialize amount as 0 for a default value
+            amount = new BigDecimal(BigInteger.ZERO, 2);
 
-        LocalDate checkinDate = booking.getCheckin();
-        LocalDate checkoutDate = booking.getCheckout();
-        Period period = Period.between(checkinDate, checkoutDate);
-        Room room = roomRepository.getById(booking.getRoomId());
-
-        // initialize amount as 0 for a default value
-        BigDecimal amount = new BigDecimal(BigInteger.ZERO, 2);
-
-        // number of days is converted to BigDecimal
-        BigDecimal totalCost = room.getPrice().multiply(new BigDecimal(Math.abs(period.getDays())));
-        amount = amount.add(totalCost);
-
+            // number of days is converted to BigDecimal
+            BigDecimal totalCost = room.getPrice().multiply(new BigDecimal(Math.abs(period.getDays())));
+            amount = amount.add(totalCost);
+        } catch (Exception exception) {
+            throw new AppException("Can't calculate invoice amount", exception);
+        }
         return amount;
     }
 
     /**
-     * Execute at 1 am every day.
+     * Execute at 3 am every day.
      *
      * @throws AppException
      */
     @Transactional
-    @Scheduled(cron = "0 0 1 * * *", zone = "Europe/Sofia")
-    // The pattern is: second, minute, hour, day, month, weekday
+    @Scheduled(cron = "0 0 3 * * *", zone = "Europe/Sofia") // The pattern is: second, minute, hour, day, month, weekday
     @Override
     public void cancelUnpaidBookings() throws AppException {
 

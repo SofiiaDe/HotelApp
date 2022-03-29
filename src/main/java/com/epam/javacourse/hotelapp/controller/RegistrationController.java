@@ -18,8 +18,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-
-
 import java.util.Objects;
 
 import static com.epam.javacourse.hotelapp.utils.Constants.PAGE_REGISTRATION;

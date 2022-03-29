@@ -24,9 +24,6 @@ public class BookingClientDto {
         this.isPaid = isPaid;
     }
 
-    public BookingClientDto() {
-    }
-
     public void setId(int id) {
         this.id = id;
     }

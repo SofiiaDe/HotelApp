@@ -1,32 +1,24 @@
 package com.epam.javacourse.hotelapp.service.impl;
 
 import com.epam.javacourse.hotelapp.dto.ClaimDto;
-import com.epam.javacourse.hotelapp.dto.InvoiceDto;
 import com.epam.javacourse.hotelapp.dto.RoomDto;
 import com.epam.javacourse.hotelapp.exception.AppException;
 import com.epam.javacourse.hotelapp.exception.DBException;
-import com.epam.javacourse.hotelapp.model.ConfirmationRequest;
-import com.epam.javacourse.hotelapp.model.Invoice;
+import com.epam.javacourse.hotelapp.exception.NoSuchElementFoundException;
 import com.epam.javacourse.hotelapp.model.Room;
 import com.epam.javacourse.hotelapp.repository.CustomizedRoomRepository;
 import com.epam.javacourse.hotelapp.repository.RoomRepository;
 import com.epam.javacourse.hotelapp.service.interfaces.IRoomService;
-import com.epam.javacourse.hotelapp.utils.mappers.ConfirmationRequestMapper;
-import com.epam.javacourse.hotelapp.utils.mappers.InvoiceMapper;
 import com.epam.javacourse.hotelapp.utils.mappers.RoomMapper;
 import com.epam.javacourse.hotelapp.utils.validation.Validator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.stereotype.Service;
-
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
 
 @Service
 public class RoomServiceImpl implements IRoomService {
@@ -59,14 +51,9 @@ public class RoomServiceImpl implements IRoomService {
     @Override
     public RoomDto getRoomById(int id) {
 
-        Optional<Room> optionalRoom = roomRepository.findById(id);
-        Room room;
-        if (optionalRoom.isEmpty()) {
-            logger.error("Can't get room with id = {}", id);
-            throw new NoSuchElementException("Not found room with id = " + id);
-        } else {
-            room = optionalRoom.get();
-        }
+        Room room = roomRepository.findById(id)
+                .orElseThrow(()->new NoSuchElementFoundException("Can't get room with id = " + id));
+
         return RoomMapper.mapToDto(room);
     }
 
@@ -101,7 +88,6 @@ public class RoomServiceImpl implements IRoomService {
         return suitableRoom;
     }
 
-
     @Override
     public List<Room> getFreeRoomsForPeriod(LocalDate checkin, LocalDate checkout) throws AppException {
         try {
@@ -132,7 +118,6 @@ public class RoomServiceImpl implements IRoomService {
 
     }
 
-
     @Override
     public List<Integer> getRoomsNumbers() throws AppException {
         try {
@@ -141,12 +126,5 @@ public class RoomServiceImpl implements IRoomService {
             throw new AppException("Can't get all rooms' numbers");
         }
     }
-
-
-//    public long getTotalRooms() {
-//        logger.info("Finding the total count of rooms from the DB.");
-//        return roomRepository.count();
-//    }
-
 
 }

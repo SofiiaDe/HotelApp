@@ -1,8 +1,6 @@
 package com.epam.javacourse.hotelapp.utils.mappers;
 
-import com.epam.javacourse.hotelapp.dto.ClaimDto;
 import com.epam.javacourse.hotelapp.dto.RoomDto;
-import com.epam.javacourse.hotelapp.model.Claim;
 import com.epam.javacourse.hotelapp.model.Room;
 
 public class RoomMapper {

@@ -33,6 +33,7 @@ public class Invoice implements Serializable {
     @Column(name = "status")
     private String invoiceStatus;
 
+    @Column(name = "due_date")
     private LocalDate dueDate;
 
     public int getId() {

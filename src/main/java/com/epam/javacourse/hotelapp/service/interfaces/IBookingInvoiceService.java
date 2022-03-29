@@ -10,7 +10,6 @@ public interface IBookingInvoiceService {
 
     /**
      * Creates new invoice once the new booking appeared.
-     * @throws AppException
      */
     void createBookingAndInvoice(BookingDto booking, InvoiceDto invoice) throws AppException;
 
@@ -20,8 +19,6 @@ public interface IBookingInvoiceService {
 
     /**
      * Updates invoice's status to 'paid' in case of successful payment transaction.
-     * @param invoiceId
-     * @throws AppException
      */
     void payInvoice(int invoiceId) throws AppException;
 }

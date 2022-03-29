@@ -17,7 +17,7 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class ClaimServiceImplTest {
 
-    @MockBean
+    @Mock
     private ClaimRepository claimRepository;
 
     @Mock
@@ -25,10 +25,9 @@ class ClaimServiceImplTest {
 
     @Test
     void testCreate_whenCalled_callsRepo() {
-//        ClaimServiceImpl appService = new ClaimServiceImpl(claimRepository);
-//        ClaimServiceImpl appService = new ClaimServiceImpl(claimRepository, userRepository, invoiceRepository, bookingRepository, roomRepository);
+        ClaimServiceImpl claimService = new ClaimServiceImpl(claimRepository, userRepository);
 
-//        appService.createClaim(new ClaimDto());
+        claimService.createClaim(new ClaimDto());
         verify(claimRepository, times(1)).save(any(Claim.class));
     }
 }

@@ -5,7 +5,6 @@ import com.epam.javacourse.hotelapp.model.Room;
 import com.epam.javacourse.hotelapp.model.User;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.validation.constraints.Future;
 import java.time.LocalDate;
 
 public class ConfirmationRequestDto {
