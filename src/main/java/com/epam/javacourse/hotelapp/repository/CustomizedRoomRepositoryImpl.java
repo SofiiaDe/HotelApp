@@ -20,18 +20,11 @@ import static com.epam.javacourse.hotelapp.utils.Constants.*;
 @Component
 public class CustomizedRoomRepositoryImpl implements CustomizedRoomRepository {
 
-//    @Autowired
-//    @Lazy
-//    RoomRepository roomRepository;
-
-    private final RoomRepository roomRepository;
 
     @PersistenceContext
     private EntityManager entityManager;
 
-    @Autowired
-    public CustomizedRoomRepositoryImpl(RoomRepository roomRepository) {
-        this.roomRepository = roomRepository;
+    public CustomizedRoomRepositoryImpl() {
     }
 
     @Override
@@ -61,9 +54,8 @@ public class CustomizedRoomRepositoryImpl implements CustomizedRoomRepository {
     @Override
     public List<Room> findRoomsToBook(LocalDate checkin, LocalDate checkout, int pageSize, int page,
                                       String sortBy, String sortType, String sortSeats, String roomStatus) throws DBException {
-//    public List<Room> findRoomsToBook(LocalDate checkin, LocalDate checkout, int pageSize, int page, Sort sortType, String sortSeats, String roomStatus) {
 
-        List<Room> paginatedResult = new ArrayList<>();
+        List<Room> paginatedResult;
         StoredProcedureQuery spQuery;
 
         try {
@@ -93,18 +85,6 @@ public class CustomizedRoomRepositoryImpl implements CustomizedRoomRepository {
             } else {
                 spQuery.setParameter("room_seats", null);
             }
-
-//            if (sortType.isSorted()) {
-//
-//                var sortParameters = sortType.toList();
-//
-//                if (!sortType.isEmpty()) {
-//                    for (var s : sortParameters) {
-//                        spQuery.setParameter("sortBy", s.getProperty());
-//                        spQuery.setParameter("sortType", s.getDirection().toString().toLowerCase());
-//                    }
-//                }
-//            }
 
             if (sortBy != null && !sortBy.isEmpty()) {
                 spQuery.setParameter("sortBy", sortBy);

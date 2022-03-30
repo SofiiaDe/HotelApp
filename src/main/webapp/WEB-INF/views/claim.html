@@ -5,16 +5,17 @@
 <html>
 <head>
 
-  <title>Claim form for client to book room</title>
+    <title>Claim form for client to book room</title>
 </head>
 <style>
-  #appForm{
-    margin-left: 35px;
-    margin-top: 35px;
-  }
-  form input{
-    margin-right: 10px;
-  }
+    #appForm {
+        margin-left: 35px;
+        margin-top: 35px;
+    }
+
+    form input {
+        margin-right: 10px;
+    }
 </style>
 
 
@@ -31,8 +32,8 @@
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <a class="navbar-brand" href="/client/account">
-        <img src="pictures/logo-hotel.jpg" width="30" height="30" class="d-inline-block align-top" alt=""
-        th:text="#{client.menu.label.client}"/>
+        <img th:src="@{/pictures/logo-hotel.jpg}" alt="logo" width="30" height="30" class="d-inline-block align-top"
+             th:text="#{client.menu.label.client}"/>
     </a>
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -47,7 +48,6 @@
         </ul>
 
 
-<!--        <div id="userName" ${sessionScope.authorisedUser.firstName} ${sessionScope.authorisedUser.lastName}</div>-->
         <div class="dropdown">
             <button class="btn btn-outline-secondary btn-sm" type="button" id="dropdownMenuButton"
                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -69,59 +69,65 @@
         </div>
 
         <form class="form-inline my-2 my-lg-0" method="post" th:action="@{/logout}">
-            <button class="btn btn-outline-success my-2 my-sm-0" type="submit" th:text="#{main.menu.button.logout}"></button>
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit"
+                    th:text="#{main.menu.button.logout}"></button>
         </form>
     </div>
 </nav>
 
-<form th:method="POST" th:action="@{/client/claim}" id="appForm" th:object="${claim}">
+<form th:method="POST" th:action="@{/client/claim}" id="appForm" th:object="${claim}" >
 
-  <h2 th:text="#{claim.header.choose_type}"></h2>
-  <p>
-    <input type="radio" th:text="#{room.type.single}" value="single" checked name="roomSeats"
-           id="roomSeats"/>
-  </p>
-  <p>
-    <input type="radio" th:text="#{room.type.double}" value="double" name="roomSeats"/>
-  </p>
-  <p>
-    <input type="radio" th:text="#{room.type.triple}" value="triple" name="roomSeats"/>
-  </p>
-  <p>
-    <input type="radio" th:text="#{room.type.twin}" value="twin" name="roomSeats"/>
-  </p>
-  <br>
-  <h2 th:text="#{claim.header.choose_class}"></h2>
-  <p>
-    <input type="radio" th:text="#{room.class.standard}" value="standard" checked name="roomClass"/>
-  </p>
-  <p>
-    <input type="radio" th:text="#{room.class.business}" value="business" name="roomClass"/>
-  </p>
-  <p>
-    <input type="radio" th:text="#{room.class.lux}" value="lux" name="roomClass"/>
-  </p>
-  <br>
-  <h2 th:text="#{claim.header.choose_time}"></h2>
-
-  <form>
-<!--    <jsp:useBean id="now" class="java.util.Date" />-->
-<!--      <${#calendars.format(#calendars.createNow(), 'dd MMM yyyy HH:mm')}>-->
-
-      <!--    <fmt:formatDate var="currentDate" value="${now}" pattern="yyyy-MM-dd" />-->
+    <h2 th:text="#{claim.header.choose_type}"></h2>
     <p>
-      <label for="date" th:text="#{checkin.date}">: </label>
-      <input type="date" id="date" name="checkinDate"/>
+        <input type="radio" th:text="#{room.type.single}" value="single" checked name="roomSeats"
+               id="roomSeats"/>
     </p>
     <p>
-      <label for="date" th:text="#{checkout.date}">: </label>
-      <input type="date" id="dateout" name="checkoutDate"/>
+        <input type="radio" th:text="#{room.type.double}" value="double" name="roomSeats"/>
+    </p>
+    <p>
+        <input type="radio" th:text="#{room.type.triple}" value="triple" name="roomSeats"/>
+    </p>
+    <p>
+        <input type="radio" th:text="#{room.type.twin}" value="twin" name="roomSeats"/>
     </p>
     <br>
+    <h2 th:text="#{claim.header.choose_class}"></h2>
     <p>
-      <button type="submit" class="btn btn-info" th:text="#{submit.button}"></button>
+        <input type="radio" th:text="#{room.class.standard}" value="standard" checked name="roomClass"/>
     </p>
-  </form>
+    <p>
+        <input type="radio" th:text="#{room.class.business}" value="business" name="roomClass"/>
+    </p>
+    <p>
+        <input type="radio" th:text="#{room.class.lux}" value="lux" name="roomClass"/>
+    </p>
+    <br>
+    <h2 th:text="#{claim.header.choose_time}"></h2>
+
+    <form>
+        <p style="color:red" th:if="${#fields.hasErrors('${claim}')}" th:errors="${claim}"></p>
+        <div class="form-group">
+            <label for="date" th:text="#{checkin.date}">: </label>
+            <input type="date" th:field="*{checkinDate}" name="checkinDate" id="date" required="required"/>
+            <div style="color:red" th:if="${#fields.hasErrors('checkinDate')}"
+                 th:errors="*{checkinDate}">Checkin Error
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="dateout" th:text="#{checkout.date}">: </label>
+            <input type="date" th:field="*{checkoutDate}" name="checkoutDate" id="dateout" required="required"/>
+            <div style="color:red" th:if="${#fields.hasErrors('checkoutDate')}"
+                 th:errors="*{checkoutDate}">Checkin Error
+            </div>
+        </div>
+
+        <br>
+        <p>
+            <button type="submit" class="btn btn-info" th:text="#{submit.button}"></button>
+        </p>
+    </form>
 </form>
 
 <div th:insert="fragments/scripts.html"></div>

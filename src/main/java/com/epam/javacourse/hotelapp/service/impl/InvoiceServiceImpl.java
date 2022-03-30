@@ -54,7 +54,7 @@ public class InvoiceServiceImpl implements IInvoiceService {
     public InvoiceDto getInvoiceById(int invoiceId) {
 
         Invoice invoice = invoiceRepository.findById(invoiceId)
-                .orElseThrow(()->new NoSuchElementFoundException("Can't get invoice with id = " + invoiceId));
+                .orElseThrow(()->new NoSuchElementFoundException("Can't retrieve invoice with id = " + invoiceId));
         return InvoiceMapper.mapToDto(invoice);
     }
 

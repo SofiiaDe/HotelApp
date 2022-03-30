@@ -63,7 +63,7 @@ public class BookingServiceImpl implements IBookingService {
     public BookingDto getBookingById(int bookingId) {
 
         Booking booking = bookingRepository.findById(bookingId)
-                .orElseThrow(() -> new NoSuchElementFoundException("Can't get booking with id = " + bookingId));
+                .orElseThrow(() -> new NoSuchElementFoundException("Can't retrieve booking with id = " + bookingId));
 
         return BookingMapper.mapToDto(booking);
     }
@@ -78,20 +78,20 @@ public class BookingServiceImpl implements IBookingService {
             allUserBookings = bookingRepository.findBookingsByUserId(userID);
             result = new ArrayList<>();
 
+
+            for (Booking booking : allUserBookings) {
+                var room = roomRepository.getById(booking.getRoomId());
+                result.add(
+                        new BookingClientDto(booking.getId(),
+                                booking.getCheckinDate(),
+                                booking.getCheckoutDate(),
+                                room.getRoomSeats(),
+                                room.getRoomClass(),
+                                false
+                        ));
+            }
         } catch (Exception exception) {
             throw new AppException("Can't retrieve list of client's bookings to show in the client's account", exception);
-        }
-
-        for (Booking booking : allUserBookings) {
-            var room = roomRepository.getById(booking.getRoomId());
-            result.add(
-                    new BookingClientDto(booking.getId(),
-                            booking.getCheckinDate(),
-                            booking.getCheckoutDate(),
-                            room.getRoomSeats(),
-                            room.getRoomClass(),
-                            false
-                    ));
         }
         return result;
     }
@@ -156,4 +156,7 @@ public class BookingServiceImpl implements IBookingService {
     public void updateBookingStatus(BookingDto bookingDto, boolean status) {
         bookingRepository.updateBookingStatus(status, bookingDto.getId());
     }
+
+//    public int getAllBookingsCount()
+
 }

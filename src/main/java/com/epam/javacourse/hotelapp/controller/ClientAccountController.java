@@ -19,6 +19,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import javax.validation.constraints.Future;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -79,7 +80,6 @@ public class ClientAccountController {
         List<InvoiceClientDto> userInvoices = invoiceService.getUserDetailedInvoices(authorisedUser.getId());
         userInvoices.sort(Comparator.comparing(InvoiceClientDto::getInvoiceDate));
 
-//        ModelAndView modelAndView = new ModelAndView("clientAccount");
         ModelAndView modelAndView = new ModelAndView(PAGE_CLIENT_ACCOUNT);
 
         modelAndView.addObject("myClaims", userClaims);
@@ -92,7 +92,7 @@ public class ClientAccountController {
 
 
     @GetMapping("/claim")
-    public String claim() {
+    public String claim(@ModelAttribute("claim") ClaimDto claimDto) {
         return PAGE_SUBMIT_CLAIM;
     }
 
@@ -101,9 +101,10 @@ public class ClientAccountController {
                               @ModelAttribute("claim") @Valid ClaimDto claimDto,
                               BindingResult bindingResult) throws AppException {
 
-        if (bindingResult.hasErrors())
+        if (bindingResult.hasErrors()) {
             return PAGE_SUBMIT_CLAIM;
 
+        }
         HttpSession session = request.getSession();
         UserDto authorisedUser = (UserDto) session.getAttribute("authorisedUser");
 
@@ -133,7 +134,8 @@ public class ClientAccountController {
 
 
     @GetMapping("/book")
-    public String findPaginated(@RequestParam(value = "page", required = false)
+    public String findPaginated(@ModelAttribute("booking") BookingDto bookingDto,
+                                @RequestParam(value = "page", required = false)
                                         Integer page,
                                 @RequestParam(value = "sortBy", required = false)
                                         String sortByParam,
@@ -144,8 +146,12 @@ public class ClientAccountController {
                                 @RequestParam(value = "seats", required = false)
                                         String roomSeatsParam,
                                 @RequestParam(value = "checkin", required = false)
+//                                    @Future(message = "Check-in date can't be earlier than current date. " +
+//                                        "Please enter correct date.")
                                         String checkinDate,
                                 @RequestParam(value = "checkout", required = false)
+//                                    @Future(message = "Check-out date can't be earlier than current date. " +
+//                                            "Please enter correct date.")
                                         String checkoutDate,
                                 Model model) throws AppException {
         int pageSize = 5;
@@ -157,8 +163,6 @@ public class ClientAccountController {
         List<Room> freeRooms;
         int totalFreeRooms;
         int totalPageCount = 0;
-//        Sort sortBy;
-//        Sort sortType;
 
         if (checkinDate == null || checkoutDate == null) {
             freeRooms = Collections.emptyList();
@@ -167,18 +171,6 @@ public class ClientAccountController {
             LocalDate checkin = Validator.dateParameterToLocalDate(checkinDate);
             LocalDate checkout = Validator.dateParameterToLocalDate(checkoutDate);
 
-//            if (sortByParam == null) {
-//                sortBy = Sort.unsorted();
-//            } else {
-//                sortBy = Objects.equals(sortByParam, "class") ? Sort.by("roomClass") : Sort.by("price");
-//            }
-//
-//            if (sortTypeParam == null) {
-//                sortType = Sort.unsorted();
-//            } else {
-//                sortType = Objects.equals(sortTypeParam, "asc") ? sortBy.ascending() : sortBy.descending();
-//            }
-
             totalFreeRooms = roomService.getRoomsNumberForPeriod(checkin, checkout);
             totalPageCount = (int) Math.ceil((float) totalFreeRooms / pageSize);
 
@@ -186,7 +178,6 @@ public class ClientAccountController {
 
             freeRooms = toGetRooms ?
                     roomService.getRoomsForPeriod(checkin, checkout, pageSize, page, sortByParam, sortTypeParam, roomSeatsParam, roomStatusParam) :
-//                    roomService.getRoomsForPeriod(checkin, checkout, pageSize, page, sortType, roomSeatsParam, roomStatusParam) :
                     new ArrayList<>();
 
         }
@@ -263,6 +254,7 @@ public class ClientAccountController {
 
     /**
      * Provide invoice payment
+     *
      * @throws AppException
      */
     @PostMapping(value = "/payInvoice")

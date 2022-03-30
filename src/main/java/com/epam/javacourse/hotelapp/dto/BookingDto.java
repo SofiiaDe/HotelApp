@@ -1,25 +1,26 @@
 package com.epam.javacourse.hotelapp.dto;
 
 import com.epam.javacourse.hotelapp.model.User;
+import com.epam.javacourse.hotelapp.utils.validation.customannotations.BookingDtoRangeCheck;
+import com.epam.javacourse.hotelapp.utils.validation.customannotations.ClaimDtoRangeCheck;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.Future;
 import java.time.LocalDate;
 
+@BookingDtoRangeCheck(message = "Check-in date should be earlier than check-out date. Dates can't be overlapping")
 public class BookingDto {
 
     private int id;
     private int userId;
 
     @Future(message = "Check-in date can't be earlier than current date. " +
-            "Please enter correct dates.")
-//    @NotNull(message = "Check-in date can't be empty")
+            "Please enter correct date.")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate checkin;
 
     @Future(message = "Check-out date can't be earlier than current date. " +
-            "Please enter correct dates.")
-//    @NotNull(message = "Check-out date can't be empty")
+            "Please enter correct date.")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate checkout;
 

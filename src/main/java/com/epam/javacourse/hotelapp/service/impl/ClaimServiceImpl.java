@@ -12,14 +12,12 @@ import com.epam.javacourse.hotelapp.repository.UserRepository;
 import com.epam.javacourse.hotelapp.service.interfaces.IClaimService;
 import com.epam.javacourse.hotelapp.utils.mappers.ClaimMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -45,7 +43,7 @@ public class ClaimServiceImpl implements IClaimService {
     @Override
     public ClaimDto getClaimById(int claimId) {
         Claim claim = claimRepository.findById(claimId)
-                .orElseThrow(()->new NoSuchElementFoundException("Can't get claim with id = " + claimId));
+                .orElseThrow(() -> new NoSuchElementFoundException("Can't get claim with id = " + claimId));
         return ClaimMapper.mapToDto(claim);
     }
 
@@ -59,7 +57,6 @@ public class ClaimServiceImpl implements IClaimService {
         claims.forEach(x -> result.add(ClaimMapper.mapToDto(x)));
         return result;
     }
-
 
 
     @Override
@@ -76,7 +73,7 @@ public class ClaimServiceImpl implements IClaimService {
 
             for (Claim claim : allUserClaims) {
                 result.add(
-                         new ClaimClientDto(claim.getId(),
+                        new ClaimClientDto(claim.getId(),
                                 claim.getCheckinDate(),
                                 claim.getCheckoutDate(),
                                 claim.getRoomSeats(),
@@ -108,13 +105,11 @@ public class ClaimServiceImpl implements IClaimService {
             List<ClaimManagerDto> result = new ArrayList<>();
 
             for (Claim claim : allClaims) {
-                Optional<User> optionalUser = users.stream()
+                var user = users.stream()
                         .filter(u -> u.getId() == claim.getUserId().getId())
-                        .findFirst();
-                if (optionalUser.isEmpty()) {
-                    throw new ChangeSetPersister.NotFoundException();
-                }
-                User user = optionalUser.get();
+                        .findFirst()
+                        .orElseThrow(() -> new NoSuchElementFoundException("Can't get user with id = " + claim.getUserId().getId()));
+
                 result.add(
                         new ClaimManagerDto(
                                 claim.getId(),
@@ -128,8 +123,8 @@ public class ClaimServiceImpl implements IClaimService {
             }
             return result;
 
-        } catch (ChangeSetPersister.NotFoundException exception) {
-            throw new AppException("Can't retrieve all applications to show in the manager's account", exception);
+        } catch (Exception exception) {
+            throw new AppException("Can't retrieve all claims to show in the manager's account", exception);
         }
     }
 

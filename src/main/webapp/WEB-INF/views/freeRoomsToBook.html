@@ -35,9 +35,8 @@
 <div class="container">
     <h1 th:text="#{client.book.choose_time}"></h1>
 
-    <!--        <jsp:useBean id="now" class="java.util.Date"/>-->
-    <!--        <fmt:formatDate var="currentDate" value="${now}" pattern="yyyy-MM-dd"/>-->
-    <form th:method="GET" th:action="@{/client/book}">
+    <form th:method="GET" th:action="@{/client/book}" th:object="${booking}">
+<!--        <p style="color:red" th:if="${#fields.hasErrors('${booking}')}" th:errors="${booking}"></p>-->
         <input type="hidden" value="freeRoomsToBook"/>
         <div class="booking-wrap d-flex justify-content-between align-items-center">
             <div class="single-select-box mb-30">
@@ -46,28 +45,40 @@
                         <span th:text="#{checkin.date}">:
                         </span>
                 </div>
+                <!--                <div class="booking-datepicker">-->
+                <!--                    <input type="date" id="checkin" name="checkin" placeholder="${currentDate}" min="${currentDate}"-->
+                <!--                           required/>-->
+                <!--                </div>-->
                 <div class="booking-datepicker">
-                    <input type="date" id="checkin" name="checkin" placeholder="${currentDate}" min="${currentDate}"
-                           required/>
-                    <!--                           th:value="*{checkin}-->
-
+                    <div class="form-group">
+                        <input type="date" th:field="*{checkin}" name="checkin" required="required"/>
+                        <div style="color:red" th:if="${#fields.hasErrors('checkin')}"
+                             th:errors="*{checkin}">Checkin Error
+                        </div>
+                    </div>
+                    </div>
                 </div>
-            </div>
 
-            <div class="single-select-box mb-30">
-                <!-- select check-out date -->
-                <div class="booking-tittle">
+                <div class="single-select-box mb-30">
+                    <!-- select check-out date -->
+                    <div class="booking-tittle">
                         <span th:text="#{checkout.date}">:
                         </span>
+                    </div>
+                    <div class="booking-datepicker">
+                        <div class="form-group">
+                            <input type="date" th:field="*{checkout}" name="checkout" required="required"/>
+                            <div style="color:red" th:if="${#fields.hasErrors('checkout')}"
+                                 th:errors="*{checkout}">Checkout Error
+                            </div>
+                        </div>
+                        <!--- <input type="date" name="checkout" placeholder="${currentDate}" min="${currentDate}" required/>-->
+                    </div>
                 </div>
-                <div class="booking-datepicker">
-                    <input type="date" name="checkout" placeholder="${currentDate}" min="${currentDate}" required/>
-                </div>
-            </div>
 
-            <button type="submit" class="btn btn-info" th:text="#{find.button}">
-            </button>
-        </div>
+                <button type="submit" class="btn btn-info" th:text="#{find.button}">
+                </button>
+            </div>
     </form>
 
 
@@ -157,9 +168,29 @@
 
                 <form th:method="POST" th:action="@{/client/book}" th:object="${booking}">
 
+<!--                    <input type="hidden" name="roomId" th:value="${room.getId()}">-->
+                    <!--                    <input type="hidden" name="checkin" th:value="${checkin}">-->
+                    <!--                    <input type="hidden" name="checkout" th:value="${checkout}">-->
+
                     <input type="hidden" name="roomId" th:value="${room.getId()}">
-                    <input type="hidden" name="checkin" th:value="${checkin}">
-                    <input type="hidden" name="checkout" th:value="${checkout}">
+
+
+
+                     <div class="form-group">
+                                <input type="hidden" name="checkin" th:value="${checkin}"
+                                       th:field="*{checkin}" required="required"/>
+            <div style="color:red" th:if="${#fields.hasErrors('checkin')}"
+                 th:errors="*{checkin}">Checkin Error
+            </div>
+        </div>
+
+              <div class="form-group">
+                                <input type="hidden" name="checkout" th:value="${checkout}"
+                                       th:field="*{checkout}" required="required"/>
+            <div style="color:red" th:if="${#fields.hasErrors('checkout')}"
+                 th:errors="*{checkout}">Checkout Error
+            </div>
+        </div>
 
                     <div class="bookingSection">
 

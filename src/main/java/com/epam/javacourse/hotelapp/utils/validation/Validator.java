@@ -54,8 +54,6 @@ public class Validator {
 
         if (date == null || date.isEmpty()) {
             logger.error("Check-in and/or check-out dates were not selected");
-//            request.setAttribute("errorMessage", "Please select check-in and check-out dates.");
-
         }
         LocalDate parsedDate = null;
         try {

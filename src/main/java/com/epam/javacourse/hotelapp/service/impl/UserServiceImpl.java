@@ -41,14 +41,20 @@ public class UserServiceImpl implements IUserService {
     @Override
     @Transactional(readOnly = true)
     public UserDto getUserByEmail(String email) {
-        return UserMapper.mapToDto(userRepository.findUserByEmail(email));
+        UserDto userDto;
+        try {
+            userDto = UserMapper.mapToDto(userRepository.findUserByEmail(email));
+        } catch (NoSuchElementFoundException exception) {
+            throw new NoSuchElementFoundException("Can't retrieve user by email", exception);
+        }
+        return userDto;
     }
 
     @Override
     @Transactional(readOnly = true)
     public UserDto getUserById(int id) {
         User user = userRepository.findById(id)
-                .orElseThrow(()->new NoSuchElementFoundException("Can't get user with id = " + id));
+                .orElseThrow(()->new NoSuchElementFoundException("Can't retrieve user with id = " + id));
         return UserMapper.mapToDto(user);
     }
 

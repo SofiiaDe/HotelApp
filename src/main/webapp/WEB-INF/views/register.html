@@ -165,6 +165,7 @@
                                          th:errors="*{password}">Password Error
                                     </div>
                                 </div>
+                                <p style="color:red" th:if="${#fields.hasErrors('${user}')}" th:errors="${user}"></p>
                                 <div class="form-group">
                                     <input type="password" th:field="*{confirmPassword}" id="confirmPassword"
                                            required="required" name="confirmPassword"
@@ -231,6 +232,7 @@
                                          th:errors="*{email}">Email Error
                                     </div>
                                 </div>
+                                <p style="color:red" th:if="${#fields.hasErrors('${user}')}" th:errors="${user}"></p>
                                 <div class="form-group">
                                     <input type="password" th:field="*{password}" id="passwordM" required="required"
                                            name="password" class="form-control"
