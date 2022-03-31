@@ -19,18 +19,19 @@
     <div class="tab-pane fade show active" id="v-pills-services" role="tabpanel"
          aria-labelledby="v-pills-services-tab">
         <ul class="nav nav-tabs" id="myTab" role="tablist">
+
             <li class="nav-item">
-                <a class="nav-link active" id="booking-tab" data-toggle="tab" href="#booking"
-                   role="tab"
-                   aria-controls="booking" aria-selected="true"
-                   th:text="#{manager.table.bookings}">
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" id="claim-tab" data-toggle="tab" href="#claim" role="tab"
+                <a class="nav-link active" id="claim-tab" data-toggle="tab" href="#claim" role="tab"
                    aria-controls="claim"
                    aria-selected="false"
                    th:text="#{manager.table.claims}">
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="booking-tab" data-toggle="tab" href="#booking"
+                   role="tab"
+                   aria-controls="booking" aria-selected="true"
+                   th:text="#{manager.table.bookings}">
                 </a>
             </li>
             <li class="nav-item">
@@ -57,84 +58,9 @@
         </ul>
 
         <div class="tab-content" id="myTabContent">
-            <!--            Booking-->
-
-            <div class="tab-pane fade active show" id="booking" role="tabpanel" aria-labelledby="booking-tab">
-                <div class="dropdown dropDownPadding">
-                    <button class="btn btn-info dropdown-toggle" type="button" data-toggle="dropdown"
-                            aria-haspopup="true" aria-expanded="false"
-                            th:text="#{status}">
-                    </button>
-                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <a class="dropdown-item" href="#" id="statusPaid" th:text="#{status.paid}"></a>
-                        <a class="dropdown-item" href="#" id="statusOngoing" th:text="#{status.ongoing}"></a>
-                        <a class="dropdown-item" href="#" id="statusFinished" th:text="#{status.finished}"></a>
-                        <a class="dropdown-item" href="#" id="statusNew" th:text="#{status.new}"></a>
-                        <a class="dropdown-item" href="#" id="statusCancelled" th:text="#{status.cancelled}"></a>
-                    </div>
-                </div>
-                <table class="table table-hover mt-2">
-                    <thead>
-                    <tr>
-                        <th scope="col"
-                            th:text="#{table.th.booked_by}">
-                        </th>
-                        <th scope="col"
-                            th:text="#{table.th.user_email}">
-                        </th>
-                        <th scope="col"
-                            th:text="#{checkin.date}">
-                        </th>
-                        <th scope="col"
-                            th:text="#{checkout.date}">
-                        </th>
-                        <th scope="col"
-                            th:text="#{table.th.room_number}">
-                        </th>
-                        <th scope="col"
-                            th:text="#{table.th.status}">
-                        </th>
-                    </tr>
-                    </thead>
-                    <tbody>
-
-                    <th:block th:each="booking : ${allBookings}">
-
-                        <tr>
-                            <td th:text="${booking.bookedByUser}"></td>
-                            <td th:text="${booking.bookedByUserEmail}"></td>
-                            <td th:text="${booking.checkinDate}"></td>
-                            <td th:text="${booking.checkoutDate}"></td>
-                            <td th:text="${booking.roomNumber}"></td>
-<!--                            <td th:text="${booking.bookingStatus}"></td>-->
-                            <td>
-                                <th:block th:if="${booking.bookingStatus != null}" th:switch="${booking.bookingStatus.text}">
-                                    <div class="badge badge-danger text-uppercase" th:case="'new'"
-                                         th:text="#{status.new}">
-                                    </div>
-                                    <div class="badge badge-secondary text-uppercase" th:case="'cancelled'"
-                                         th:text="#{status.cancelled}">
-                                    </div>
-                                    <div class="badge badge-success text-uppercase" th:case="'paid'"
-                                         th:text="#{status.paid}">
-                                    </div>
-                                    <div class="badge badge-warning text-uppercase" th:case="'finished'"
-                                         th:text="#{status.finished}">
-                                    </div>
-                                    <div class="badge badge-primary text-uppercase" th:case="'ongoing'"
-                                         th:text="#{status.ongoing}">
-                                    </div>
-                                </th:block>
-                            </td>
-                        </tr>
-                    </th:block>
-                    </tbody>
-                </table>
-
-            </div>
 
             <!--            Claim-->
-            <div class="tab-pane fade" id="claim" role="tabpanel" aria-labelledby="claim-tab">
+            <div class="tab-pane fade active show" id="claim" role="tabpanel" aria-labelledby="claim-tab">
                 <table class="table table-hover mt-2">
                     <thead>
                     <tr>
@@ -156,9 +82,9 @@
                         <th scope="col"
                             th:text="#{checkout.date}">
                         </th>
-
                     </tr>
                     </thead>
+
                     <tbody>
                     <th:block th:each="claim : ${allClaims}">
 
@@ -307,7 +233,176 @@
                     </th:block>
                     </tbody>
                 </table>
+
+                <ul class="pagination">
+
+                    <li class="page-item" th:classappend="${claimPage <= 1 ? 'disabled' : ''}" >
+                        <a class="page-link"
+                           th:href="@{'/manager1/account/?page=' + ${claimPage - 1}}"
+                           aria-label="Prev" id="prevPage">
+                            <span aria-hidden="true">&laquo;</span>
+                            <span class="sr-only">&laquo;</span>
+                        </a>
+                    </li>
+
+                    <th:block th:if="${claimPage - 3 > 1 || (claimPage > 1 && claimPage <= 4)}">
+                        <li class="page-item">
+                            <a class="page-link"
+                               th:href="@{'/manager1/account/?page=' + 1}"
+                               id="firstPage">1</a></li>
+                    </th:block>
+
+                    <th:block th:if="${claimPage - 3 > 1}">
+                        <li class="page-item disabled">
+                            <a class="page-link"
+                               th:href="#{}">...</a></li>
+                    </th:block>
+
+                    <th:block th:if="${claimPage - 2 > 1}">
+                        <li class="page-item">
+                            <a class="page-link"
+                               th:href="@{'/manager1/account/?page=' + ${claimPage - 1}}"
+                               id="pageMin2" th:text="${claimPage - 2}"></a></li>
+                    </th:block>
+
+                    <th:block th:if="${claimPage - 1 > 1}">
+                        <li class="page-item">
+                            <a class="page-link"
+                               th:href="@{'/manager1/account/?page=' + ${claimPage - 1}}"
+                               id="pageMin1" th:text="${claimPage - 1}"></a>
+                        </li>
+                    </th:block>
+
+                    <li class="page-item active">
+                        <a class="page-link"
+                           th:href="@{'/?page=' + ${claimPage}}"
+                           th:text="${claimPage}"></a></li>
+
+                    <th:block th:if="${claimPage + 1 <= totalClaimPageCount}">
+                        <li class="page-item">
+                            <a class="page-link"
+                               th:href="@{'/manager1/account/?page=' + ${claimPage + 1}}"
+                               id="pagePlus1" th:text="${claimPage + 1}"></a>
+                        </li>
+                    </th:block>
+
+                    <th:block th:if="${claimPage + 2 <= totalClaimPageCount}">
+                        <li class="page-item">
+                            <a class="page-link"
+                               th:href="@{'/manager1/account/?page=' + ${claimPage + 2}}"
+                               id="pagePlus2" th:text="${claimPage + 2}"></a>
+                        </li>
+                    </th:block>
+
+                    <th:block th:if="${claimPage + 4 <= totalClaimPageCount}">
+                        <li class="page-item">
+                            <a class="page-link"
+                               th:href="@{'/manager1/account/?page=' + ${claimPage + 4}}"
+                            >...</a>
+                        </li>
+                    </th:block>
+
+                    <th:block th:if="${claimPage + 3 <= totalClaimPageCount && totalClaimPageCount >= 4}">
+                        <li class="page-item">
+                            <a class="page-link"
+                               th:href="@{'/manager1/account/?page=' + ${claimPage + 3}}"
+                               id="lastPage" th:text="${totalClaimPageCount}"></a>
+                        </li>
+                    </th:block>
+
+                    <li class="page-item" th:classappend="${claimPage >= totalClaimPageCount ? 'disabled' : ''}">
+                        <a class="page-link"
+                           th:href="@{'/manager1/account/?page=' + ${claimPage + 1}}"
+                           aria-label="Next" id="nextPage">
+                            <span aria-hidden="true">&raquo;</span>
+                            <span class="sr-only">&raquo;</span>
+                        </a>
+                    </li>
+
+                </ul>
+
+
             </div>
+
+
+
+            <!--            Booking-->
+
+            <div class="tab-pane fade" id="booking" role="tabpanel" aria-labelledby="booking-tab">
+                <div class="dropdown dropDownPadding">
+                    <button class="btn btn-info dropdown-toggle" type="button" data-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false"
+                            th:text="#{status}">
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item" href="#" id="statusPaid" th:text="#{status.paid}"></a>
+                        <a class="dropdown-item" href="#" id="statusOngoing" th:text="#{status.ongoing}"></a>
+                        <a class="dropdown-item" href="#" id="statusFinished" th:text="#{status.finished}"></a>
+                        <a class="dropdown-item" href="#" id="statusNew" th:text="#{status.new}"></a>
+                        <a class="dropdown-item" href="#" id="statusCancelled" th:text="#{status.cancelled}"></a>
+                    </div>
+                </div>
+                <table class="table table-hover mt-2">
+                    <thead>
+                    <tr>
+                        <th scope="col"
+                            th:text="#{table.th.booked_by}">
+                        </th>
+                        <th scope="col"
+                            th:text="#{table.th.user_email}">
+                        </th>
+                        <th scope="col"
+                            th:text="#{checkin.date}">
+                        </th>
+                        <th scope="col"
+                            th:text="#{checkout.date}">
+                        </th>
+                        <th scope="col"
+                            th:text="#{table.th.room_number}">
+                        </th>
+                        <th scope="col"
+                            th:text="#{table.th.status}">
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    <th:block th:each="booking : ${allBookings}">
+
+                        <tr>
+                            <td th:text="${booking.bookedByUser}"></td>
+                            <td th:text="${booking.bookedByUserEmail}"></td>
+                            <td th:text="${booking.checkinDate}"></td>
+                            <td th:text="${booking.checkoutDate}"></td>
+                            <td th:text="${booking.roomNumber}"></td>
+<!--                            <td th:text="${booking.bookingStatus}"></td>-->
+                            <td>
+                                <th:block th:if="${booking.bookingStatus != null}" th:switch="${booking.bookingStatus.text}">
+                                    <div class="badge badge-danger text-uppercase" th:case="'new'"
+                                         th:text="#{status.new}">
+                                    </div>
+                                    <div class="badge badge-secondary text-uppercase" th:case="'cancelled'"
+                                         th:text="#{status.cancelled}">
+                                    </div>
+                                    <div class="badge badge-success text-uppercase" th:case="'paid'"
+                                         th:text="#{status.paid}">
+                                    </div>
+                                    <div class="badge badge-warning text-uppercase" th:case="'finished'"
+                                         th:text="#{status.finished}">
+                                    </div>
+                                    <div class="badge badge-primary text-uppercase" th:case="'ongoing'"
+                                         th:text="#{status.ongoing}">
+                                    </div>
+                                </th:block>
+                            </td>
+                        </tr>
+                    </th:block>
+                    </tbody>
+                </table>
+
+            </div>
+
+
 
             <!--            Confirmation Request-->
             <div class="tab-pane fade" id="confirmrequest" role="tabpanel" aria-labelledby="confirmrequest-tab">

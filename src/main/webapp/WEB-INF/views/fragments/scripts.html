@@ -25,30 +25,6 @@
 </script>
 
 <script>
-    function buildUrl(page) {
-        const result = new URL(window.location.href);
-        result.searchParams.set("page", page);
-        return result;
-    }
-    function setUrls(tagId, value) {
-        if (document.getElementById(tagId)) {
-            document.getElementById(tagId).href = value;
-        }
-    }
-    (function () {
-        setUrls("prevPage", buildUrl(${ requestScope.page } - 1));
-        setUrls("nextPage", buildUrl(${ requestScope.page } + 1));
-        setUrls("pageMin1", buildUrl(${ requestScope.page } - 1));
-        setUrls("pageMin2", buildUrl(${ requestScope.page } - 2));
-        setUrls("pagePlus1", buildUrl(${ requestScope.page } + 1));
-        setUrls("pagePlus2", buildUrl(${ requestScope.page } + 2));
-        setUrls("pagePlus2", buildUrl(${ requestScope.page } + 2));
-        setUrls("firstPage", buildUrl(1));
-        setUrls("lastPage", buildUrl(${ requestScope.pageCount }));
-    })();
-</script>
-
-<script>
     (function () {
         const url = new URL(window.location.href);
         if(url.searchParams.get("successReg")){

@@ -5,7 +5,11 @@
 
 <head>
 
+    <meta http-equiv='Content-Type' content='text/html; charset=UTF-8'/>
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
     <title>Error</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <style>
     #errorForm{
@@ -13,16 +17,27 @@
         margin-top: 35px;
     }
 </style>
+
 <body class="text-center" id="errorForm">
+
+<div th:insert="fragments/header"></div>
 
 <h2 class="error"
     th:text="#{error.occurred}">:
 </h2>
 
+<!--<div class="main-wrapper">-->
+<!--    <div class="signboard-wrapper">-->
+<!--        <div class="signboard">Problems</div>-->
+<!--        <div class="string"></div>-->
+<!--        <div class="pin pin1"></div>-->
+<!--        <div class="pin pin2"></div>-->
+<!--        <div class="pin pin3"></div>-->
+<!--    </div>-->
+<!--</div>-->
 
-<!--<div th:if="${not empty errorMessage}">-->
-    <h3>${requestScope.errorMessage}</h3>
-</div>
+<div th:insert="fragments/scripts.html"></div>
+
 
 </body>
 </html>

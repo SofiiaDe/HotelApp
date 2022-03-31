@@ -10,6 +10,7 @@ import com.epam.javacourse.hotelapp.utils.validation.Validator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -146,14 +147,21 @@ public class ClientAccountController {
                                 @RequestParam(value = "seats", required = false)
                                         String roomSeatsParam,
                                 @RequestParam(value = "checkin", required = false)
-//                                    @Future(message = "Check-in date can't be earlier than current date. " +
-//                                        "Please enter correct date.")
+                                @Future(message = "Check-in date can't be earlier than current date. " +
+                                        "Please enter correct date.")
+                                @DateTimeFormat(pattern = "yyyy-MM-dd")
                                         String checkinDate,
                                 @RequestParam(value = "checkout", required = false)
-//                                    @Future(message = "Check-out date can't be earlier than current date. " +
-//                                            "Please enter correct date.")
+                                @Future(message = "Check-out date can't be earlier than current date. " +
+                                        "Please enter correct date.")
+                                @DateTimeFormat(pattern = "yyyy-MM-dd")
                                         String checkoutDate,
+                                BindingResult bindingResult,
                                 Model model) throws AppException {
+        if (bindingResult.hasErrors()) {
+            return PAGE_FREE_ROOMS;
+        }
+
         int pageSize = 5;
 
         if (page == null || page <= 0) {
@@ -168,6 +176,7 @@ public class ClientAccountController {
             freeRooms = Collections.emptyList();
 
         } else {
+
             LocalDate checkin = Validator.dateParameterToLocalDate(checkinDate);
             LocalDate checkout = Validator.dateParameterToLocalDate(checkoutDate);
 

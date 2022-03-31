@@ -12,6 +12,10 @@ import com.epam.javacourse.hotelapp.repository.UserRepository;
 import com.epam.javacourse.hotelapp.service.interfaces.IClaimService;
 import com.epam.javacourse.hotelapp.utils.mappers.ClaimMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,7 +39,7 @@ public class ClaimServiceImpl implements IClaimService {
 
 
     @Override
-    @Transactional(rollbackFor = { Exception.class })
+    @Transactional(rollbackFor = {Exception.class})
     public void createClaim(ClaimDto claimDto) {
         claimRepository.save(ClaimMapper.mapFromDto(claimDto));
     }
@@ -49,7 +53,7 @@ public class ClaimServiceImpl implements IClaimService {
 
 
     @Override
-    @Transactional(rollbackFor = { Exception.class }, readOnly = true)
+    @Transactional(rollbackFor = {Exception.class}, readOnly = true)
     public List<ClaimDto> getClaimsByUserId(int userId) {
         final List<ClaimDto> result = new ArrayList<>();
         List<Claim> claims = claimRepository.findClaimsByUserId(userId);
@@ -131,5 +135,58 @@ public class ClaimServiceImpl implements IClaimService {
     @Override
     public void removeClaim(int claimId) {
         claimRepository.deleteById(claimId);
+    }
+
+    @Override
+    public List<ClaimManagerDto> getAllDetailedClaimsPaginated(int page, int pageSize, String sortBy) throws AppException {
+        try {
+
+            Pageable paging = PageRequest.of(page - 1, pageSize, Sort.by(sortBy));
+            Page<Claim> pagedResult = claimRepository.findAll(paging);
+
+            List<Claim> allClaims;
+
+            if (pagedResult.hasContent()) {
+                allClaims = pagedResult.getContent();
+            } else {
+                allClaims = new ArrayList<>();
+            }
+
+            if (allClaims.isEmpty()) {
+                return Collections.emptyList();
+            }
+
+            List<Integer> userIds = allClaims.stream()
+                    .map(Claim::getUserId)
+                    .map(User::getId)
+                    .distinct().collect(Collectors.toList());
+
+            List<User> users = userRepository.findUsersByIds(userIds);
+
+            List<ClaimManagerDto> result = new ArrayList<>();
+
+            for (Claim claim : allClaims) {
+                var user = users.stream()
+                        .filter(u -> u.getId() == claim.getUserId().getId())
+                        .findFirst()
+                        .orElseThrow(() -> new NoSuchElementFoundException(
+                                "Can't get user with id = " + claim.getUserId().getId()));
+
+                result.add(
+                        new ClaimManagerDto(
+                                claim.getId(),
+                                user.getFirstName() + ' ' + user.getLastName(),
+                                user.getEmail(),
+                                claim.getCheckinDate(),
+                                claim.getCheckoutDate(),
+                                claim.getRoomSeats(),
+                                claim.getRoomClass()
+                        ));
+            }
+            return result;
+
+        } catch (Exception exception) {
+            throw new AppException("Can't retrieve all claims to show in the manager's account", exception);
+        }
     }
 }

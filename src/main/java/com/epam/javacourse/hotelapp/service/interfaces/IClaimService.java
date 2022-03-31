@@ -13,18 +13,14 @@ public interface IClaimService {
     List<ClaimDto> getClaimsByUserId(int userId) throws AppException;
 
     void createClaim(ClaimDto claimDto);
-//
-//    List<ClaimDto> getAllClaims() throws AppException;
-//
+
     List<ClaimManagerDto> getAllDetailedClaims() throws AppException;
-//
-//
-//    boolean updateClaim(Claim claim) throws AppException;
-//
+
+    List<ClaimManagerDto> getAllDetailedClaimsPaginated(int page, int pageSize, String sortBy) throws AppException;
+
     void removeClaim(int claimId);
 
     ClaimDto getClaimById(int claimId) throws AppException;
-
 
     List<ClaimClientDto> getUserDetailedClaims(int userID) throws AppException;
 

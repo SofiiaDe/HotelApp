@@ -24,6 +24,9 @@ import javax.validation.Valid;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static com.epam.javacourse.hotelapp.utils.Constants.*;
 
@@ -53,19 +56,31 @@ public class ManagerAccountController {
     }
 
     @GetMapping(value = "/account")
-    public ModelAndView getManagerAccount(HttpSession session, HttpServletRequest request) throws AppException {
+    public ModelAndView getManagerAccount(
+            HttpServletRequest request,
+            @RequestParam("page") Optional<Integer> page,
+            @RequestParam("size") Optional<Integer> size,
+            Model model) throws AppException {
 
-        UserDto authorisedUser = (UserDto) session.getAttribute("authorisedUser");
+        int claimPage = page.orElse(1);
+        int pageSize = size.orElse(5);
 
-        List<ClaimManagerDto> allClaims = claimService.getAllDetailedClaims();
+        List<ClaimManagerDto> allClaims =
+                claimService.getAllDetailedClaimsPaginated(claimPage, pageSize, "checkinDate");
+
+        int allClaimsCount = claimService.getAllDetailedClaims().size();
+        int totalClaimPageCount = (int) Math.ceil((float) allClaimsCount / pageSize);
+        if (totalClaimPageCount > 0) {
+            List<Integer> claimPageNumbers = IntStream.rangeClosed(1, totalClaimPageCount)
+                    .boxed()
+                    .collect(Collectors.toList());
+            model.addAttribute("claimPageNumbers", claimPageNumbers);
+        }
+
+        model.addAttribute("claimPage", claimPage);
+        model.addAttribute("totalClaimPageCount", totalClaimPageCount);
 
         BookingStatus bookingStatus = BookingStatus.fromString(request.getParameter("bookingStatus"));
-//        int allBookingsCount = bookingService.getAllBookingsCount(bookingStatus);
-//        int pageCount = (int) Math.ceil((float)allBookingsCount / pageSize);
-//
-//        boolean toGetBookings = allBookingsCount > 0 && page <= pageCount;
-//        List<BookingManagerDto> allBookings = toGetBookings ?
-//                bookingService.getAllDetailedBookings(page, pageSize, bookingStatus) : new ArrayList<>();
 
         List<BookingManagerDto> allBookings = bookingService.getAllDetailedBookings(bookingStatus);
 
@@ -80,9 +95,6 @@ public class ManagerAccountController {
         modelAndView.addObject("allConfirmRequests", allConfirmRequests);
         modelAndView.addObject("allInvoices", allInvoices);
 
-
-//        request.setAttribute("page", page);
-//        request.setAttribute("pageCount", pageCount)
         return modelAndView;
     }
 
