@@ -25,7 +25,7 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = { Exception.class })
     public User createUser(UserDto userDto) throws UserAlreadyExistsException {
         if (emailExist(userDto.getEmail())) {
             throw new UserAlreadyExistsException("There is an account with the following email address: "

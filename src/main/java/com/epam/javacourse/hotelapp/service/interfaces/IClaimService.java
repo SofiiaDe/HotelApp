@@ -12,7 +12,6 @@ public interface IClaimService {
 
     List<ClaimDto> getClaimsByUserId(int userId) throws AppException;
 
-    @Transactional
     void createClaim(ClaimDto claimDto);
 //
 //    List<ClaimDto> getAllClaims() throws AppException;

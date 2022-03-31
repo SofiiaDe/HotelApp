@@ -164,7 +164,7 @@ public class InvoiceServiceImpl implements IInvoiceService {
      * Execute at 3 am every day.
      *
      */
-    @Transactional
+    @Transactional(rollbackFor = { Exception.class })
     @Scheduled(cron = "0 0 3 * * *", zone = "Europe/Sofia") // The pattern is: second, minute, hour, day, month, weekday
     @Override
     public void updateInvoiceStatusToCancelled() throws AppException {

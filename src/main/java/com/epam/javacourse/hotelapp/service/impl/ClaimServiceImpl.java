@@ -35,7 +35,7 @@ public class ClaimServiceImpl implements IClaimService {
 
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = { Exception.class })
     public void createClaim(ClaimDto claimDto) {
         claimRepository.save(ClaimMapper.mapFromDto(claimDto));
     }
@@ -49,7 +49,7 @@ public class ClaimServiceImpl implements IClaimService {
 
 
     @Override
-    @Transactional(readOnly = true)
+    @Transactional(rollbackFor = { Exception.class }, readOnly = true)
     public List<ClaimDto> getClaimsByUserId(int userId) {
         final List<ClaimDto> result = new ArrayList<>();
         List<Claim> claims = claimRepository.findClaimsByUserId(userId);

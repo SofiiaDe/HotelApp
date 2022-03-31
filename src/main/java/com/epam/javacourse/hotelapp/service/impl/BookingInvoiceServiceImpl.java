@@ -60,7 +60,7 @@ public class BookingInvoiceServiceImpl implements IBookingInvoiceService {
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = { Exception.class })
     public void createBookingAndInvoice(BookingDto booking, InvoiceDto invoice) throws AppException {
 
         try {
@@ -105,7 +105,7 @@ public class BookingInvoiceServiceImpl implements IBookingInvoiceService {
      *
      * @throws AppException
      */
-    @Transactional
+    @Transactional(rollbackFor = { Exception.class })
     @Scheduled(cron = "0 0 3 * * *", zone = "Europe/Sofia") // The pattern is: second, minute, hour, day, month, weekday
     @Override
     public void cancelUnpaidBookings() throws AppException {
@@ -123,7 +123,7 @@ public class BookingInvoiceServiceImpl implements IBookingInvoiceService {
         logger.info("Daily booking updates were completed by scheduler");
     }
 
-    @Transactional
+    @Transactional(rollbackFor = { Exception.class })
     @Override
     public void payInvoice(int invoiceId) throws AppException {
         try {

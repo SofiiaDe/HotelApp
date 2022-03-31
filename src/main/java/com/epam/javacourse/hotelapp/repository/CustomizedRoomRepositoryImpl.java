@@ -50,7 +50,7 @@ public class CustomizedRoomRepositoryImpl implements CustomizedRoomRepository {
         return availableRooms;
     }
 
-    @Transactional
+    @Transactional(rollbackFor = { Exception.class })
     @Override
     public List<Room> findRoomsToBook(LocalDate checkin, LocalDate checkout, int pageSize, int page,
                                       String sortBy, String sortType, String sortSeats, String roomStatus) throws DBException {

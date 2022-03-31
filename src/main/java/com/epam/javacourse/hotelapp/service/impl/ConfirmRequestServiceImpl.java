@@ -40,7 +40,7 @@ public class ConfirmRequestServiceImpl implements IConfirmationRequestService {
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = { Exception.class })
     public void createConfirmRequest(ConfirmationRequestDto confirmRequestDto) {
         confirmRequestRepository.save(ConfirmationRequestMapper.mapFromDto(confirmRequestDto));
     }
@@ -61,7 +61,7 @@ public class ConfirmRequestServiceImpl implements IConfirmationRequestService {
 
     }
 
-    @Transactional
+    @Transactional(rollbackFor = { Exception.class })
     @Override
     public void confirmRequestByClient(int confirmRequestId) throws AppException {
 
