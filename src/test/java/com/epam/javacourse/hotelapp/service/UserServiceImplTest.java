@@ -37,37 +37,32 @@ class UserServiceImplTest {
         verify(userRepositoryMock, times(1)).findAll();
     }
 
-//    @Test
-//    void testCreate_whenRepoThrows_throwsException() {
-////        doThrow(new UserAlreadyExistsException()).when(userRepositoryMock).save(any());
-//        doReturn(null).when(userRepositoryMock).save(UserMapper.mapFromDto(getUser()));
-//        UserServiceImpl userService = new UserServiceImpl(userRepositoryMock);
-//
-//        Assertions.assertThrowsExactly(UserAlreadyExistsException.class, () -> userService.createUser(new UserDto()));
-//    }
-//
-//    @Test
-//    void testCreate_whenRepoThrows_ShowExceptionMessage() {
-//        String messageNotToGet = "aaaaa";
-//        String email = "email@com";
-//
-//        when(userRepositoryMock.findUserByEmail(email))
-//                .thenThrow(new NoSuchElementFoundException("There is an account with the following email address: " + email));
-//
-////        doThrow(new UserAlreadyExistsException("There is an account with the following email address: " + email)).when(userRepositoryMock).save(any(User.class));
-//
-//        UserServiceImpl userService = new UserServiceImpl(userRepositoryMock);
-//
-//        try {
-//            userService.createUser(new UserDto());
-//        } catch (UserAlreadyExistsException ex) {
-//            assertEquals("There is an account with the following email address: " + email, ex.getMessage());
-//            assertNotEquals(messageNotToGet, ex.getMessage());
-//            return;
-//        }
-//
-//        Assertions.fail("Should have thrown UserAlreadyExistsException");
-//    }
+    @Test
+    void testCreate_whenRepoThrows_throwsException() {
+        when(userRepositoryMock.findUserByEmail(getUser().getEmail())).thenReturn(UserMapper.mapFromDto(getUser()));
+        UserServiceImpl userService = new UserServiceImpl(userRepositoryMock);
+
+        Assertions.assertThrowsExactly(UserAlreadyExistsException.class, () -> userService.createUser(getUser()));
+    }
+
+    @Test
+    void testCreate_whenRepoThrows_ShowExceptionMessage() {
+        String messageNotToGet = "aaaaa";
+        when(userRepositoryMock.findUserByEmail(getUser().getEmail())).thenReturn(UserMapper.mapFromDto(getUser()));
+
+        UserServiceImpl userService = new UserServiceImpl(userRepositoryMock);
+
+        try {
+            userService.createUser(getUser());
+
+        } catch (UserAlreadyExistsException ex) {
+            assertEquals("There is an account with the following email address: " + getUser().getEmail(), ex.getMessage());
+            assertNotEquals(messageNotToGet, ex.getMessage());
+            return;
+        }
+
+        Assertions.fail("Should have thrown UserAlreadyExistsException");
+    }
 
     @Test
     void testCreate_whenCalled_callsRepo() throws UserAlreadyExistsException {

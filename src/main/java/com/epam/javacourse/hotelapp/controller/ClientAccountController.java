@@ -35,7 +35,6 @@ public class ClientAccountController {
 
     private static final Logger logger = LogManager.getLogger(ClientAccountController.class);
 
-
     private final IClaimService claimService;
     private final IBookingService bookingService;
     private final IConfirmationRequestService confirmRequestService;
@@ -58,18 +57,10 @@ public class ClientAccountController {
     @GetMapping(value = "/account")
     public ModelAndView getClientAccount(HttpSession session) throws AppException {
 
-
-        UserDto authorisedUser = (UserDto) session.getAttribute("authorisedUser");
+        UserDto authorisedUser = (UserDto) session.getAttribute(AUTH_USER);
 
         List<ClaimClientDto> userClaims = claimService.getUserDetailedClaims(authorisedUser.getId());
         userClaims.sort(Comparator.comparing(ClaimClientDto::getCheckinDate).reversed());
-
-//        int userBookingsCount = bookingService.getUserBookingsCount(authorisedUser.getId());
-//        int pageCount = (int) Math.ceil((float) userBookingsCount / pageSize);
-//
-//        boolean toGetBookings = userBookingsCount > 0 && page <= pageCount;
-//        List<UserBookingDetailed> userBookings = toGetBookings ?
-//                bookingService.getUserDetailedBookings(authorisedUser.getId(), page, pageSize) : new ArrayList<>();
 
         List<BookingClientDto> userBookings = bookingService.getUserDetailedBookings(authorisedUser.getId());
         userBookings.sort(Comparator.comparing(BookingClientDto::getCheckinDate).reversed());
@@ -104,10 +95,9 @@ public class ClientAccountController {
 
         if (bindingResult.hasErrors()) {
             return PAGE_SUBMIT_CLAIM;
-
         }
         HttpSession session = request.getSession();
-        UserDto authorisedUser = (UserDto) session.getAttribute("authorisedUser");
+        UserDto authorisedUser = (UserDto) session.getAttribute(AUTH_USER);
 
         String roomSeats = claimDto.getRoomSeats();
         String roomClass = claimDto.getRoomClass();
@@ -147,13 +137,11 @@ public class ClientAccountController {
                                 @RequestParam(value = "seats", required = false)
                                         String roomSeatsParam,
                                 @RequestParam(value = "checkin", required = false)
-                                @Future(message = "Check-in date can't be earlier than current date. " +
-                                        "Please enter correct date.")
+                                @Future(message = "{checkin.future}")
                                 @DateTimeFormat(pattern = "yyyy-MM-dd")
                                         String checkinDate,
                                 @RequestParam(value = "checkout", required = false)
-                                @Future(message = "Check-out date can't be earlier than current date. " +
-                                        "Please enter correct date.")
+                                @Future(message = "{checkout.future}")
                                 @DateTimeFormat(pattern = "yyyy-MM-dd")
                                         String checkoutDate,
                                 BindingResult bindingResult,
@@ -188,7 +176,6 @@ public class ClientAccountController {
             freeRooms = toGetRooms ?
                     roomService.getRoomsForPeriod(checkin, checkout, pageSize, page, sortByParam, sortTypeParam, roomSeatsParam, roomStatusParam) :
                     new ArrayList<>();
-
         }
 
         // pagination parameters
@@ -218,7 +205,7 @@ public class ClientAccountController {
         }
 
         HttpSession session = request.getSession();
-        UserDto authorisedUser = (UserDto) session.getAttribute("authorisedUser");
+        UserDto authorisedUser = (UserDto) session.getAttribute(AUTH_USER);
 
         LocalDate checkinDate = bookingDto.getCheckin();
         LocalDate checkoutDate = bookingDto.getCheckout();
@@ -237,17 +224,25 @@ public class ClientAccountController {
 
         InvoiceDto newInvoice = new InvoiceDto();
         newInvoice.setUserId(bookingDto.getUserId());
-        newInvoice.setAmount(bookingInvoiceService.getInvoiceAmount(bookingDto));
+        try {
+            newInvoice.setAmount(bookingInvoiceService.getInvoiceAmount(bookingDto));
+        } catch (Exception exception) {
+            throw new AppException("Can't calculate invoice amount", exception);
+        }
+
         newInvoice.setInvoiceDate(LocalDate.now());
         newInvoice.setStatus("new");
         newInvoice.setBooking(BookingMapper.mapFromDto(bookingDto));
         newInvoice.setUser(UserMapper.mapFromDto(authorisedUser));
 
-        bookingInvoiceService.createBookingAndInvoice(bookingDto, newInvoice);
+        try {
+            bookingInvoiceService.createBookingAndInvoice(bookingDto, newInvoice);
+        } catch (Exception exception) {
+            throw new AppException("Can't create new booking and invoice", exception);
+        }
 
         // "Thank you! The room was successfully booked.
         // Please check the invoice in your personal account."
-
 
         return REDIRECT_CLIENT_ACCOUNT;
     }
@@ -257,20 +252,20 @@ public class ClientAccountController {
                           Model model) {
 
         model.addAttribute("invoiceId", invoiceId);
-
         return PAGE_PAY_INVOICE;
     }
 
     /**
      * Provide invoice payment
-     *
-     * @throws AppException
      */
+    @ResponseBody
     @PostMapping(value = "/payInvoice")
     public String payInvoice(@RequestParam(value = "invoiceId") Integer invoiceId) throws AppException {
-
-        bookingInvoiceService.payInvoice(invoiceId);
-
+        try {
+            bookingInvoiceService.payInvoice(invoiceId);
+        } catch (AppException exception) {
+            throw new AppException("Can't pay invoice", exception);
+        }
         return REDIRECT_CLIENT_ACCOUNT;
     }
 
@@ -278,9 +273,8 @@ public class ClientAccountController {
     public String confirmRequest(HttpServletRequest request,
                                  @RequestParam("confirmRequestId") Integer confirmRequestId) throws AppException {
 
-
         HttpSession session = request.getSession();
-        UserDto authorisedUser = (UserDto) session.getAttribute("authorisedUser");
+        UserDto authorisedUser = (UserDto) session.getAttribute(AUTH_USER);
 
         confirmRequestService.confirmRequestByClient(confirmRequestId);
 
@@ -298,14 +292,23 @@ public class ClientAccountController {
 
         InvoiceDto newInvoice = new InvoiceDto();
         newInvoice.setUserId(newBooking.getUserId());
-        newInvoice.setAmount(bookingInvoiceService.getInvoiceAmount(newBooking));
+
+        try {
+            newInvoice.setAmount(bookingInvoiceService.getInvoiceAmount(newBooking));
+        } catch (Exception exception) {
+            throw new AppException("Can't calculate invoice amount", exception);
+        }
+
         newInvoice.setBookingId(newBooking.getId());
         newInvoice.setInvoiceDate(LocalDate.now());
         newInvoice.setStatus("new");
         newInvoice.setUser(UserMapper.mapFromDto(authorisedUser));
 
-
-        bookingInvoiceService.createBookingAndInvoice(newBooking, newInvoice);
+        try {
+            bookingInvoiceService.createBookingAndInvoice(newBooking, newInvoice);
+        } catch (Exception exception) {
+            throw new AppException("Can't create new booking and invoice", exception);
+        }
 
         return REDIRECT_CLIENT_ACCOUNT;
     }

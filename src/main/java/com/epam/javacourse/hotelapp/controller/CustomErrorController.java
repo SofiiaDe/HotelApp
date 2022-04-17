@@ -24,10 +24,11 @@ public class CustomErrorController implements ErrorController {
             logger.info("Error: error code {}", statusCode);
         }
 
-        return "errorPage";
+        return "error";
     }
 
 
+//    @Override
     public String getErrorPath() {
         return "/error";
     }

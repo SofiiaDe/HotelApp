@@ -69,6 +69,12 @@ public class BookingServiceImpl implements IBookingService {
     }
 
     @Override
+    @Transactional(rollbackFor = { Exception.class })
+    public void updateBookingStatus(BookingDto bookingDto, boolean status) {
+        bookingRepository.updateBookingStatus(status, bookingDto.getId());
+    }
+
+    @Override
     public List<BookingClientDto> getUserDetailedBookings(int userID) throws AppException {
 
         List<Booking> allUserBookings;
@@ -150,13 +156,4 @@ public class BookingServiceImpl implements IBookingService {
         }
         return result;
     }
-
-    @Transactional(rollbackFor = { Exception.class })
-    @Override
-    public void updateBookingStatus(BookingDto bookingDto, boolean status) {
-        bookingRepository.updateBookingStatus(status, bookingDto.getId());
-    }
-
-//    public int getAllBookingsCount()
-
 }

@@ -189,23 +189,23 @@ public class ManagerAccountController {
         return REDIRECT_MANAGER_ACCOUNT;
     }
 
-    @GetMapping("/showFormForUpdate/{id}")
-    public String showFormForUpdate(@PathVariable(value = "id") int id, Model model) throws AppException {
-
-        // get room from the service
-        RoomDto room = roomService.getRoomById(id);
-
-        // set room as a model attribute to pre-populate the form
-        model.addAttribute("room", room);
-        return "updateRoom";
-    }
-
-    @GetMapping("/deleteRoom/{id}")
-    public String deleteRoom(@PathVariable(value = "id") int id) {
-
-        this.roomService.deleteRoomById(id);
-        return "redirect:/";
-    }
+//    @GetMapping("/showFormForUpdate/{id}")
+//    public String showFormForUpdate(@PathVariable(value = "id") int id, Model model) throws AppException {
+//
+//        // get room from the service
+//        RoomDto room = roomService.getRoomById(id);
+//
+//        // set room as a model attribute to pre-populate the form
+//        model.addAttribute("room", room);
+//        return "updateRoom";
+//    }
+//
+//    @GetMapping("/deleteRoom/{id}")
+//    public String deleteRoom(@PathVariable(value = "id") int id) {
+//
+//        this.roomService.deleteRoomById(id);
+//        return "redirect:/";
+//    }
 
 
 }

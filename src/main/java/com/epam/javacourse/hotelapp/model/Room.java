@@ -55,7 +55,7 @@ import java.time.LocalDate;
 @Table(name = "rooms")
 public class Room implements Serializable {
 
-    private static final long serialVersionUID = -1L;
+    private static final long serialVersionUID = 5512347890045635L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

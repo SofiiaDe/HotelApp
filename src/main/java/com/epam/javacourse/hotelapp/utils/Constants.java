@@ -6,7 +6,7 @@ public class Constants {
     }
 
     public static final String PAGE_GET_USERS = "getAllUsers";
-    public static final String PAGE_ERROR = "errorPage";
+    public static final String PAGE_ERROR = "error";
     public static final String PAGE_LOGIN = "login";
     public static final String PAGE_HOME = "home";
     public static final String PAGE_REGISTRATION = "register";
@@ -27,6 +27,6 @@ public class Constants {
     public static final String PASSWORD_REGEX = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#&()-\\[{}\\]:;'.,?\\*~$^+=<>]).{8,20}$";
     public static final String EMAIL_REGEX = "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$";
 
-    public static final String TRACE = "trace";
+    public static final String AUTH_USER = "authorisedUser";
 
 }

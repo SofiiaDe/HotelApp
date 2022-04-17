@@ -39,10 +39,14 @@ class InvoiceServiceImplTest {
 
     @Test
     void testGetAllDetailedInvoices_returnsCorrectData() throws AppException {
-        List<Invoice> invoiceDb = getInvoices();
-        when(invoiceRepositoryMock.findAll()).thenReturn(invoiceDb);
 
-        List<User> userDb = getUsers();
+        List<Invoice> invoiceDb = EntityHelperForTests.getInvoices();
+        List<User> userDb = EntityHelperForTests.getUsers();
+        invoiceDb.get(0).setUserId(userDb.get(0));
+        invoiceDb.get(1).setUserId(userDb.get(1));
+        invoiceDb.get(0).setBookingId(EntityHelperForTests.getBookings().get(0));
+        invoiceDb.get(1).setBookingId(EntityHelperForTests.getBookings().get(1));
+        when(invoiceRepositoryMock.findAll()).thenReturn(invoiceDb);
         when(userRepositoryMock.findUsersByIds(anyList())).thenReturn(userDb);
 
         InvoiceServiceImpl invoiceService = new InvoiceServiceImpl(invoiceRepositoryMock, null,
@@ -182,7 +186,7 @@ class InvoiceServiceImplTest {
 
     @Test
     void testUpdateInvoiceStatusToCancelled_whenCalled_callsRepo() throws AppException {
-        List<Invoice> invoicesDb = getInvoices();
+        List<Invoice> invoicesDb = EntityHelperForTests.getInvoices();
         Invoice invoice = invoicesDb.get(0);
         when(invoiceRepositoryMock.findAll()).thenReturn(invoicesDb);
 
@@ -203,13 +207,16 @@ class InvoiceServiceImplTest {
     @Test
     void testGetInvoiceById_whenCalled_RepoCalled() {
         int invoiceId = 112567890;
-        Invoice invoice = getInvoices().get(0);
+        Invoice invoice = EntityHelperForTests.getInvoices().get(0);
+        invoice.setUserId(EntityHelperForTests.getUsers().get(0));
+        invoice.setBookingId(EntityHelperForTests.getBookings().get(0));
         when(invoiceRepositoryMock.findById(any())).thenReturn(Optional.of(invoice));
 
         InvoiceServiceImpl invoiceService = new InvoiceServiceImpl(invoiceRepositoryMock, null,
                 null, null);
 
-        invoiceService.getInvoiceById(invoiceId);
+        invoiceService.
+                getInvoiceById(invoiceId);
 
         verify(invoiceRepositoryMock, times(1)).findById(invoiceId);
     }
@@ -247,7 +254,9 @@ class InvoiceServiceImplTest {
 
     @Test
     void testGetInvoiceById_whenCalled_returnsCorrectInvoice() {
-        Invoice expectedInvoice = getInvoices().get(0);
+        Invoice expectedInvoice = EntityHelperForTests.getInvoices().get(0);
+        expectedInvoice.setUserId(EntityHelperForTests.getUsers().get(0));
+        expectedInvoice.setBookingId(EntityHelperForTests.getBookings().get(0));
         int invoiceId = expectedInvoice.getId();
         when(invoiceRepositoryMock.findById(invoiceId)).thenReturn(Optional.of(expectedInvoice));
         InvoiceServiceImpl invoiceService = new InvoiceServiceImpl(invoiceRepositoryMock, null,
@@ -265,83 +274,11 @@ class InvoiceServiceImplTest {
 
     @Test
     void testGetInvoicesByStatus_whenCalled_RepoCalled() {
-        int userId = 7890;
         InvoiceServiceImpl invoiceService = new InvoiceServiceImpl(invoiceRepositoryMock, null,
                 null, null);
 
         invoiceService.getInvoicesByStatus("cancelled");
 
         verify(invoiceRepositoryMock, times(1)).findInvoicesByStatus("cancelled");
-    }
-
-    private List<Invoice> getInvoices() {
-
-        List<User> userDb = getUsers();
-        List<Booking> bookingDb = getBookings();
-
-        List<Invoice> invoiceDb = new ArrayList<>();
-        Invoice invoice = new Invoice();
-        invoice.setId(111);
-        invoice.setInvoiceDate(LocalDate.now().minusDays(8));
-        invoice.setAmount(new BigDecimal("300.00"));
-        invoice.setBookingId(bookingDb.get(0));
-        invoice.setUserId(getUsers().get(0));
-        invoice.setInvoiceStatus("new");
-        invoice.setDueDate(LocalDate.now().minusDays(6));
-
-        Invoice invoice2 = new Invoice();
-        invoice2.setId(222);
-        invoice2.setInvoiceDate(LocalDate.now().plusDays(1));
-        invoice2.setAmount(new BigDecimal("200.00"));
-        invoice2.setBookingId(bookingDb.get(1));
-        invoice2.setUserId(userDb.get(1));
-        invoice2.setInvoiceStatus("someStatus");
-
-        invoiceDb.add(invoice);
-        invoiceDb.add(invoice2);
-
-        return invoiceDb;
-    }
-
-    private List<User> getUsers() {
-
-        User user1 = new User();
-        user1.setId(1);
-        user1.setFirstName("UserFirstName");
-        user1.setLastName("UserLastName");
-        user1.setEmail("aaa@bbb.ccc");
-
-        User user2 = new User();
-        user2.setId(2);
-        user2.setFirstName("AAAAA");
-        user2.setLastName("BBBB");
-        user2.setEmail("writing.tests@is.timeconsuming");
-
-        List<User> userDb = new ArrayList<>();
-        userDb.add(user1);
-        userDb.add(user2);
-
-        return userDb;
-    }
-
-    private List<Booking> getBookings() {
-
-        List<Booking> bookings = new ArrayList<>();
-        Booking booking1 = new Booking();
-        booking1.setRoomId(456);
-        booking1.setCheckinDate(LocalDate.now().plusDays(7));
-        booking1.setCheckoutDate(LocalDate.now().plusDays(9));
-        booking1.setId(111);
-
-        Booking booking2 = new Booking();
-        booking2.setRoomId(789);
-        booking2.setCheckinDate(LocalDate.now().plusDays(4));
-        booking2.setCheckoutDate(LocalDate.now().plusDays(6));
-        booking2.setId(222);
-
-        bookings.add(booking1);
-        bookings.add(booking2);
-
-        return bookings;
     }
 }

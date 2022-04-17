@@ -10,6 +10,7 @@ import org.springframework.web.servlet.view.RedirectView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import static com.epam.javacourse.hotelapp.utils.Constants.AUTH_USER;
 import static com.epam.javacourse.hotelapp.utils.Constants.PAGE_HOME;
 
 @Controller
@@ -21,11 +22,11 @@ public class LogoutController {
     public RedirectView postLogout(HttpServletRequest request, SessionStatus sessionStatus) {
 
         HttpSession session = request.getSession(false);
-        session.removeAttribute("authorisedUser");
+        session.removeAttribute(AUTH_USER);
         session.removeAttribute("email");
         session.removeAttribute("password");
         session.removeAttribute("role");
-        session.setAttribute("authorisedUser", false);
+        session.setAttribute(AUTH_USER, false);
 
         if (session != null) {
             session.invalidate();

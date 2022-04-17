@@ -8,7 +8,7 @@ import java.time.LocalDate;
 @Table(name = "bookings")
 public class Booking implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 5512347890045630L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

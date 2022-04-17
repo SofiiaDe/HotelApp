@@ -55,7 +55,7 @@ public class ConfirmRequestServiceImpl implements IConfirmationRequestService {
     public ConfirmationRequestDto getConfirmRequestById(int confirmRequestId) {
 
         ConfirmationRequest confirmRequest =  confirmRequestRepository.findById(confirmRequestId)
-                .orElseThrow(()->new NoSuchElementFoundException("Can't get invoice with id = " + confirmRequestId));
+                .orElseThrow(()->new NoSuchElementFoundException("Can't retrieve confirmation request with id = " + confirmRequestId));
 
         return ConfirmationRequestMapper.mapToDto(confirmRequest);
 
@@ -100,7 +100,8 @@ public class ConfirmRequestServiceImpl implements IConfirmationRequestService {
                 var bookingUser = userDtos.stream()
                         .filter(u -> u.getId() == confirmRequest.getUserId().getId())
                         .findFirst()
-                        .orElseThrow(() -> new NoSuchElementFoundException("Can't get bookingUser with id = " + confirmRequest.getUserId().getId()));
+                        .orElseThrow(() -> new NoSuchElementFoundException(
+                                "Can't get bookingUser with id = " + confirmRequest.getUserId().getId()));
                 result.add(
                         new ConfirmationRequestManagerDto(confirmRequest.getId(),
                                 bookingUser.getFirstName() + ' ' + bookingUser.getLastName(),

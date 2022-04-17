@@ -8,7 +8,7 @@ import java.time.LocalDate;
 @Table(name = "confirmation_requests")
 public class ConfirmationRequest implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 5512347890045632L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

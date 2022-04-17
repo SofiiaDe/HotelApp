@@ -14,13 +14,13 @@ public interface IBookingService {
 
     void createBooking(BookingDto bookingDto);
 
-    List<BookingDto> getBookingsByUserId(int userId) throws AppException;
+    List<BookingDto> getBookingsByUserId(int userId);
 
     List<BookingManagerDto> getAllDetailedBookings(BookingStatus bookingStatus) throws AppException;
 
     List<BookingClientDto> getUserDetailedBookings(int userID) throws AppException;
 
-    BookingDto getBookingById(int bookingId) throws AppException;
+    BookingDto getBookingById(int bookingId);
 
-    void updateBookingStatus(BookingDto bookingDto, boolean status) throws AppException;
+    void updateBookingStatus(BookingDto bookingDto, boolean status);
 }

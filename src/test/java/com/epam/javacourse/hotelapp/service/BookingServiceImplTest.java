@@ -126,7 +126,8 @@ class BookingServiceImplTest {
     @Test
     void testGetBookingById_whenCalled_RepoCalled() {
         int bookingId = 112567890;
-        Booking booking = getBookings().get(0);
+        Booking booking = EntityHelperForTests.getBookings().get(0);
+        booking.setUserId(EntityHelperForTests.getUsers().get(0));
         when(bookingRepositoryMock.findById(any())).thenReturn(Optional.of(booking));
         BookingServiceImpl bookingService = new BookingServiceImpl(bookingRepositoryMock, null,
                 userRepositoryMock, null);
@@ -168,7 +169,8 @@ class BookingServiceImplTest {
     @Test
     void testGetBookingById_whenCalled_returnsCorrectBooking() {
         int bookingId = 112567890;
-        Booking booking = getBookings().get(0);
+        Booking booking = EntityHelperForTests.getBookings().get(0);
+        booking.setUserId((EntityHelperForTests.getUsers().get(0)));
         when(bookingRepositoryMock.findById(bookingId)).thenReturn(Optional.of(booking));
         BookingServiceImpl bookingService = new BookingServiceImpl(bookingRepositoryMock, null,
                 userRepositoryMock, null);
@@ -191,49 +193,5 @@ class BookingServiceImplTest {
         bookingService.updateBookingStatus(booking, true);
 
         verify(bookingRepositoryMock, times(1)).updateBookingStatus(true, booking.getId());
-    }
-
-    private List<Booking> getBookings() {
-
-        List<User> users = getUsers();
-        List<Booking> bookings = new ArrayList<>();
-        Booking booking1 = new Booking();
-        booking1.setRoomId(456);
-        booking1.setCheckinDate(LocalDate.now().plusDays(7));
-        booking1.setCheckoutDate(LocalDate.now().plusDays(9));
-        booking1.setId(111);
-        booking1.setUserId(users.get(0));
-
-        Booking booking2 = new Booking();
-        booking2.setRoomId(789);
-        booking2.setCheckinDate(LocalDate.now().plusDays(4));
-        booking2.setCheckoutDate(LocalDate.now().plusDays(6));
-        booking2.setId(222);
-        booking2.setUserId(users.get(1));
-
-        bookings.add(booking1);
-        bookings.add(booking2);
-
-        return bookings;
-    }
-
-    private List<User> getUsers() {
-        User user1 = new User();
-        user1.setId(1);
-        user1.setFirstName("UserFirstName");
-        user1.setLastName("UserLastName");
-        user1.setEmail("aaa@bbb.ccc");
-
-        User user2 = new User();
-        user2.setId(2);
-        user2.setFirstName("AAAAA");
-        user2.setLastName("BBBB");
-        user2.setEmail("writing.tests@is.timeconsuming");
-
-        List<User> userDb = new ArrayList<>();
-        userDb.add(user1);
-        userDb.add(user2);
-
-        return userDb;
     }
 }

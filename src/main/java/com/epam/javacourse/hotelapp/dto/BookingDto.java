@@ -2,25 +2,23 @@ package com.epam.javacourse.hotelapp.dto;
 
 import com.epam.javacourse.hotelapp.model.User;
 import com.epam.javacourse.hotelapp.utils.validation.customannotations.BookingDtoRangeCheck;
-import com.epam.javacourse.hotelapp.utils.validation.customannotations.ClaimDtoRangeCheck;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.Future;
+import javax.validation.constraints.NotBlank;
 import java.time.LocalDate;
 
-@BookingDtoRangeCheck(message = "Check-in date should be earlier than check-out date. Dates can't be overlapping")
+@BookingDtoRangeCheck(message = "{dates.notequal.notoverlap}")
 public class BookingDto {
 
     private int id;
     private int userId;
 
-    @Future(message = "Check-in date can't be earlier than current date. " +
-            "Please enter correct date.")
+    @Future(message = "{checkin.future}")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate checkin;
 
-    @Future(message = "Check-out date can't be earlier than current date. " +
-            "Please enter correct date.")
+    @Future(message = "{checkout.future}")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate checkout;
 
@@ -28,20 +26,20 @@ public class BookingDto {
     private int claimId;
     private User user;
 
-    private boolean status;
+    private boolean bookingStatus;
 
     public BookingDto() {
     }
 
     public BookingDto(int id, int userId, LocalDate checkin, LocalDate checkout,
-                      int roomId, int claimId, boolean status) {
+                      int roomId, int claimId, boolean bookingStatus) {
         this.id = id;
         this.userId = userId;
         this.checkin = checkin;
         this.checkout = checkout;
         this.roomId = roomId;
         this.claimId = claimId;
-        this.status = status;
+        this.bookingStatus = bookingStatus;
     }
 
     public int getId() {
@@ -100,11 +98,11 @@ public class BookingDto {
         this.user = user;
     }
 
-    public boolean isStatus() {
-        return status;
+    public boolean isBookingStatus() {
+        return bookingStatus;
     }
 
-    public void setStatus(boolean status) {
-        this.status = status;
+    public void setBookingStatus(boolean bookingStatus) {
+        this.bookingStatus = bookingStatus;
     }
 }

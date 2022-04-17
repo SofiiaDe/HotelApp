@@ -60,43 +60,34 @@ public class BookingInvoiceServiceImpl implements IBookingInvoiceService {
     }
 
     @Override
-    @Transactional(rollbackFor = { Exception.class })
-    public void createBookingAndInvoice(BookingDto booking, InvoiceDto invoice) throws AppException {
+    @Transactional(rollbackFor = {Exception.class})
+    public void createBookingAndInvoice(BookingDto booking, InvoiceDto invoice) {
 
-        try {
-            Booking newBooking = BookingMapper.mapFromDto(booking);
-            Invoice newInvoice = InvoiceMapper.mapFromDto(invoice);
-            bookingRepository.save(newBooking);
-            newInvoice.setBookingId(newBooking);
-            newInvoice.setDueDate(Helpers.getInvoiceDueDate(invoice));
-            invoiceRepository.save(newInvoice);
+        Booking newBooking = BookingMapper.mapFromDto(booking);
+        Invoice newInvoice = InvoiceMapper.mapFromDto(invoice);
+        bookingRepository.save(newBooking);
+        newInvoice.setBookingId(newBooking);
+        newInvoice.setDueDate(Helpers.getInvoiceDueDate(invoice));
+        invoiceRepository.save(newInvoice);
 
-            logger.info("Create booking with id = {}", newBooking.getId());
-            logger.info("Create invoice with id = {}", newInvoice.getId());
-        } catch (Exception exception) {
-            throw new AppException("Can't create new booking and invoice", exception);
-        }
+        logger.info("Create booking with id = {}", newBooking.getId());
+        logger.info("Create invoice with id = {}", newInvoice.getId());
 
     }
 
     @Override
-    public BigDecimal getInvoiceAmount(BookingDto booking) throws AppException {
-        BigDecimal amount;
-        try {
-            LocalDate checkinDate = booking.getCheckin();
-            LocalDate checkoutDate = booking.getCheckout();
-            Period period = Period.between(checkinDate, checkoutDate);
-            Room room = roomRepository.getById(booking.getRoomId());
+    public BigDecimal getInvoiceAmount(BookingDto booking) {
 
-            // initialize amount as 0 for a default value
-            amount = new BigDecimal(BigInteger.ZERO, 2);
+        Period period = Period.between(booking.getCheckin(), booking.getCheckout());
+        Room room = roomRepository.getById(booking.getRoomId());
 
-            // number of days is converted to BigDecimal
-            BigDecimal totalCost = room.getPrice().multiply(new BigDecimal(Math.abs(period.getDays())));
-            amount = amount.add(totalCost);
-        } catch (Exception exception) {
-            throw new AppException("Can't calculate invoice amount", exception);
-        }
+        // initialize amount as 0 for a default value
+        BigDecimal amount = new BigDecimal(BigInteger.ZERO, 2);
+
+        // number of days is converted to BigDecimal
+        BigDecimal totalCost = room.getPrice().multiply(new BigDecimal(Math.abs(period.getDays())));
+        amount = amount.add(totalCost);
+
         return amount;
     }
 
@@ -105,7 +96,7 @@ public class BookingInvoiceServiceImpl implements IBookingInvoiceService {
      *
      * @throws AppException
      */
-    @Transactional(rollbackFor = { Exception.class })
+    @Transactional(rollbackFor = {Exception.class})
     @Scheduled(cron = "0 0 3 * * *", zone = "Europe/Sofia") // The pattern is: second, minute, hour, day, month, weekday
     @Override
     public void cancelUnpaidBookings() throws AppException {
@@ -123,17 +114,13 @@ public class BookingInvoiceServiceImpl implements IBookingInvoiceService {
         logger.info("Daily booking updates were completed by scheduler");
     }
 
-    @Transactional(rollbackFor = { Exception.class })
+    @Transactional(rollbackFor = {Exception.class})
     @Override
-    public void payInvoice(int invoiceId) throws AppException {
-        try {
-            InvoiceDto invoiceDto = invoiceService.getInvoiceById(invoiceId);
-            invoiceDto.setUser(UserMapper.mapFromDto(userService.getUserById(invoiceDto.getUserId())));
-            invoiceDto.setBooking(BookingMapper.mapFromDto(bookingService.getBookingById(invoiceDto.getBookingId())));
-            invoiceRepository.updateInvoiceStatus("paid", invoiceId);
-            bookingRepository.updateBookingStatus(true, invoiceDto.getBookingId());
-        } catch (Exception exception) {
-            throw new AppException("Can't pay invoice", exception);
-        }
+    public void payInvoice(int invoiceId) {
+        InvoiceDto invoiceDto = invoiceService.getInvoiceById(invoiceId);
+        invoiceDto.setUser(UserMapper.mapFromDto(userService.getUserById(invoiceDto.getUserId())));
+        invoiceDto.setBooking(BookingMapper.mapFromDto(bookingService.getBookingById(invoiceDto.getBookingId())));
+        invoiceRepository.updateInvoiceStatus("paid", invoiceId);
+        bookingRepository.updateBookingStatus(true, invoiceDto.getBookingId());
     }
 }

@@ -1,11 +1,13 @@
 package com.epam.javacourse.hotelapp.model;
 
-public enum Role {
+import java.io.Serializable;
+
+public enum Role implements Serializable {
 
     MANAGER("manager"),
     CLIENT("client");
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 5512347890045634L;
 
 
     private final String role;

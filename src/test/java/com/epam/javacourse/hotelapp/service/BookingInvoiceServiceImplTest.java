@@ -59,34 +59,6 @@ class BookingInvoiceServiceImplTest {
 
     }
 
-    @Test
-    void testCreateBookingAndInvoice_whenRepoThrows_throwsException() {
-        doReturn(null).when(bookingRepositoryMock).save(BookingMapper.mapFromDto(getBookingDto()));
-        doReturn(null).when(invoiceRepositoryMock).save(InvoiceMapper.mapFromDto(getInvoiceDto()));
-        BookingInvoiceServiceImpl bookInvService = new BookingInvoiceServiceImpl(bookingRepositoryMock,
-                invoiceRepositoryMock, null, null, null, null);
-
-        Assertions.assertThrowsExactly(AppException.class, () -> bookInvService.createBookingAndInvoice(new BookingDto(), new InvoiceDto()));
-    }
-
-    @Test
-    void testCreateBookingAndInvoice_whenRepoThrows_ShowExceptionMessage() {
-        String messageNotToGet = "aaaaa";
-        doReturn(null).when(bookingRepositoryMock).save(BookingMapper.mapFromDto(getBookingDto()));
-        doReturn(null).when(invoiceRepositoryMock).save(InvoiceMapper.mapFromDto(getInvoiceDto()));
-        BookingInvoiceServiceImpl bookInvService = new BookingInvoiceServiceImpl(bookingRepositoryMock,
-                invoiceRepositoryMock, null, null, null, null);
-
-        try {
-            bookInvService.createBookingAndInvoice(new BookingDto(), new InvoiceDto());
-        } catch (AppException ex) {
-            Assertions.assertEquals("Can't create new booking and invoice", ex.getMessage());
-            Assertions.assertNotEquals(messageNotToGet, ex.getMessage());
-            return;
-        }
-
-        Assertions.fail("Should have thrown AppException");
-    }
 
 //    @Test
 //    void testPayInvoice_whenCalled_RepoCalled() throws AppException {

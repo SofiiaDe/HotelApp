@@ -6,7 +6,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.Future;
 import java.time.LocalDate;
-@ClaimDtoRangeCheck(message = "Check-in date should be earlier than check-out date. Dates can't be overlapping")
+@ClaimDtoRangeCheck(message = "{dates.notequal.notoverlap}")
 public class ClaimDto {
 
     private int id;
@@ -14,13 +14,11 @@ public class ClaimDto {
     private String roomSeats;
     private String roomClass;
 
-    @Future(message = "Check-in date can't be earlier than current date. " +
-            "Please enter correct dates.")
+    @Future(message = "{checkin.future}")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate checkinDate;
 
-    @Future(message = "Check-out date can't be earlier than current date. " +
-            "Please enter correct dates.")
+    @Future(message = "{checkout.future}")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate checkoutDate;
 

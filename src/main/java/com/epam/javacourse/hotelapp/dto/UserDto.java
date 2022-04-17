@@ -16,37 +16,27 @@ public class UserDto implements Serializable {
 
     private int id;
 
-//    @NotBlank(message = "First Name can't be empty")
-//    @Size(min = 2, max = 20, message = "First Name should be between 2 and 20 characters")
+
     @Size(min = 2, max = 20, message = "{firstname.size}")
     @NotBlank(message = "{firstname.notempty}")
     private String firstName;
 
-    //    @NotBlank(message = "Last Name can't be empty")
-//    @Size(min = 2, max = 20, message = "Last Name should be between 2 and 20 characters")
     @Size(min = 2, max = 20, message = "{lastname.size}")
     @NotBlank(message = "{lastname.notempty}")
     private String lastName;
 
     @ValidEmail
-//    @NotBlank(message = "Email can't be empty")
     @NotBlank(message = "{email.notempty}")
     private String email;
 
-//    @ValidPassword(message = "Password must contain at least one digit, at least one lowercase and one uppercase " +
-//            "Latin characters as well as at least one special character like ! @ # & ( ) etc.")
-//    @NotBlank(message = "Password can't be empty")
-//@Size(min = 8, max = 20, message = "Password must contain a length of at least 8 characters and a maximum of 20 characters.")
     @ValidPassword(message = "{password.regex}")
     @NotBlank(message = "{password.notempty}")
     @Size(min = 8, max = 20, message = "{password.size}")
     private String password;
 
-//    @NotBlank(message = "Password should match")
     @NotBlank(message = "{password.match}")
     String confirmPassword;
 
-//    @NotBlank(message = "Country can't be empty")
     @NotBlank(message = "{country.notempty}")
     private String country;
 

@@ -17,7 +17,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.time.LocalDate;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -44,7 +43,9 @@ class ClaimServiceImplTest {
     @Test
     void testGetClaimById_whenCalled_callsRepo() {
         int claimId = 112567890;
-        Claim claim = getClaims().get(0);
+        Claim claim = EntityHelperForTests.getClaims().get(0);
+        claim.setUserId(EntityHelperForTests.getUsers().get(0));
+
         when(claimRepositoryMock.findById(any())).thenReturn(Optional.of(claim));
         ClaimServiceImpl claimService = new ClaimServiceImpl(claimRepositoryMock, null);
         claimService.getClaimById(claimId);
@@ -87,7 +88,7 @@ class ClaimServiceImplTest {
         expectedClaim.setRoomClass("classy room");
         expectedClaim.setId(claimId);
 
-        User user = getUsers().get(0);
+        User user = EntityHelperForTests.getUsers().get(0);
         expectedClaim.setUser(user);
 
         when(claimRepositoryMock.findById(claimId)).thenReturn(Optional.of(ClaimMapper.mapFromDto(expectedClaim)));
@@ -111,7 +112,7 @@ class ClaimServiceImplTest {
     @Test
     void testGetUserDetailedClaims_returnsCorrectData() throws AppException {
         int expectedUserId = 1;
-        ArrayList<Claim> claimDb = getClaims();
+        List<Claim> claimDb = EntityHelperForTests.getClaims();
         when(claimRepositoryMock.findClaimsByUserId(expectedUserId)).thenReturn(claimDb);
 
         ClaimServiceImpl claimService = new ClaimServiceImpl(claimRepositoryMock, null);
@@ -161,10 +162,11 @@ class ClaimServiceImplTest {
     @Test
     void testGetAllDetailedClaims_returnsCorrectData() throws AppException {
 
-        List<Claim> claimDb = getClaims();
+        List<Claim> claimDb = EntityHelperForTests.getClaims();
+        List<User> userDb = EntityHelperForTests.getUsers();
+        claimDb.get(0).setUserId(userDb.get(0));
+        claimDb.get(1).setUserId(userDb.get(1));
         when(claimRepositoryMock.findAll()).thenReturn(claimDb);
-
-        List<User> userDb = getUsers();
         when(userRepositoryMock.findUsersByIds(anyList())).thenReturn(userDb);
 
         ClaimServiceImpl claimService = new ClaimServiceImpl(claimRepositoryMock, userRepositoryMock);
@@ -234,53 +236,6 @@ class ClaimServiceImplTest {
         ClaimServiceImpl claimService = new ClaimServiceImpl(claimRepositoryMock, null);
         claimService.removeClaim(claimId);
         verify(claimRepositoryMock, times(1)).deleteById(claimId);
-    }
-
-    private ArrayList<Claim> getClaims() {
-
-        List<User> users = getUsers();
-
-        ArrayList<Claim> claimDb = new ArrayList<>();
-        Claim claim1 = new Claim();
-        claim1.setId(111);
-        claim1.setCheckinDate(LocalDate.MIN);
-        claim1.setCheckoutDate(LocalDate.MAX);
-        claim1.setRoomSeats("double");
-        claim1.setUserId(users.get(0));
-        claim1.setRoomClass("aaaa");
-
-        Claim claim2 = new Claim();
-        claim2.setId(222);
-        claim2.setCheckinDate(LocalDate.now().plusDays(1));
-        claim2.setCheckinDate(LocalDate.now().plusDays(3));
-        claim2.setRoomSeats("twin");
-        claim2.setUserId(users.get(1));
-        claim2.setRoomClass("does not matter");
-
-        claimDb.add(claim1);
-        claimDb.add(claim2);
-
-        return claimDb;
-    }
-
-    private List<User> getUsers() {
-        User user1 = new User();
-        user1.setId(1);
-        user1.setFirstName("UserFirstName");
-        user1.setLastName("UserLastName");
-        user1.setEmail("aaa@bbb.ccc");
-
-        User user2 = new User();
-        user2.setId(2);
-        user2.setFirstName("AAAAA");
-        user2.setLastName("BBBB");
-        user2.setEmail("writing.tests@is.timeconsuming");
-
-        List<User> userDb = new ArrayList<>();
-        userDb.add(user1);
-        userDb.add(user2);
-
-        return userDb;
     }
 
 }

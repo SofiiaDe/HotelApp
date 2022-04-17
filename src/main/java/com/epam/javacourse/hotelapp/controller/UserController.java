@@ -12,6 +12,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
 
+import static com.epam.javacourse.hotelapp.utils.Constants.AUTH_USER;
 import static com.epam.javacourse.hotelapp.utils.Constants.PAGE_LOGIN;
 
 @Controller
@@ -36,7 +37,7 @@ public class UserController {
                 user = userService.getUserByEmail(email);
                 role = user.getRole();
             }
-        } catch (AppException exception) {
+        } catch (Exception exception) {
             String errorMessage = "Can't authenticate user";
             throw new AppException(errorMessage, exception);
         }
@@ -46,7 +47,7 @@ public class UserController {
             return new ModelAndView(PAGE_LOGIN);
         }
 
-        session.setAttribute("authorisedUser", user);
+        session.setAttribute(AUTH_USER, user);
         session.setAttribute("userRole", role);
 
         return ("client".equalsIgnoreCase(role)) ? new ModelAndView("redirect:/client/account") :
