@@ -144,6 +144,7 @@ public class EntityHelperForTests {
         invoice2.setInvoiceDate(LocalDate.now().plusDays(1));
         invoice2.setAmount(new BigDecimal("200.00"));
         invoice2.setInvoiceStatus("someStatus");
+        invoice2.setDueDate(LocalDate.now().plusDays(3));
 
         invoiceDb.add(invoice);
         invoiceDb.add(invoice2);

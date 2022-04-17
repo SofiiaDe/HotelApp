@@ -165,7 +165,7 @@ class InvoiceServiceImplTest {
     @Test
     void testUpdateInvoiceStatusToCancelled_whenRepoThrows_ShowExceptionMessage() {
         String messageNotToGet = "aaaaa";
-        when(invoiceRepositoryMock.findAll()).thenReturn(null);
+        when(invoiceRepositoryMock.findInvoicesByStatus("new")).thenReturn(null);
         InvoiceServiceImpl invoiceService = new InvoiceServiceImpl(invoiceRepositoryMock, null,
                 null, null);
 
@@ -184,17 +184,24 @@ class InvoiceServiceImplTest {
     void testUpdateInvoiceStatusToCancelled_whenCalled_callsRepo() throws AppException {
         List<Invoice> invoicesDb = EntityHelperForTests.getInvoices();
         Invoice invoice = invoicesDb.get(0);
-        when(invoiceRepositoryMock.findAll()).thenReturn(invoicesDb);
+        invoice.setUserId(EntityHelperForTests.getUsers().get(0));
+        invoice.setBookingId(EntityHelperForTests.getBookings().get(0));
+
+        Invoice invoice2 = invoicesDb.get(1);
+        invoice2.setUserId(EntityHelperForTests.getUsers().get(1));
+        invoice2.setBookingId(EntityHelperForTests.getBookings().get(1));
+        when(invoiceRepositoryMock.findInvoicesByStatus("new")).thenReturn(invoicesDb);
+
 
         InvoiceServiceImpl invoiceService = new InvoiceServiceImpl(invoiceRepositoryMock, null,
-                null, null);
+                null, userRepositoryMock);
         invoiceService.updateInvoiceStatusToCancelled();
         verify(invoiceRepositoryMock, times(1)).updateInvoiceStatus("cancelled", invoice.getId());
     }
 
     @Test
     void testUpdateInvoiceStatusToCancelled_whenRepoThrows_throwsException() {
-        when(invoiceRepositoryMock.findAll()).thenReturn(null);
+        when(invoiceRepositoryMock.findInvoicesByStatus("new")).thenReturn(null);
         InvoiceServiceImpl invoiceService = new InvoiceServiceImpl(invoiceRepositoryMock, null,
                 null, null);
         assertThrowsExactly(AppException.class, () -> invoiceService.updateInvoiceStatusToCancelled());
