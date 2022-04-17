@@ -2,6 +2,7 @@ package com.epam.javacourse.hotelapp.dto;
 
 import com.epam.javacourse.hotelapp.model.User;
 import com.epam.javacourse.hotelapp.utils.validation.customannotations.BookingDtoRangeCheck;
+import com.epam.javacourse.hotelapp.utils.validation.customannotations.ClaimDtoRangeCheck;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.Future;

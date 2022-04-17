@@ -38,6 +38,7 @@
         <input type="hidden" value="freeRoomsToBook"/>
         <div class="booking-wrap d-flex justify-content-between align-items-center">
             <div class="single-select-box mb-30">
+                <p style="color:red" th:if="${#fields.hasErrors('${booking}')}" th:errors="${booking}"></p>
                 <!-- select check-in date -->
                 <div class="booking-tittle">
                         <span th:text="#{checkin.date}">:
@@ -50,28 +51,28 @@
                              th:errors="*{checkin}">Checkin Error
                         </div>
                     </div>
-                    </div>
                 </div>
+            </div>
 
-                <div class="single-select-box mb-30">
-                    <!-- select check-out date -->
-                    <div class="booking-tittle">
+            <div class="single-select-box mb-30">
+                <!-- select check-out date -->
+                <div class="booking-tittle">
                         <span th:text="#{checkout.date}">:
                         </span>
-                    </div>
-                    <div class="booking-datepicker">
-                        <div class="form-group">
-                            <input type="date" th:field="*{checkout}" name="checkout" required="required"/>
-                            <div style="color:red" th:if="${#fields.hasErrors('checkout')}"
-                                 th:errors="*{checkout}">Checkout Error
-                            </div>
+                </div>
+                <div class="booking-datepicker">
+                    <div class="form-group">
+                        <input type="date" th:field="*{checkout}" name="checkout" required="required"/>
+                        <div style="color:red" th:if="${#fields.hasErrors('checkout')}"
+                             th:errors="*{checkout}">Checkout Error
                         </div>
                     </div>
                 </div>
-
-                <button type="submit" class="btn btn-info" th:text="#{find.button}">
-                </button>
             </div>
+
+            <button type="submit" class="btn btn-info" th:text="#{find.button}">
+            </button>
+        </div>
     </form>
 
 
