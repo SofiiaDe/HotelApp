@@ -3,6 +3,9 @@ package com.epam.javacourse.hotelapp.dto;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+/**
+ * DTO to show all invoices in Manager's account
+ */
 public class InvoiceManagerDto {
 
     private int id;

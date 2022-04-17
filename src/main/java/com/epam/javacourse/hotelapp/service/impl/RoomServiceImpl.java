@@ -100,7 +100,7 @@ public class RoomServiceImpl implements IRoomService {
     @Override
     public int getRoomsNumberForPeriod(LocalDate checkin, LocalDate checkout) throws AppException {
         try {
-//            Validator.ensureDatesAreValid(checkin, checkout);
+            Validator.ensureDatesAreValid(checkin, checkout);
             return customizedRoomRepository.findAvailableRoomsForPeriod(checkin, checkout).size();
         } catch (DBException exception) {
             throw new AppException("Can't retrieve free rooms number for the specified period from " + checkin + " to " + checkout, exception);

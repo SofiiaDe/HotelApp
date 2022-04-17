@@ -28,7 +28,6 @@ import java.util.stream.Collectors;
 public class ClaimServiceImpl implements IClaimService {
 
     private final ClaimRepository claimRepository;
-
     private final UserRepository userRepository;
 
     @Autowired

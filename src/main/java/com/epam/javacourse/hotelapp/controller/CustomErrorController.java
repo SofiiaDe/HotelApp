@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 
+import static com.epam.javacourse.hotelapp.utils.Constants.PAGE_ERROR;
+
 @Controller
 public class CustomErrorController implements ErrorController {
 
@@ -24,12 +26,7 @@ public class CustomErrorController implements ErrorController {
             logger.info("Error: error code {}", statusCode);
         }
 
-        return "error";
+        return PAGE_ERROR;
     }
 
-
-//    @Override
-    public String getErrorPath() {
-        return "/error";
-    }
 }

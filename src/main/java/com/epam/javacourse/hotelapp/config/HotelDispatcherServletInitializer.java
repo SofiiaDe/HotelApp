@@ -8,6 +8,7 @@ public class HotelDispatcherServletInitializer extends AbstractAnnotationConfigD
         return null;
     }
 
+    // for DispatcherServlet application context (Spring MVC infrastructure) configuration
     @Override
     protected Class<?>[] getServletConfigClasses() {
         return new Class[]{SpringConfig.class};

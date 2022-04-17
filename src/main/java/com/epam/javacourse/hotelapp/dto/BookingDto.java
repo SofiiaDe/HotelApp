@@ -5,7 +5,6 @@ import com.epam.javacourse.hotelapp.utils.validation.customannotations.BookingDt
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.Future;
-import javax.validation.constraints.NotBlank;
 import java.time.LocalDate;
 
 @BookingDtoRangeCheck(message = "{dates.notequal.notoverlap}")

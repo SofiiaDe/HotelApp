@@ -34,11 +34,8 @@ public class InvoiceServiceImpl implements IInvoiceService {
     private static final Logger logger = LogManager.getLogger(InvoiceServiceImpl.class);
 
     private final InvoiceRepository invoiceRepository;
-
     private final BookingRepository bookingRepository;
-
     private final RoomRepository roomRepository;
-
     private final UserRepository userRepository;
 
     @Autowired
@@ -54,7 +51,7 @@ public class InvoiceServiceImpl implements IInvoiceService {
     public InvoiceDto getInvoiceById(int invoiceId) {
 
         Invoice invoice = invoiceRepository.findById(invoiceId)
-                .orElseThrow(()->new NoSuchElementFoundException("Can't retrieve invoice with id = " + invoiceId));
+                .orElseThrow(() -> new NoSuchElementFoundException("Can't retrieve invoice with id = " + invoiceId));
         return InvoiceMapper.mapToDto(invoice);
     }
 
@@ -73,7 +70,6 @@ public class InvoiceServiceImpl implements IInvoiceService {
         invoices.forEach(x -> invoicesDto.add(InvoiceMapper.mapToDto(x)));
         return invoicesDto;
     }
-
 
     @Override
     public List<InvoiceManagerDto> getAllDetailedInvoices() throws AppException {
@@ -162,17 +158,15 @@ public class InvoiceServiceImpl implements IInvoiceService {
 
     /**
      * Execute at 3 am every day.
-     *
      */
-    @Transactional(rollbackFor = { Exception.class })
+    @Transactional(rollbackFor = {Exception.class})
     @Scheduled(cron = "0 0 3 * * *", zone = "Europe/Sofia") // The pattern is: second, minute, hour, day, month, weekday
     @Override
     public void updateInvoiceStatusToCancelled() throws AppException {
         try {
-            List<Invoice> allInvoices = invoiceRepository.findAll();
-            for (Invoice invoice : allInvoices) {
-                if (invoice.getInvoiceStatus().equals("new") &&
-                        invoice.getDueDate().isBefore(LocalDate.now())) {
+            List<InvoiceDto> unpaidInvoicesDto = getInvoicesByStatus("new");
+            for (InvoiceDto invoice : unpaidInvoicesDto) {
+                if (invoice.getDueDate().isBefore(LocalDate.now())) {
                     invoiceRepository.updateInvoiceStatus("cancelled", invoice.getId());
                 }
             }

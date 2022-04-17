@@ -15,6 +15,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.crypto.password.Pbkdf2PasswordEncoder;
 
+/**
+ * Security Configurer
+ */
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
@@ -28,14 +31,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new Pbkdf2PasswordEncoder();
     }
 
-
     @Autowired
     public void configureGlobalAuthentication(AuthenticationManagerBuilder auth) throws Exception {
-        auth
-                .userDetailsService(userDetailsService)
+        auth.userDetailsService(userDetailsService)
                 .passwordEncoder(passwordEncoder());
     }
-
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -64,7 +64,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .logoutUrl("/logout")
                 .logoutSuccessUrl("/")
                 .invalidateHttpSession(true);
-
     }
 
     @Override
@@ -81,6 +80,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public DaoAuthenticationProvider authProvider() {
+        // DaoAuthenticationProvider is an implementation of the AuthenticationProvider interface
+        // which mainly deals with username password authentication
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
         authProvider.setUserDetailsService(userDetailsService);
         authProvider.setPasswordEncoder(passwordEncoder());

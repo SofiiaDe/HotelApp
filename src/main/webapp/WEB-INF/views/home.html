@@ -90,11 +90,6 @@
             color: black;
         }
 
-        .rightnav {
-            width: 30%;
-            text-align: right;
-        }
-
         #search {
             padding: 5px;
             font-size: 17px;
@@ -116,17 +111,6 @@
             max-width: 80%;
             margin: auto;
             height: 60%;
-        }
-
-        .firsthalf {
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-
-        .secondhalf {
-            width: 30%;
         }
 
         .secondhalf img {
@@ -171,10 +155,6 @@
             margin: auto;
         }
 
-        .section-Left {
-            flex-direction: row-reverse;
-        }
-
         .paras {
             padding: 0px 65px;
         }
@@ -186,10 +166,6 @@
             margin-top: 19px;
         }
 
-        .center {
-            text-align: center;
-        }
-
         .text-footer {
             text-align: center;
             padding: 30px 0;
@@ -198,7 +174,6 @@
             justify-content: center;
             color: white;
         }
-
 
     </style>
 
@@ -267,13 +242,6 @@
 <section class="section" style="justify-content: end">
     <div class="paras" id="infoSection">
         <h1 class="sectionTag text-big" th:text="#{home.hotel.location}"></h1>
-
-<!--        <p class="sectionSubTag text-small"-->
-<!--           th:text="#{home.hotel.location.address}"><br-->
-<!--            th:text="#{home.hotel.location.city}"><br-->
-<!--            th:text="#{home.hotel.location.phone}"><br-->
-<!--            th:text="#{home.hotel.location.email}">-->
-<!--        </p>-->
 
         <p class="sectionSubTag text-small"
            th:text="#{home.hotel.location.address}"></p>

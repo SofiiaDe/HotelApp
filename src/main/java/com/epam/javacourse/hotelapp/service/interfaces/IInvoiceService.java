@@ -11,8 +11,6 @@ public interface IInvoiceService {
 
     List<InvoiceManagerDto> getAllDetailedInvoices() throws AppException;
 
-//    List<Invoice> getInvoicesByUserId(int userId) throws AppException;
-
     List<InvoiceClientDto> getUserDetailedInvoices(int userID) throws AppException;
 
     List<InvoiceDto> getInvoicesByBookingsIds(List<Integer> bookingsIds) throws AppException;

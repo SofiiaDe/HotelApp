@@ -5,7 +5,8 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import static com.epam.javacourse.hotelapp.utils.validation.Validator.isEmailValid;
 import static com.epam.javacourse.hotelapp.utils.validation.Validator.isPasswordValid;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class RegistrationTest {
 

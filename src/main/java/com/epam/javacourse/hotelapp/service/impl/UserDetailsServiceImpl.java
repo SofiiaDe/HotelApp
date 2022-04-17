@@ -15,6 +15,9 @@ import org.springframework.stereotype.Service;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Service which is responsible for fetching the details of the user from a database
+ */
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 
@@ -27,6 +30,11 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         this.userRepository = userRepository;
     }
 
+    /**
+     * @param email User's email
+     * @return a UserDetails object populated with the user data fetched from the db.
+     * @throws UsernameNotFoundException
+     */
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         User user = userRepository.findUserByEmail(email);

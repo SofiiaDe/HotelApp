@@ -1,7 +1,6 @@
 package com.epam.javacourse.hotelapp.utils.validation.customannotations;
 
 import com.epam.javacourse.hotelapp.dto.BookingDto;
-import com.epam.javacourse.hotelapp.dto.ClaimDto;
 import org.springframework.stereotype.Component;
 
 import javax.validation.ConstraintValidator;

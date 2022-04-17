@@ -2,12 +2,8 @@
 
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
-
     <title>Client account</title>
-
-    <link rel="stylesheet" href="/css/stxxyle.css">
-
-
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 
 <body>
@@ -109,23 +105,24 @@
                                 </th:block>
                             </td>
                             <td>
-                            <th:block th:if="${booking.bookingStatus != null}" th:switch="${booking.bookingStatus.text}">
-                                <div class="badge badge-danger text-uppercase" th:case="'new'"
-                                     th:text="#{status.new}">
-                                </div>
-                                <div class="badge badge-secondary text-uppercase" th:case="'cancelled'"
-                                     th:text="#{status.cancelled}">
-                                </div>
-                                <div class="badge badge-success text-uppercase" th:case="'paid'"
-                                     th:text="#{status.paid}">
-                                </div>
-                                <div class="badge badge-warning text-uppercase" th:case="'finished'"
-                                     th:text="#{status.finished}">
-                                </div>
-                                <div class="badge badge-primary text-uppercase" th:case="'ongoing'"
-                                     th:text="#{status.ongoing}">
-                                </div>
-                            </th:block>
+                                <th:block th:if="${booking.bookingStatus != null}"
+                                          th:switch="${booking.bookingStatus.text}">
+                                    <div class="badge badge-danger text-uppercase" th:case="'new'"
+                                         th:text="#{status.new}">
+                                    </div>
+                                    <div class="badge badge-secondary text-uppercase" th:case="'cancelled'"
+                                         th:text="#{status.cancelled}">
+                                    </div>
+                                    <div class="badge badge-success text-uppercase" th:case="'paid'"
+                                         th:text="#{status.paid}">
+                                    </div>
+                                    <div class="badge badge-warning text-uppercase" th:case="'finished'"
+                                         th:text="#{status.finished}">
+                                    </div>
+                                    <div class="badge badge-primary text-uppercase" th:case="'ongoing'"
+                                         th:text="#{status.ongoing}">
+                                    </div>
+                                </th:block>
                             </td>
                         </tr>
                     </th:block>
@@ -235,7 +232,8 @@
                             <td th:text="${confirmrequest.confirmRequestDate}"></td>
                             <td th:text="${confirmrequest.confirmRequestDueDate}"></td>
                             <td>
-                                <th:block th:if="${confirmrequest.roomSeats != null}" th:switch="${confirmrequest.roomSeats}">
+                                <th:block th:if="${confirmrequest.roomSeats != null}"
+                                          th:switch="${confirmrequest.roomSeats}">
                                     <div th:case="'single'"
                                          th:text="#{room.type.single}">
                                     </div>
@@ -251,7 +249,8 @@
                                 </th:block>
                             </td>
                             <td>
-                                <th:block th:if="${confirmrequest.roomClass != null}" th:switch="${confirmrequest.roomClass}">
+                                <th:block th:if="${confirmrequest.roomClass != null}"
+                                          th:switch="${confirmrequest.roomClass}">
                                     <div th:case="'standard'"
                                          th:text="#{room.class.standard}">
                                     </div>

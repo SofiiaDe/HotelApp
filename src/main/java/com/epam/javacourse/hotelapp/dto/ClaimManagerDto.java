@@ -3,7 +3,7 @@ package com.epam.javacourse.hotelapp.dto;
 import java.time.LocalDate;
 
 /**
- * Show all applications in manager account
+ * DTO to show all claims in Manager's account
  */
 public class ClaimManagerDto {
 

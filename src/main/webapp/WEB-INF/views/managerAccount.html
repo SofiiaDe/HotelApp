@@ -1,14 +1,9 @@
 <!doctype html>
-<!--<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://thymeleaf.org" lang="en">-->
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="en">
 
 <head>
-
     <title>Manager account</title>
-
     <link rel="stylesheet" href="/css/style.css">
-
-
 </head>
 
 <body>
@@ -318,16 +313,10 @@
                             <span class="sr-only">&raquo;</span>
                         </a>
                     </li>
-
                 </ul>
-
-
             </div>
 
-
-
             <!--            Booking-->
-
             <div class="tab-pane fade" id="booking" role="tabpanel" aria-labelledby="booking-tab">
                 <div class="dropdown dropDownPadding">
                     <button class="btn btn-info dropdown-toggle" type="button" data-toggle="dropdown"
@@ -375,7 +364,6 @@
                             <td th:text="${booking.checkinDate}"></td>
                             <td th:text="${booking.checkoutDate}"></td>
                             <td th:text="${booking.roomNumber}"></td>
-<!--                            <td th:text="${booking.bookingStatus}"></td>-->
                             <td>
                                 <th:block th:if="${booking.bookingStatus != null}" th:switch="${booking.bookingStatus.text}">
                                     <div class="badge badge-danger text-uppercase" th:case="'new'"

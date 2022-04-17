@@ -69,15 +69,12 @@ public class Room implements Serializable {
     private int roomNumber;
 
     @Column(name = "room_seats")
-//    @Enumerated(EnumType.ORDINAL)
     private String roomSeats;
 
     @Column(name = "room_class")
-//    @Enumerated(EnumType.ORDINAL)
     private String roomClass;
 
     @Column(name = "room_status")
-//    @Enumerated(EnumType.ORDINAL)
     private String roomStatus;
 
     public Room() {

@@ -4,7 +4,6 @@ import com.epam.javacourse.hotelapp.dto.ClaimClientDto;
 import com.epam.javacourse.hotelapp.dto.ClaimDto;
 import com.epam.javacourse.hotelapp.dto.ClaimManagerDto;
 import com.epam.javacourse.hotelapp.exception.AppException;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 

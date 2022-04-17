@@ -23,6 +23,9 @@ public class InvoiceDto {
     private User user;
     private Booking booking;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate dueDate;
+
     public InvoiceDto() {
     }
 
@@ -99,5 +102,13 @@ public class InvoiceDto {
 
     public void setBooking(Booking booking) {
         this.booking = booking;
+    }
+
+    public LocalDate getDueDate() {
+        return dueDate;
+    }
+
+    public void setDueDate(LocalDate dueDate) {
+        this.dueDate = dueDate;
     }
 }

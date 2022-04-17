@@ -5,6 +5,9 @@ import com.epam.javacourse.hotelapp.utils.enums.BookingStatus;
 
 import java.time.LocalDate;
 
+/**
+ * DTO to show list of Client's bookings in Client's account
+ */
 public class BookingClientDto {
 
     private int id;

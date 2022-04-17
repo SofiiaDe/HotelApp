@@ -9,6 +9,9 @@ import java.lang.annotation.Target;
 
 import static java.lang.annotation.ElementType.*;
 
+/**
+ * Custom annotation to check whether booking's check-in date is before check-out date
+ */
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ TYPE, FIELD, ANNOTATION_TYPE })
 @Constraint(validatedBy = BookingDtoDateValidator.class)

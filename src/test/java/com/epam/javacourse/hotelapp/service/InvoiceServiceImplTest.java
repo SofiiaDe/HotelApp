@@ -5,7 +5,6 @@ import com.epam.javacourse.hotelapp.dto.InvoiceDto;
 import com.epam.javacourse.hotelapp.dto.InvoiceManagerDto;
 import com.epam.javacourse.hotelapp.exception.AppException;
 import com.epam.javacourse.hotelapp.exception.NoSuchElementFoundException;
-import com.epam.javacourse.hotelapp.model.Booking;
 import com.epam.javacourse.hotelapp.model.Invoice;
 import com.epam.javacourse.hotelapp.model.User;
 import com.epam.javacourse.hotelapp.repository.InvoiceRepository;
@@ -18,14 +17,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class InvoiceServiceImplTest {
@@ -278,7 +274,6 @@ class InvoiceServiceImplTest {
                 null, null);
 
         invoiceService.getInvoicesByStatus("cancelled");
-
         verify(invoiceRepositoryMock, times(1)).findInvoicesByStatus("cancelled");
     }
 }

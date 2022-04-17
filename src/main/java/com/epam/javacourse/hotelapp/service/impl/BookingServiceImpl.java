@@ -28,11 +28,8 @@ import java.util.stream.Collectors;
 public class BookingServiceImpl implements IBookingService {
 
     private final BookingRepository bookingRepository;
-
     private final RoomRepository roomRepository;
-
     private final UserRepository userRepository;
-
     private final InvoiceRepository invoiceRepository;
 
     @Autowired

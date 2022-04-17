@@ -258,7 +258,6 @@ public class ClientAccountController {
     /**
      * Provide invoice payment
      */
-    @ResponseBody
     @PostMapping(value = "/payInvoice")
     public String payInvoice(@RequestParam(value = "invoiceId") Integer invoiceId) throws AppException {
         try {

@@ -4,7 +4,6 @@ import com.epam.javacourse.hotelapp.dto.UserDto;
 import com.epam.javacourse.hotelapp.exception.AppException;
 import com.epam.javacourse.hotelapp.exception.UserAlreadyExistsException;
 import com.epam.javacourse.hotelapp.model.User;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 

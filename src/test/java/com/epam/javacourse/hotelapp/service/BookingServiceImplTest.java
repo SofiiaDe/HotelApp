@@ -5,8 +5,6 @@ import com.epam.javacourse.hotelapp.dto.BookingManagerDto;
 import com.epam.javacourse.hotelapp.exception.AppException;
 import com.epam.javacourse.hotelapp.exception.NoSuchElementFoundException;
 import com.epam.javacourse.hotelapp.model.Booking;
-import com.epam.javacourse.hotelapp.model.Claim;
-import com.epam.javacourse.hotelapp.model.User;
 import com.epam.javacourse.hotelapp.repository.BookingRepository;
 import com.epam.javacourse.hotelapp.repository.InvoiceRepository;
 import com.epam.javacourse.hotelapp.repository.UserRepository;
@@ -18,9 +16,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.awt.print.Book;
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -31,7 +26,6 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class BookingServiceImplTest {

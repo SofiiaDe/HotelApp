@@ -7,6 +7,13 @@ import java.time.LocalDate;
 
 public class Helpers {
 
+    /**
+     * Dynamically build URL finds and chooses room to book
+     * @param page current page
+     * @param sortBy sorting criteria (like price / class)
+     * @param sortType sorting order (asc / desc)
+     * @return URL containing params chosen by a client
+     */
     public static String buildBookingPageUrl(String checkinDate, String checkoutDate, int page, String sortBy,
                                              String sortType, String status, String seats) {
 
@@ -43,6 +50,9 @@ public class Helpers {
         return url;
     }
 
+    /**
+     * Dynamically assign status of booking to show in the User's account
+     */
     public static BookingStatus calculateBookingStatus(LocalDate checkinDate, LocalDate checkoutDate, boolean isPaid) {
         if (isPaid) {
             if (LocalDate.now().isBefore(checkinDate)) {
@@ -60,9 +70,7 @@ public class Helpers {
             }
             return BookingStatus.CANCELLED;
         }
-
         return BookingStatus.NONE;
-
     }
 
     public static LocalDate getInvoiceDueDate(InvoiceDto invoice) {
@@ -70,5 +78,4 @@ public class Helpers {
         return invoiceDate.plusDays(2);
 
     }
-
 }

@@ -2,7 +2,6 @@
 
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 
-<html>
 <style>
     .dropDownPadding {
         margin-right: 20px;
@@ -36,7 +35,6 @@
     <h1 th:text="#{client.book.choose_time}"></h1>
 
     <form th:method="GET" th:action="@{/client/book}" th:object="${booking}">
-<!--        <p style="color:red" th:if="${#fields.hasErrors('${booking}')}" th:errors="${booking}"></p>-->
         <input type="hidden" value="freeRoomsToBook"/>
         <div class="booking-wrap d-flex justify-content-between align-items-center">
             <div class="single-select-box mb-30">
@@ -45,10 +43,6 @@
                         <span th:text="#{checkin.date}">:
                         </span>
                 </div>
-                <!--                <div class="booking-datepicker">-->
-                <!--                    <input type="date" id="checkin" name="checkin" placeholder="${currentDate}" min="${currentDate}"-->
-                <!--                           required/>-->
-                <!--                </div>-->
                 <div class="booking-datepicker">
                     <div class="form-group">
                         <input type="date" th:field="*{checkin}" name="checkin" required="required"/>
@@ -72,7 +66,6 @@
                                  th:errors="*{checkout}">Checkout Error
                             </div>
                         </div>
-                        <!--- <input type="date" name="checkout" placeholder="${currentDate}" min="${currentDate}" required/>-->
                     </div>
                 </div>
 
@@ -167,11 +160,6 @@
 
 
                 <form th:method="POST" th:action="@{/client/book}" th:object="${booking}">
-
-<!--                    <input type="hidden" name="roomId" th:value="${room.getId()}">-->
-                    <!--                    <input type="hidden" name="checkin" th:value="${checkin}">-->
-                    <!--                    <input type="hidden" name="checkout" th:value="${checkout}">-->
-
                     <input type="hidden" name="roomId" th:value="${room.getId()}">
 
                      <div class="form-group">
@@ -357,25 +345,7 @@
 
 </div>
 <div th:insert="fragments/scripts"></div>
-<script>
-    function setInputValue(tagId, value) {
-        document.getElementById(tagId).value = value;
-    }
 
-    function setUrls(tagId, value) {
-        if (document.getElementById(tagId)) {
-            document.getElementById(tagId).href = value;
-        }
-    }
-
-
-    function setOptionalSearchParam(searchParams, paramName, value) {
-        const data = value ?? searchParams.get(paramName);
-        if (data) {
-            searchParams.set(paramName, data);
-        }
-    }
-</script>
 </body>
 
 </html>

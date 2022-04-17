@@ -101,8 +101,4 @@ public class User implements Serializable {
         this.country = country;
     }
 
-
-//    public Optional<String> getAuthorities() {
-//        return role;
-//    }
 }

@@ -26,10 +26,6 @@ public interface IRoomService {
 
     int getRoomsNumberForPeriod(LocalDate checkinDate, LocalDate checkoutDate) throws AppException;
 
-//    Page<Room> findPaginated(int pageNo, int pageSize, String sortBy, String sortType, String roomStatus, String roomSeats);
-
     List<Room> getRoomsForPeriod(LocalDate checkin, LocalDate checkout, int pageSize, int page,
                                  String sortBy, String sortType, String sortSeats, String status) throws AppException;
-//List<Room> getRoomsForPeriod(LocalDate checkin, LocalDate checkout, int pageSize, int page, Sort sortType, String sortSeats, String status);
-
 }

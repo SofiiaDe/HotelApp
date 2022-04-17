@@ -5,9 +5,7 @@ import com.epam.javacourse.hotelapp.dto.BookingDto;
 import com.epam.javacourse.hotelapp.dto.BookingManagerDto;
 import com.epam.javacourse.hotelapp.exception.AppException;
 import com.epam.javacourse.hotelapp.utils.enums.BookingStatus;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.SQLException;
 import java.util.List;
 
 public interface IBookingService {

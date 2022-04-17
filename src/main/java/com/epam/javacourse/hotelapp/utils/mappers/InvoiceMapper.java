@@ -13,6 +13,7 @@ public class InvoiceMapper {
         dto.setBookingId(invoice.getBookingId().getId());
         dto.setInvoiceDate(invoice.getInvoiceDate());
         dto.setStatus(invoice.getInvoiceStatus());
+        dto.setDueDate(invoice.getDueDate());
         return dto;
     }
 
@@ -24,6 +25,7 @@ public class InvoiceMapper {
         invoice.setBookingId(dto.getBooking());
         invoice.setInvoiceDate(dto.getInvoiceDate());
         invoice.setInvoiceStatus(dto.getStatus());
+        invoice.setDueDate(dto.getDueDate());
         return invoice;
     }
 }

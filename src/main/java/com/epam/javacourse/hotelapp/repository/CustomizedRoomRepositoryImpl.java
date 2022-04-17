@@ -2,7 +2,6 @@ package com.epam.javacourse.hotelapp.repository;
 
 import com.epam.javacourse.hotelapp.exception.DBException;
 import com.epam.javacourse.hotelapp.model.Room;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -10,7 +9,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.StoredProcedureQuery;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 

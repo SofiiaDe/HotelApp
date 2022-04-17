@@ -14,13 +14,7 @@ public interface IConfirmationRequestService {
 
     ConfirmationRequestDto getConfirmRequestById(int confirmRequestId);
 
-//    List<ConfirmationRequest> getConfirmRequestsByUserId(int userId) throws AppException;
-//
-//    List<ConfirmationRequest> getAllConfirmRequests() throws AppException;
-
     List<ConfirmationRequestManagerDto> getAllDetailedConfirmRequests() throws AppException;
-
-//    void deleteConfirmRequestById(int id) throws AppException;
 
     List<ConfirmationRequestClientDto> getUserDetailedConfirmRequests(int userID) throws AppException;
 

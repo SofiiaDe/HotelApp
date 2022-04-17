@@ -26,9 +26,7 @@ import java.util.stream.Collectors;
 public class ConfirmRequestServiceImpl implements IConfirmationRequestService {
 
     private final ConfirmRequestRepository confirmRequestRepository;
-
     private final UserRepository userRepository;
-
     private final ClaimRepository claimRepository;
 
     @Autowired

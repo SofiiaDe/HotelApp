@@ -20,13 +20,15 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.times;
 
 @ExtendWith(MockitoExtension.class)
 class ConfirmRequestServiceImplTest {
@@ -113,7 +115,7 @@ class ConfirmRequestServiceImplTest {
     }
 
     @Test
-    void testGetAllDetailedConfirmRequests_whenRepoThrows_doesNotShowDbExceptionMessage() {
+    void testGetAllDetailedConfirmRequests_whenRepoThrows_ShowExceptionMessage() {
         String messageNotToGet = "aaaaa";
         when(confirmRequestRepoMock.findAll()).thenReturn(null);
         ConfirmRequestServiceImpl confirmRequestService = new ConfirmRequestServiceImpl(

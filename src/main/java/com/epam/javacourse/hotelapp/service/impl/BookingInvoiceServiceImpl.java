@@ -26,7 +26,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.time.LocalDate;
 import java.time.Period;
 import java.util.List;
 
@@ -36,15 +35,10 @@ public class BookingInvoiceServiceImpl implements IBookingInvoiceService {
     private static final Logger logger = LogManager.getLogger(BookingInvoiceServiceImpl.class);
 
     private final BookingRepository bookingRepository;
-
     private final InvoiceRepository invoiceRepository;
-
     private final RoomRepository roomRepository;
-
     private final IInvoiceService invoiceService;
-
     private final IBookingService bookingService;
-
     private final IUserService userService;
 
     @Autowired
@@ -72,7 +66,6 @@ public class BookingInvoiceServiceImpl implements IBookingInvoiceService {
 
         logger.info("Create booking with id = {}", newBooking.getId());
         logger.info("Create invoice with id = {}", newInvoice.getId());
-
     }
 
     @Override
@@ -93,7 +86,6 @@ public class BookingInvoiceServiceImpl implements IBookingInvoiceService {
 
     /**
      * Execute at 3 am every day.
-     *
      * @throws AppException
      */
     @Transactional(rollbackFor = {Exception.class})

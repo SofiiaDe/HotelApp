@@ -16,7 +16,6 @@ public class UserDto implements Serializable {
 
     private int id;
 
-
     @Size(min = 2, max = 20, message = "{firstname.size}")
     @NotBlank(message = "{firstname.notempty}")
     private String firstName;

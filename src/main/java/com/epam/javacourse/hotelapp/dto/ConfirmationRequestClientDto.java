@@ -2,6 +2,9 @@ package com.epam.javacourse.hotelapp.dto;
 
 import java.time.LocalDate;
 
+/**
+ * DTO to show list of Client's confirmation requests in Client's account
+ */
 public class ConfirmationRequestClientDto {
 
     private int id;

@@ -2,6 +2,9 @@ package com.epam.javacourse.hotelapp.dto;
 
 import java.time.LocalDate;
 
+/**
+ * DTO to show list of Client's claims in Client's account
+ */
 public class ClaimClientDto {
 
     private int id;
@@ -19,9 +22,6 @@ public class ClaimClientDto {
         this.roomClass = roomClass;
     }
 
-    public ClaimClientDto() {
-
-    }
 
     public void setId(int id) {
         this.id = id;

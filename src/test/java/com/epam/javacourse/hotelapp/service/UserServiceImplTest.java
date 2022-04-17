@@ -1,8 +1,8 @@
 package com.epam.javacourse.hotelapp.service;
 
+import com.epam.javacourse.hotelapp.dto.UserDto;
 import com.epam.javacourse.hotelapp.exception.NoSuchElementFoundException;
 import com.epam.javacourse.hotelapp.exception.UserAlreadyExistsException;
-import com.epam.javacourse.hotelapp.model.Claim;
 import com.epam.javacourse.hotelapp.model.User;
 import com.epam.javacourse.hotelapp.repository.UserRepository;
 import com.epam.javacourse.hotelapp.service.impl.UserServiceImpl;
@@ -13,15 +13,12 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.times;
-
-import com.epam.javacourse.hotelapp.dto.UserDto;
-
-import java.util.Optional;
 
 @ExtendWith(MockitoExtension.class)
 class UserServiceImplTest {

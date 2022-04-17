@@ -30,8 +30,6 @@ public class ConfirmationRequest implements Serializable {
     @Column(name = "confirm_request_date")
     private LocalDate confirmRequestDate;
 
-//    private LocalDate confirmRequestDueDate;
-
     @Column(name = "status")
     private String status;
 
@@ -42,14 +40,6 @@ public class ConfirmationRequest implements Serializable {
     public void setUserId(User userId) {
         this.userId = userId;
     }
-
-//    public LocalDate getConfirmRequestDueDate() {
-//        return confirmRequestDueDate;
-//    }
-//
-//    public void setConfirmRequestDueDate(LocalDate confirmRequestDueDate) {
-//        this.confirmRequestDueDate = confirmRequestDueDate;
-//    }
 
     public Claim getClaimId() {
         return claimId;
