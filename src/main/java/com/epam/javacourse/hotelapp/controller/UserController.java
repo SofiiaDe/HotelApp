@@ -50,7 +50,14 @@ public class UserController {
         session.setAttribute(AUTH_USER, user);
         session.setAttribute("userRole", role);
 
-        return ("client".equalsIgnoreCase(role)) ? new ModelAndView("redirect:/client/account") :
-                new ModelAndView("redirect:/manager1/account");
+        ModelAndView result;
+
+        if ("client".equalsIgnoreCase(role) || "клієнт".equalsIgnoreCase(role)) {
+            result = new ModelAndView("redirect:/client/account");
+        } else {
+            result = new ModelAndView("redirect:/manager1/account");
+        }
+
+        return result;
     }
 }
