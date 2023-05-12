@@ -13,7 +13,7 @@ import static java.lang.annotation.ElementType.*;
  * Custom annotation to check whether claim's check-in date is before check-out date
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ TYPE, FIELD, ANNOTATION_TYPE })
+@Target({TYPE, FIELD, ANNOTATION_TYPE})
 @Constraint(validatedBy = ClaimDtoDateValidator.class)
 @Documented
 public @interface ClaimDtoRangeCheck {

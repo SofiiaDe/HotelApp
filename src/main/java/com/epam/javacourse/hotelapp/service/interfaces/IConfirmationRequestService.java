@@ -20,7 +20,7 @@ public interface IConfirmationRequestService {
 
     /**
      * Calculates due date until which the client has to confirm request
-     * @param confirmRequest
+     *
      * @return LocalDate
      */
     LocalDate getConfirmRequestDueDate(ConfirmationRequestDto confirmRequest);

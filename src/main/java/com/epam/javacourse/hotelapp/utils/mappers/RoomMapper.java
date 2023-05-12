@@ -16,7 +16,7 @@ public class RoomMapper {
         return dto;
     }
 
-    public static Room mapFromDto(RoomDto dto){
+    public static Room mapFromDto(RoomDto dto) {
         Room room = new Room();
         room.setId(dto.getId());
         room.setPrice(dto.getPrice());

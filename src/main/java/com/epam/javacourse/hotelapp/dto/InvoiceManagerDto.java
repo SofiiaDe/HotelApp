@@ -8,18 +8,18 @@ import java.time.LocalDate;
  */
 public class InvoiceManagerDto {
 
-    private int id;
-    private String bookedByUser;
-    private String bookedByUserEmail;
-    private BigDecimal amount;
-    private int bookingId;
-    private LocalDate invoiceDate;
-    private String status;
+    private final int id;
+    private final String bookedByUser;
+    private final String bookedByUserEmail;
+    private final BigDecimal amount;
+    private final int bookingId;
+    private final LocalDate invoiceDate;
+    private final String status;
 
 
     public InvoiceManagerDto(int id, String bookedByUser, String bookedByUserEmail,
-                           BigDecimal amount, int bookingId, LocalDate invoiceDate,
-                           String status) {
+                             BigDecimal amount, int bookingId, LocalDate invoiceDate,
+                             String status) {
         this.id = id;
         this.bookedByUser = bookedByUser;
         this.bookedByUserEmail = bookedByUserEmail;

@@ -28,8 +28,7 @@ public class Validator {
     }
 
     /**
-     *
-     * @param password password entered by a user
+     * @param password  password entered by a user
      * @param minLength min length of the password established in a regex
      * @param maxLength max length of the password variable in a database
      * @return message to a user explaining incorrect input or null if validation was successful
@@ -46,8 +45,9 @@ public class Validator {
 
     /**
      * validates parsing date parameter to LocalDate type
+     *
      * @param date parameter of date selected by user
-//     * @param request HttpServletRequest request
+     *             //     * @param request HttpServletRequest request
      * @return LocalDate type of parsed date
      */
     public static LocalDate dateParameterToLocalDate(String date) {
@@ -77,10 +77,9 @@ public class Validator {
     }
 
     /**
-     *
-     * @param checkin checkinDate selected by user and then parsed to LocalDate type
+     * @param checkin  checkinDate selected by user and then parsed to LocalDate type
      * @param checkout checkoutDate selected by user and then parsed to LocalDate type
-     * @param request HttpServletRequest request
+     * @param request  HttpServletRequest request
      * @return true if user selected valid checkin and checkout dates
      */
     public static boolean isCorrectDate(LocalDate checkin, LocalDate checkout, HttpServletRequest request) {
@@ -90,14 +89,14 @@ public class Validator {
             return false;
         }
 
-        if(checkin.isAfter(checkout)) {
+        if (checkin.isAfter(checkout)) {
             logger.error("Check-in date is after check-out date");
             request.setAttribute("errorMessage", "Check-out date cannot be later than check-in date.\n " +
                     "Please enter correct dates.");
             return false;
         }
 
-        if(checkin.isBefore(LocalDate.now()) || checkout.isBefore(LocalDate.now())) {
+        if (checkin.isBefore(LocalDate.now()) || checkout.isBefore(LocalDate.now())) {
             logger.error("Check-in date and/or check-out date are before current date");
             request.setAttribute("errorMessage", "Check-in date and check-out date cannot be earlier than current date.\n " +
                     "Please enter correct dates.");

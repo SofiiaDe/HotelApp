@@ -5,7 +5,7 @@ import org.springframework.http.HttpStatus;
 /**
  * An exception which provides information on an application error.
  */
-public class AppException extends Exception{
+public class AppException extends Exception {
 
     private HttpStatus status = null;
 
@@ -56,10 +56,10 @@ public class AppException extends Exception{
     }
 
     public AppException(String message) {
-        super (message);
+        super(message);
     }
 
-    public AppException(Exception exception){
+    public AppException(Exception exception) {
         super(exception);
     }
 

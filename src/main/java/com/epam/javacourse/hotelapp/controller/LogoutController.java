@@ -28,9 +28,7 @@ public class LogoutController {
         session.removeAttribute("role");
         session.setAttribute(AUTH_USER, false);
 
-        if (session != null) {
-            session.invalidate();
-        }
+        session.invalidate();
         logger.debug("Logout finished");
 
         sessionStatus.setComplete();

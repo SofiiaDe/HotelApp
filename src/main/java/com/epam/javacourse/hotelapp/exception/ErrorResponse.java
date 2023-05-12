@@ -12,13 +12,11 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ErrorResponse {
 
-    //    indicating when the error occurred
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
     private Date timestamp;
 
     private int code;
 
-    private String status;
     private String message;
     private String stackTrace;
     Object data;
@@ -34,7 +32,7 @@ public class ErrorResponse {
     ) {
         this();
         this.code = httpStatus.value();
-        this.status = httpStatus.name();
+        String status = httpStatus.name();
         this.message = message;
     }
 

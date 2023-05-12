@@ -89,10 +89,6 @@ public class ConfirmationRequestDto {
         return confirmRequestDueDate;
     }
 
-    public void setConfirmRequestDueDate(LocalDate confirmRequestDueDate) {
-        this.confirmRequestDueDate = confirmRequestDueDate;
-    }
-
     public User getUser() {
         return user;
     }

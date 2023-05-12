@@ -6,7 +6,7 @@ import com.epam.javacourse.hotelapp.model.Claim;
 
 public class ClaimMapper {
 
-    public static ClaimDto mapToDto(Claim claim){
+    public static ClaimDto mapToDto(Claim claim) {
         ClaimDto dto = new ClaimDto();
         dto.setId(claim.getId());
         dto.setUserId(claim.getUserId().getId());
@@ -17,7 +17,7 @@ public class ClaimMapper {
         return dto;
     }
 
-    public static Claim mapFromDto(ClaimDto dto){
+    public static Claim mapFromDto(ClaimDto dto) {
         Claim claim = new Claim();
         claim.setId(dto.getId());
         claim.setUserId(dto.getUser());

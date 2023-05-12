@@ -33,7 +33,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     /**
      * @param email User's email
      * @return a UserDetails object populated with the user data fetched from the db.
-     * @throws UsernameNotFoundException
      */
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {

@@ -17,7 +17,7 @@ public interface IInvoiceService {
 
     /**
      * Updates invoice's status to 'cancelled' in case of not paying the invoice by the due date.
-     * @throws AppException
+     *
      */
     void updateInvoiceStatusToCancelled() throws AppException;
 

@@ -10,9 +10,9 @@ import static com.epam.javacourse.hotelapp.utils.Constants.PAGE_LOGIN;
 @Controller
 public class LoginController {
 
-        @GetMapping("/login")
-        public String login(){
-            return PAGE_LOGIN;
-        }
+    @GetMapping("/login")
+    public String login() {
+        return PAGE_LOGIN;
     }
+}
 

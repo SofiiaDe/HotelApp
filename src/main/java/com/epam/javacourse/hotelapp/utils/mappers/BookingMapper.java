@@ -6,7 +6,7 @@ import com.epam.javacourse.hotelapp.model.Booking;
 
 public class BookingMapper {
 
-    public static BookingDto mapToDto(Booking booking){
+    public static BookingDto mapToDto(Booking booking) {
         BookingDto dto = new BookingDto();
         dto.setId(booking.getId());
         dto.setUserId(booking.getUserId().getId());
@@ -19,7 +19,7 @@ public class BookingMapper {
     }
 
 
-    public static Booking mapFromDto(BookingDto dto){
+    public static Booking mapFromDto(BookingDto dto) {
         Booking booking = new Booking();
         booking.setId(dto.getId());
         booking.setUserId(dto.getUser());

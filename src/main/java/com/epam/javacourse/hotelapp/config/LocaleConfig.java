@@ -1,4 +1,5 @@
 package com.epam.javacourse.hotelapp.config;
+
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -29,7 +30,7 @@ public class LocaleConfig implements WebMvcConfigurer {
         return messageSource;
     }
 
-//     use a locale attribute in the user’s session to determine current locale
+    // use a locale attribute in the user’s session to determine current locale
     @Primary
     @Bean
     public LocaleResolver localeResolver() {
@@ -40,9 +41,9 @@ public class LocaleConfig implements WebMvcConfigurer {
         return slr;
     }
 
-//      detect any change in the user’s locale and then switch to the new locale
+    // detect any change in the user’s locale and then switch to the new locale
     @Bean
-    public LocaleChangeInterceptor localeChangeInterceptor( ) {
+    public LocaleChangeInterceptor localeChangeInterceptor() {
         LocaleChangeInterceptor localeChangeInterceptor
                 = new LocaleChangeInterceptor();
         localeChangeInterceptor.setParamName("lang");

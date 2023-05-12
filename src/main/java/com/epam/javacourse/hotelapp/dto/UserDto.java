@@ -69,10 +69,6 @@ public class UserDto implements Serializable {
         return confirmPassword;
     }
 
-    public void setConfirmPassword(String confirmPassword) {
-        this.confirmPassword = confirmPassword;
-    }
-
     public String getRole() {
         return role;
     }

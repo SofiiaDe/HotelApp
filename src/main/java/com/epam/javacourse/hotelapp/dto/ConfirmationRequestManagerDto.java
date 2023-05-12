@@ -7,13 +7,13 @@ import java.time.LocalDate;
  */
 public class ConfirmationRequestManagerDto {
 
-    private int id;
-    private String bookedByUser;
-    private String bookedByUserEmail;
-    private int claimId;
-    private int roomId;
-    private LocalDate confirmRequestDate;
-    private String status;
+    private final int id;
+    private final String bookedByUser;
+    private final String bookedByUserEmail;
+    private final int claimId;
+    private final int roomId;
+    private final LocalDate confirmRequestDate;
+    private final String status;
 
     public ConfirmationRequestManagerDto(int id, String bookedByUser, String bookedByUserEmail,
                                          int claimId, int roomId, LocalDate confirmRequestDate, String status) {

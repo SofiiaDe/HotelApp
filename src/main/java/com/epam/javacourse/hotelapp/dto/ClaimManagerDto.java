@@ -15,9 +15,6 @@ public class ClaimManagerDto {
     private String roomSeats;
     private String roomClass;
 
-    public ClaimManagerDto() {
-    }
-
     public ClaimManagerDto(int id, String bookedByUser, String bookedByUserEmail,
                            LocalDate checkinDate, LocalDate checkoutDate, String roomSeats, String roomClass) {
         this.id = id;

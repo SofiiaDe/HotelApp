@@ -13,14 +13,14 @@ import static java.lang.annotation.ElementType.*;
  * Custom annotation to check whether booking's check-in date is before check-out date
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ TYPE, FIELD, ANNOTATION_TYPE })
+@Target({TYPE, FIELD, ANNOTATION_TYPE})
 @Constraint(validatedBy = BookingDtoDateValidator.class)
 @Documented
 public @interface BookingDtoRangeCheck {
 
-        String message() default "Invalid Dates";
+    String message() default "Invalid Dates";
 
-        Class<?>[] groups() default {};
+    Class<?>[] groups() default {};
 
-        Class<? extends Payload>[] payload() default {};
+    Class<? extends Payload>[] payload() default {};
 }

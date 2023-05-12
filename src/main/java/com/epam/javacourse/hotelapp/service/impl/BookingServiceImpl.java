@@ -51,7 +51,7 @@ public class BookingServiceImpl implements IBookingService {
     }
 
     @Override
-    @Transactional(rollbackFor = { Exception.class })
+    @Transactional(rollbackFor = {Exception.class})
     public void createBooking(BookingDto bookingDto) {
         bookingRepository.save(BookingMapper.mapFromDto(bookingDto));
     }
@@ -66,7 +66,7 @@ public class BookingServiceImpl implements IBookingService {
     }
 
     @Override
-    @Transactional(rollbackFor = { Exception.class })
+    @Transactional(rollbackFor = {Exception.class})
     public void updateBookingStatus(BookingDto bookingDto, boolean status) {
         bookingRepository.updateBookingStatus(status, bookingDto.getId());
     }

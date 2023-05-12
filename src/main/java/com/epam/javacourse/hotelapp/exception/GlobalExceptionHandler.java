@@ -91,7 +91,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler({AccessDeniedException.class})
-    public ResponseEntity<Object> handleAccessDeniedException(Exception exception, WebRequest request) {
+    public ResponseEntity<Object> handleAccessDeniedException(Exception exception) {
         logger.error("AccessDeniedException has occurred", exception);
         return new ResponseEntity<>(
                 "Access denied", new HttpHeaders(), HttpStatus.FORBIDDEN);
@@ -104,7 +104,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(AppException.class)
     public ResponseEntity<Object> handleAppExceptions(Exception exception, WebRequest request) {
-        // casting the generic Exception e to CustomErrorException
         AppException appException = (AppException) exception;
 
         logger.error("AppException has occurred", appException);
@@ -116,6 +115,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     /**
      * a fallback method to cover all remaining cases
+     *
      * @return ResponseEntity<Object>
      */
     @ExceptionHandler(RuntimeException.class)
@@ -168,7 +168,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 message
         );
 
-        if(printStackTrace ){
+        if (printStackTrace) {
             errorResponse.setStackTrace(ExceptionUtils.getStackTrace(exception));
         }
         return ResponseEntity.status(httpStatus).body(errorResponse);

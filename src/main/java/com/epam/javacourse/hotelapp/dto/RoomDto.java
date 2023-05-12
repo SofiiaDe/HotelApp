@@ -13,12 +13,10 @@ public class RoomDto {
 
     @DecimalMin(value = "100.00", message = "Room price should correspond to the company's pricing policy.")
     @DecimalMax(value = "999.00", message = "Room price should correspond to the company's pricing policy.")
-    @Digits(integer=3, fraction=2)
+    @Digits(integer = 3, fraction = 2)
     private BigDecimal price;
 
-//    @NotBlank(message = "Room number can't be empty")
     @Min(value = 1, message = "Room number can't be assigned a negative value")
-//    @UniqueElements(message = "Room with such number already exists")
     private int roomNumber;
 
     private String roomSeats;

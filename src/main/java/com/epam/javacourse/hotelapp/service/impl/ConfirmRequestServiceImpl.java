@@ -38,7 +38,7 @@ public class ConfirmRequestServiceImpl implements IConfirmationRequestService {
     }
 
     @Override
-    @Transactional(rollbackFor = { Exception.class })
+    @Transactional(rollbackFor = {Exception.class})
     public void createConfirmRequest(ConfirmationRequestDto confirmRequestDto) {
         confirmRequestRepository.save(ConfirmationRequestMapper.mapFromDto(confirmRequestDto));
     }
@@ -52,14 +52,14 @@ public class ConfirmRequestServiceImpl implements IConfirmationRequestService {
     @Override
     public ConfirmationRequestDto getConfirmRequestById(int confirmRequestId) {
 
-        ConfirmationRequest confirmRequest =  confirmRequestRepository.findById(confirmRequestId)
-                .orElseThrow(()->new NoSuchElementFoundException("Can't retrieve confirmation request with id = " + confirmRequestId));
+        ConfirmationRequest confirmRequest = confirmRequestRepository.findById(confirmRequestId)
+                .orElseThrow(() -> new NoSuchElementFoundException("Can't retrieve confirmation request with id = " + confirmRequestId));
 
         return ConfirmationRequestMapper.mapToDto(confirmRequest);
 
     }
 
-    @Transactional(rollbackFor = { Exception.class })
+    @Transactional(rollbackFor = {Exception.class})
     @Override
     public void confirmRequestByClient(int confirmRequestId) throws AppException {
 

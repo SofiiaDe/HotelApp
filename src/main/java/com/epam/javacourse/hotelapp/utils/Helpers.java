@@ -9,8 +9,9 @@ public class Helpers {
 
     /**
      * Dynamically build URL finds and chooses room to book
-     * @param page current page
-     * @param sortBy sorting criteria (like price / class)
+     *
+     * @param page     current page
+     * @param sortBy   sorting criteria (like price / class)
      * @param sortType sorting order (asc / desc)
      * @return URL containing params chosen by a client
      */
@@ -23,27 +24,27 @@ public class Helpers {
         }
         url = url + "page=" + page;
 
-        if(checkinDate != null) {
+        if (checkinDate != null) {
             url = url + "&checkin=" + checkinDate;
         }
 
-        if(checkoutDate != null) {
+        if (checkoutDate != null) {
             url = url + "&checkout=" + checkoutDate;
         }
 
-        if(sortBy != null) {
+        if (sortBy != null) {
             url = url + "&sortBy=" + sortBy;
         }
 
-        if(sortType != null) {
+        if (sortType != null) {
             url = url + "&sortType=" + sortType;
         }
 
-        if(status != null) {
+        if (status != null) {
             url = url + "&status=" + status;
         }
 
-        if(seats != null) {
+        if (seats != null) {
             url = url + "&seats=" + seats;
         }
 

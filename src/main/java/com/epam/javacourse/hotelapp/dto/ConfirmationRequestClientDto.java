@@ -7,15 +7,15 @@ import java.time.LocalDate;
  */
 public class ConfirmationRequestClientDto {
 
-    private int id;
-    private LocalDate confirmRequestDate;
-    private LocalDate confirmRequestDueDate;
-    private String roomSeats;
-    private String roomClass;
-    private LocalDate checkinDate;
-    private LocalDate checkoutDate;
-    private int claimId;
-    private String status;
+    private final int id;
+    private final LocalDate confirmRequestDate;
+    private final LocalDate confirmRequestDueDate;
+    private final String roomSeats;
+    private final String roomClass;
+    private final LocalDate checkinDate;
+    private final LocalDate checkoutDate;
+    private final int claimId;
+    private final String status;
 
     public ConfirmationRequestClientDto(int id, LocalDate confirmRequestDate,
                                         LocalDate confirmRequestDueDate,

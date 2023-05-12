@@ -127,23 +127,23 @@ public class ClientAccountController {
     @GetMapping("/book")
     public String findPaginated(@ModelAttribute("booking") BookingDto bookingDto,
                                 @RequestParam(value = "page", required = false)
-                                        Integer page,
+                                Integer page,
                                 @RequestParam(value = "sortBy", required = false)
-                                        String sortByParam,
+                                String sortByParam,
                                 @RequestParam(value = "sortType", required = false)
-                                        String sortTypeParam,
+                                String sortTypeParam,
                                 @RequestParam(value = "status", required = false)
-                                        String roomStatusParam,
+                                String roomStatusParam,
                                 @RequestParam(value = "seats", required = false)
-                                        String roomSeatsParam,
+                                String roomSeatsParam,
                                 @RequestParam(value = "checkin", required = false)
                                 @Future(message = "{checkin.future}")
                                 @DateTimeFormat(pattern = "yyyy-MM-dd")
-                                        String checkinDate,
+                                String checkinDate,
                                 @RequestParam(value = "checkout", required = false)
                                 @Future(message = "{checkout.future}")
                                 @DateTimeFormat(pattern = "yyyy-MM-dd")
-                                        String checkoutDate,
+                                String checkoutDate,
                                 BindingResult bindingResult,
                                 Model model) throws AppException {
         if (bindingResult.hasErrors()) {

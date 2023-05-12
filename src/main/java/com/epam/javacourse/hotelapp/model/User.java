@@ -5,7 +5,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-@Table(name="users")
+@Table(name = "users")
 public class User implements Serializable {
 
     private static final long serialVersionUID = 5512347890045636L;
@@ -21,7 +21,7 @@ public class User implements Serializable {
     @Column(name = "last_name")
     private String lastName;
 
-    @Column(name = "email", unique=true)
+    @Column(name = "email", unique = true)
     private String email;
 
     @Column(name = "password")

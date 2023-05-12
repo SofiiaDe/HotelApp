@@ -57,7 +57,7 @@ public class RegistrationController {
         String country = userDto.getCountry();
         String role = userDto.getRole().trim().toLowerCase();
 
-        if(!Objects.equals(password, confirmPassword)) {
+        if (!Objects.equals(password, confirmPassword)) {
             bindingResult.rejectValue("confirmPassword", confirmPassword, "Passwords should match");
         }
 

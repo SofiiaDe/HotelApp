@@ -25,7 +25,7 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    @Transactional(rollbackFor = { Exception.class })
+    @Transactional(rollbackFor = {Exception.class})
     public User createUser(UserDto userDto) throws UserAlreadyExistsException {
         if (emailExist(userDto.getEmail())) {
             throw new UserAlreadyExistsException("There is an account with the following email address: "
@@ -54,7 +54,7 @@ public class UserServiceImpl implements IUserService {
     @Transactional(readOnly = true)
     public UserDto getUserById(int id) {
         User user = userRepository.findById(id)
-                .orElseThrow(()->new NoSuchElementFoundException("Can't retrieve user with id = " + id));
+                .orElseThrow(() -> new NoSuchElementFoundException("Can't retrieve user with id = " + id));
         return UserMapper.mapToDto(user);
     }
 

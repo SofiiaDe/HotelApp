@@ -6,50 +6,49 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 
-
 @NamedStoredProcedureQuery(
-        name="getReservedRooms",
-        procedureName="reserved_rooms",
-        resultClasses = { Room.class },
-        parameters={
-                @StoredProcedureParameter(name="checkin_date", type= LocalDate.class, mode=ParameterMode.IN),
-                @StoredProcedureParameter(name="checkout_date", type= LocalDate.class, mode=ParameterMode.IN),
-                @StoredProcedureParameter(name="room_seats", type= String.class, mode=ParameterMode.IN),
-                @StoredProcedureParameter(name="sortBy", type= String.class, mode=ParameterMode.IN),
-                @StoredProcedureParameter(name="sortType", type= String.class, mode=ParameterMode.IN)
+        name = "getReservedRooms",
+        procedureName = "reserved_rooms",
+        resultClasses = {Room.class},
+        parameters = {
+                @StoredProcedureParameter(name = "checkin_date", type = LocalDate.class, mode = ParameterMode.IN),
+                @StoredProcedureParameter(name = "checkout_date", type = LocalDate.class, mode = ParameterMode.IN),
+                @StoredProcedureParameter(name = "room_seats", type = String.class, mode = ParameterMode.IN),
+                @StoredProcedureParameter(name = "sortBy", type = String.class, mode = ParameterMode.IN),
+                @StoredProcedureParameter(name = "sortType", type = String.class, mode = ParameterMode.IN)
         })
 @NamedStoredProcedureQuery(
-        name="getBookedRooms",
-        procedureName="booked_rooms",
-        resultClasses = { Room.class },
-        parameters={
-                @StoredProcedureParameter(name="checkin_date", type= LocalDate.class, mode=ParameterMode.IN),
-                @StoredProcedureParameter(name="checkout_date", type= LocalDate.class, mode=ParameterMode.IN),
-                @StoredProcedureParameter(name="room_seats", type= String.class, mode=ParameterMode.IN),
-                @StoredProcedureParameter(name="sortBy", type= String.class, mode=ParameterMode.IN),
-                @StoredProcedureParameter(name="sortType", type= String.class, mode=ParameterMode.IN)
+        name = "getBookedRooms",
+        procedureName = "booked_rooms",
+        resultClasses = {Room.class},
+        parameters = {
+                @StoredProcedureParameter(name = "checkin_date", type = LocalDate.class, mode = ParameterMode.IN),
+                @StoredProcedureParameter(name = "checkout_date", type = LocalDate.class, mode = ParameterMode.IN),
+                @StoredProcedureParameter(name = "room_seats", type = String.class, mode = ParameterMode.IN),
+                @StoredProcedureParameter(name = "sortBy", type = String.class, mode = ParameterMode.IN),
+                @StoredProcedureParameter(name = "sortType", type = String.class, mode = ParameterMode.IN)
         })
 @NamedStoredProcedureQuery(
-        name="getUnavailableRooms",
-        procedureName="unavailable_rooms",
-        resultClasses = { Room.class },
-        parameters={
-                @StoredProcedureParameter(name="checkin_date", type= LocalDate.class, mode=ParameterMode.IN),
-                @StoredProcedureParameter(name="checkout_date", type= LocalDate.class, mode=ParameterMode.IN),
-                @StoredProcedureParameter(name="room_seats", type= String.class, mode=ParameterMode.IN),
-                @StoredProcedureParameter(name="sortBy", type= String.class, mode=ParameterMode.IN),
-                @StoredProcedureParameter(name="sortType", type= String.class, mode=ParameterMode.IN)
+        name = "getUnavailableRooms",
+        procedureName = "unavailable_rooms",
+        resultClasses = {Room.class},
+        parameters = {
+                @StoredProcedureParameter(name = "checkin_date", type = LocalDate.class, mode = ParameterMode.IN),
+                @StoredProcedureParameter(name = "checkout_date", type = LocalDate.class, mode = ParameterMode.IN),
+                @StoredProcedureParameter(name = "room_seats", type = String.class, mode = ParameterMode.IN),
+                @StoredProcedureParameter(name = "sortBy", type = String.class, mode = ParameterMode.IN),
+                @StoredProcedureParameter(name = "sortType", type = String.class, mode = ParameterMode.IN)
         })
 @NamedStoredProcedureQuery(
-        name="getAvailableRooms",
-        procedureName="available_rooms",
-        resultClasses = { Room.class },
-        parameters={
-                @StoredProcedureParameter(name="checkin_date", type= LocalDate.class, mode=ParameterMode.IN),
-                @StoredProcedureParameter(name="checkout_date", type= LocalDate.class, mode=ParameterMode.IN),
-                @StoredProcedureParameter(name="room_seats", type= String.class, mode=ParameterMode.IN),
-                @StoredProcedureParameter(name="sortBy", type= String.class, mode=ParameterMode.IN),
-                @StoredProcedureParameter(name="sortType", type= String.class, mode=ParameterMode.IN)
+        name = "getAvailableRooms",
+        procedureName = "available_rooms",
+        resultClasses = {Room.class},
+        parameters = {
+                @StoredProcedureParameter(name = "checkin_date", type = LocalDate.class, mode = ParameterMode.IN),
+                @StoredProcedureParameter(name = "checkout_date", type = LocalDate.class, mode = ParameterMode.IN),
+                @StoredProcedureParameter(name = "room_seats", type = String.class, mode = ParameterMode.IN),
+                @StoredProcedureParameter(name = "sortBy", type = String.class, mode = ParameterMode.IN),
+                @StoredProcedureParameter(name = "sortType", type = String.class, mode = ParameterMode.IN)
         })
 @Entity
 @Table(name = "rooms")
@@ -65,7 +64,7 @@ public class Room implements Serializable {
     @Column(name = "price")
     private BigDecimal price;
 
-    @Column(name = "room_number", unique=true)
+    @Column(name = "room_number", unique = true)
     private int roomNumber;
 
     @Column(name = "room_seats")
@@ -79,7 +78,6 @@ public class Room implements Serializable {
 
     public Room() {
     }
-
 
 
     public int getId() {

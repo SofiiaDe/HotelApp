@@ -52,7 +52,7 @@ public class RoomServiceImpl implements IRoomService {
     public RoomDto getRoomById(int id) {
 
         Room room = roomRepository.findById(id)
-                .orElseThrow(()->new NoSuchElementFoundException("Can't get room with id = " + id));
+                .orElseThrow(() -> new NoSuchElementFoundException("Can't get room with id = " + id));
 
         return RoomMapper.mapToDto(room);
     }

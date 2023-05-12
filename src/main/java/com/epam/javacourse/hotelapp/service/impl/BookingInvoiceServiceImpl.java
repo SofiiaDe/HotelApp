@@ -86,7 +86,7 @@ public class BookingInvoiceServiceImpl implements IBookingInvoiceService {
 
     /**
      * Execute at 3 am every day.
-     * @throws AppException
+     *
      */
     @Transactional(rollbackFor = {Exception.class})
     @Scheduled(cron = "0 0 3 * * *", zone = "Europe/Sofia") // The pattern is: second, minute, hour, day, month, weekday

@@ -188,4 +188,5 @@ public class ClaimServiceImpl implements IClaimService {
             throw new AppException("Can't retrieve all claims to show in the manager's account", exception);
         }
     }
+
 }
